@@ -4,6 +4,7 @@ import 'package:client/components/navbar/navbar.dart';
 import 'package:client/screens/home.dart';
 import 'package:client/screens/groups.dart';
 import 'package:client/screens/profile.dart';
+import 'package:client/constant/my_colors.dart';
 
 class LayoutPage extends StatefulWidget {
   const LayoutPage({Key? key}) : super(key: key);
@@ -53,6 +54,15 @@ class _LayoutPageState extends State<LayoutPage> {
                 selectedIndex = index;
               });
             },
+
+            theme: SideNavigationBarTheme(
+              backgroundColor: MyColors.purple,
+              togglerTheme: SideNavigationBarTogglerTheme.standard(),
+              itemTheme: const SideNavigationBarItemTheme(
+                selectedItemColor: Colors.white,
+              ),
+              dividerTheme: SideNavigationBarDividerTheme.standard(),
+            ),
           ),
 
           /// Make it take the rest of the available width
