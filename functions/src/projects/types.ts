@@ -1,13 +1,12 @@
 import { IsString } from 'class-validator';
 
-export class AddPostData {
-  likes = [];
-
-  tags: [string] = [''];
-
+export class AddProjectData {
   @IsString()
-  image!: string;
+  title!: string;
 
   @IsString()
   description!: string;
+
+  @IsString()
+  groupId!: string;
 }
