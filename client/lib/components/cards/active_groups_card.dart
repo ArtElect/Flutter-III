@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:client/constant/my_colors.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:client/components/cards/group_card.dart';
+
+class ActiveGroupsCard extends StatelessWidget {
+  const ActiveGroupsCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GFCard(
+      boxFit: BoxFit.cover,
+      titlePosition: GFPosition.start,
+      margin: const EdgeInsets.all(0),
+      title: const GFListTile(
+        margin: EdgeInsets.all(0),
+        title: Text(
+          'Active groups',
+          style: TextStyle(
+            color: MyColors.text,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+      content: SizedBox(
+        width: 710,
+        height: 120,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            GroupCard(name: "Admin", role: "Admin", description: "Admin group with all basic admin rights"),
+            GroupCard(name: "Manager", role: "Manager", description: "Manager group with all basic manager rights"),
+            GroupCard(name: "User", role: "User", description: "User group with only read right on assign project"),
+          ]
+        )
+      ),
+      buttonBar: GFButtonBar(
+        children: <Widget>[
+          GFButton(
+            onPressed: () {},
+            text: 'See more',
+          ),
+        ],
+      ),
+    );
+  }
+}
