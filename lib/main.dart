@@ -1,9 +1,16 @@
+// firebase packages
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_iii/routes/routes.dart';
 import 'package:flutter_iii/screens/groups/groups.dart';
 import 'package:flutter_iii/screens/users/users.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
