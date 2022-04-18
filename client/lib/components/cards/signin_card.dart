@@ -94,7 +94,7 @@ class _FooterState extends State<Footer> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(primary: MyColors.purple),
             child: const Text("Sign In"),
-            onPressed: () => {Navigator.of(context).pushNamed(Routes.dashboard)},
+            onPressed: () => {Navigator.of(context).pushNamed(Routes.home)},
           ),
         ),
       ),

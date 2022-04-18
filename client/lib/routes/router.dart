@@ -1,5 +1,6 @@
 import 'package:client/routes/routes.dart';
 import 'package:client/screens/home.dart';
+import 'package:client/screens/layout.dart';
 import 'package:client/screens/signin.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class GenerateRoutes {
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.home:
-        return routeBuilder(settings, const HomePage());
+        return routeBuilder(settings, const LayoutPage());
       case Routes.signin:
         return routeBuilder(settings, const SignIn());
       default:

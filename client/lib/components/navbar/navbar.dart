@@ -9,6 +9,7 @@ class Navbar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       title: const Center(
         child: Text('Epitech Dashboard', textAlign: TextAlign.center),
       ),

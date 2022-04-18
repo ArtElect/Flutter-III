@@ -29,6 +29,7 @@ environment:
 dependencies:
   percent_indicator: ^3.4.0
   getwidget: ^2.0.5
+  side_navigation: ^1.0.2
   flutter:
     sdk: flutter
 
