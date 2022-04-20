@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddProjectData = void 0;
+exports.ModifyProjectData = exports.AddProjectData = void 0;
 const class_validator_1 = require("class-validator");
 class AddProjectData {
 }
@@ -16,8 +16,16 @@ __decorate([
 __decorate([
     class_validator_1.IsString()
 ], AddProjectData.prototype, "description", void 0);
-__decorate([
-    class_validator_1.IsString()
-], AddProjectData.prototype, "groupId", void 0);
 exports.AddProjectData = AddProjectData;
+class ModifyProjectData {
+}
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsString()
+], ModifyProjectData.prototype, "title", void 0);
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsString()
+], ModifyProjectData.prototype, "description", void 0);
+exports.ModifyProjectData = ModifyProjectData;
 //# sourceMappingURL=types.js.map

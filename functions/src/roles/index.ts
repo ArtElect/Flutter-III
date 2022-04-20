@@ -36,3 +36,8 @@ export const addRole = async (data: AddRoleData) => {
   })
   return { message: 'role added' };
 }
+
+export const modifyRole = async (roleId: string, data: AddRoleData) => {
+  await database.firestore().collection('role').doc(roleId).update(data);
+  return { message: 'role updated' };
+}

@@ -40,10 +40,10 @@ export const listAccountProjects = async (userId: string) => {
   }));
 }
 
-export const addProject = async (userId: string, data: AddProjectData) => {
+export const addProject = async (groupId: string, userId: string, data: AddProjectData) => {
   const account = await getAccountFromUserId(userId)
   const accountRef = await database.firestore().collection('account').doc(account!.id);
-  const groupRef = await database.firestore().doc(`group/${data.groupId}`);
+  const groupRef = await database.firestore().doc(`group/${groupId}`);
   const canEdit = await database.firestore()
     .collection('role')
     .where('account', '==', accountRef)
@@ -59,4 +59,21 @@ export const addProject = async (userId: string, data: AddProjectData) => {
     group: groupRef
   })
   return { message: 'project created' };
+}
+
+export const modifyProject = async (projectId: string, groupId: string, userId: string, data: AddProjectData) => {
+  const account = await getAccountFromUserId(userId)
+  const accountRef = await database.firestore().collection('account').doc(account!.id);
+  const groupRef = await database.firestore().doc(`group/${groupId}`);
+  const canEdit = await database.firestore()
+    .collection('role')
+    .where('account', '==', accountRef)
+    .where('group', '==', groupRef)
+    .where('type', '==', 'MANAGER')
+    .get()
+  if (canEdit.size === 0) {
+    throw new Error('Unauthorized');
+  }
+  await database.firestore().collection('project').doc(projectId).update(data);
+  return { message: 'project updated' };
 }

@@ -20,3 +20,8 @@ export const addGroup = async (data: AddGroupData) => {
   await database.firestore().collection('group').add(data);
   return { message: 'group created' };
 };
+
+export const modifyGroup = async (groupId: string, data: AddGroupData) => {
+  await database.firestore().collection('group').doc(groupId).update(data);
+  return { message: 'group updated' };
+};

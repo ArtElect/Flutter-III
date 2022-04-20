@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addProject = exports.listAccountProjects = void 0;
+exports.modifyProject = exports.addProject = exports.listAccountProjects = void 0;
 const database_1 = require("../database");
 const accounts_1 = require("../accounts");
 exports.listAccountProjects = async (userId) => {
@@ -32,10 +32,10 @@ exports.listAccountProjects = async (userId) => {
         };
     }));
 };
-exports.addProject = async (userId, data) => {
+exports.addProject = async (groupId, userId, data) => {
     const account = await accounts_1.getAccountFromUserId(userId);
     const accountRef = await database_1.default.firestore().collection('account').doc(account.id);
-    const groupRef = await database_1.default.firestore().doc(`group/${data.groupId}`);
+    const groupRef = await database_1.default.firestore().doc(`group/${groupId}`);
     const canEdit = await database_1.default.firestore()
         .collection('role')
         .where('account', '==', accountRef)
@@ -51,5 +51,21 @@ exports.addProject = async (userId, data) => {
         group: groupRef
     });
     return { message: 'project created' };
+};
+exports.modifyProject = async (projectId, groupId, userId, data) => {
+    const account = await accounts_1.getAccountFromUserId(userId);
+    const accountRef = await database_1.default.firestore().collection('account').doc(account.id);
+    const groupRef = await database_1.default.firestore().doc(`group/${groupId}`);
+    const canEdit = await database_1.default.firestore()
+        .collection('role')
+        .where('account', '==', accountRef)
+        .where('group', '==', groupRef)
+        .where('type', '==', 'MANAGER')
+        .get();
+    if (canEdit.size === 0) {
+        throw new Error('Unauthorized');
+    }
+    await database_1.default.firestore().collection('project').doc(projectId).update(data);
+    return { message: 'project updated' };
 };
 //# sourceMappingURL=index.js.map
