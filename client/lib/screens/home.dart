@@ -23,9 +23,9 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Header(name: "Zhiwen"),
-          Body(),
+        children: [
+          const Header(name: "Zhiwen"),
+          Expanded(child: Body()),
         ],
       ),
     );
@@ -56,26 +56,57 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // color: MyColors.purple,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 2.5,
-            height: 250,
-            // child: Container(
-            //   color: MyColors.purple,
-            // ),
-            child: const ActiveGroupsCard(),
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 2.5,
-            height: 350,
-            child: Container(
-              color: MyColors.purple,
+          Expanded(
+            child: Row(
+              children: const [
+                Expanded(
+                  child: ActiveGroupsCard(),
+                ),
+                SizedBox(width: 20, height: 20),
+                Expanded(
+                  child: ActiveGroupsCard(),
+                )
+              ],
             ),
-            // child: ActiveGroupsCard(),
           ),
+          const SizedBox(width: 20, height: 20),
+          Expanded(
+            child: Row(
+              children: const [
+                Expanded(
+                  child: ActiveGroupsCard(),
+                ),
+                SizedBox(width: 20, height: 20),
+                Expanded(
+                  child: ActiveGroupsCard(),
+                )
+              ],
+            ),
+          ),
+          // Expanded(
+          //   child: Text("test"),
+          // )
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width / 2.5,
+          //   height: 250,
+          // child: Container(
+          //   color: MyColors.purple,
+          // ),
+          // child: const ActiveGroupsCard(),
+          // ),
+          // const ActiveGroupsCard(),
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width / 2.5,
+          //   height: 350,
+          //   child: Container(
+          //     color: MyColors.purple,
+          //   ),
+          //   // child: ActiveGroupsCard(),
+          // ),
         ],
       ),
     );

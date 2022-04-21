@@ -23,17 +23,33 @@ class ActiveGroupsCard extends StatelessWidget {
           ),
         ),
       ),
-      content: SizedBox(
-        width: 710,
-        height: 120,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            GroupCard(name: "Admin", role: "Admin", description: "Admin group with all basic admin rights"),
-            GroupCard(name: "Manager", role: "Manager", description: "Manager group with all basic manager rights"),
-            GroupCard(name: "User", role: "User", description: "User group with only read right on assign project"),
-          ]
-        )
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Expanded(
+            child: GroupCard(
+              name: "Admin",
+              role: "Admin",
+              description: "Admin group with all basic admin rights",
+            ),
+          ),
+          SizedBox(width: 20, height: 20),
+          Expanded(
+            child: GroupCard(
+              name: "Manager",
+              role: "Manager",
+              description: "Manager group with all basic manager rights",
+            ),
+          ),
+          SizedBox(width: 20, height: 20),
+          Expanded(
+            child: GroupCard(
+              name: "User",
+              role: "User",
+              description: "User group with only read right on assign project",
+            ),
+          ),
+        ],
       ),
       buttonBar: GFButtonBar(
         children: <Widget>[

@@ -56,10 +56,11 @@ class _LayoutPageState extends State<LayoutPage> {
             },
 
             theme: SideNavigationBarTheme(
-              backgroundColor: MyColors.purple,
+              backgroundColor: MyColors.headline,
               togglerTheme: SideNavigationBarTogglerTheme.standard(),
               itemTheme: const SideNavigationBarItemTheme(
                 selectedItemColor: Colors.white,
+                unselectedItemColor: MyColors.lightPurple,
               ),
               dividerTheme: SideNavigationBarDividerTheme.standard(),
             ),
