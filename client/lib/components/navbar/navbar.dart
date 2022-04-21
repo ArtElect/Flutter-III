@@ -1,3 +1,4 @@
+import 'package:client/services/fire_auth.dart';
 import 'package:flutter/material.dart';
 
 class Navbar extends StatelessWidget with PreferredSizeWidget {
@@ -17,7 +18,7 @@ class Navbar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.logout),
           tooltip: 'Logout',
-          onPressed: () {},
+          onPressed: () => FireAuthService().signOut(),
         ),
       ],
     );

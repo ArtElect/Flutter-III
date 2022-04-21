@@ -1,7 +1,6 @@
 import 'package:client/routes/routes.dart';
-import 'package:client/screens/home.dart';
 import 'package:client/screens/layout.dart';
-import 'package:client/screens/signin.dart';
+import 'package:client/screens/signIn.dart';
 import 'package:flutter/material.dart';
 
 class GenerateRoutes {
@@ -11,7 +10,7 @@ class GenerateRoutes {
       settings: settings,
       pageBuilder: (context, _, __) => page,
       transitionsBuilder: (context, opacity, _, child) {
-          return FadeTransition(opacity: opacity, child: child);
+        return FadeTransition(opacity: opacity, child: child);
       },
     );
   }
