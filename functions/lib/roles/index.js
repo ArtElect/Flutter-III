@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addRole = exports.listAccountRoles = void 0;
+exports.modifyRole = exports.addRole = exports.listAccountRoles = void 0;
 const database_1 = require("../database");
 const accounts_1 = require("../accounts");
 exports.listAccountRoles = async (userId) => {
@@ -32,5 +32,9 @@ exports.addRole = async (data) => {
         group: database_1.default.firestore().doc(`group/${data.groupId}`)
     });
     return { message: 'role added' };
+};
+exports.modifyRole = async (roleId, data) => {
+    await database_1.default.firestore().collection('role').doc(roleId).update(data);
+    return { message: 'role updated' };
 };
 //# sourceMappingURL=index.js.map

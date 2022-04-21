@@ -5,17 +5,17 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as functions from 'firebase-functions';
 
-import {createAccount, getAccountFromUserId} from './accounts';
+import { createAccount, getAccountFromUserId } from './accounts';
 
 import database from './database';
-import { AddGroupData } from './groups/types';
-import { addGroup, getGroup } from './groups';
-import { AddRoleData } from "./roles/types";
-import { addRole, listAccountRoles } from "./roles";
-import { addProject, listAccountProjects } from "./projects";
+import { AddRoleData, ModifyRoleData } from "./roles/types";
+import { addGroup, getGroup, modifyGroup } from './groups';
+import { AddGroupData, ModifyGroupData } from './groups/types';
+import { addRole, listAccountRoles, modifyRole } from "./roles";
+import { AddProjectData, ModifyProjectData } from "./projects/types";
+import { addProject, listAccountProjects, modifyProject } from "./projects";
 
 import { validationMiddleware } from './middlewares';
-import {AddProjectData} from "./projects/types";
 
 const app = express();
 
@@ -104,6 +104,10 @@ app.post('/groups', adminMiddleware, validationMiddleware(AddGroupData, 'body'),
   res.send(await addGroup(req.body));
 });
 
+app.patch('/groups/:groupId', adminMiddleware, validationMiddleware(ModifyGroupData, 'body'), async (req, res, _next) => {
+  res.send(await modifyGroup(req.params.groupId, req.body));
+});
+
 // ROLES
 
 app.get('/roles', async (req, res, _next) => {
@@ -114,14 +118,22 @@ app.post('/roles', adminMiddleware, validationMiddleware(AddRoleData, 'body'), a
   res.send(await addRole(req.body));
 });
 
+app.patch('/roles/:roleId', adminMiddleware, validationMiddleware(ModifyRoleData, 'body'), async (req, res, _next) => {
+  res.send(await modifyRole(req.params.roleId, req.body));
+});
+
 // PROJECTS
 
 app.get('/projects', async (req, res, _next) => {
   res.send(await listAccountProjects(res.locals.user.uid));
 });
 
-app.post('/projects', validationMiddleware(AddProjectData, 'body'), async (req, res, _next) => {
-  res.send(await addProject(res.locals.user.uid, req.body));
+app.post('/groups/:groupId/projects', validationMiddleware(AddProjectData, 'body'), async (req, res, _next) => {
+  res.send(await addProject(req.params.groupId, res.locals.user.uid, req.body));
+});
+
+app.patch('/groups/:groupId/projects/:projectId', validationMiddleware(ModifyProjectData, 'body'), async (req, res, _next) => {
+  res.send(await modifyProject(req.params.projectId, req.params.groupId, res.locals.user.uid, req.body));
 });
 
 /*

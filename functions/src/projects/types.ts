@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class AddProjectData {
   @IsString()
@@ -6,7 +6,14 @@ export class AddProjectData {
 
   @IsString()
   description!: string;
+}
 
+export class ModifyProjectData {
+  @IsOptional()
   @IsString()
-  groupId!: string;
+  title?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
 }

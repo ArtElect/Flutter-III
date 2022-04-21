@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddRoleData = void 0;
+exports.ModifyRoleData = exports.AddRoleData = void 0;
 const class_validator_1 = require("class-validator");
 class AddRoleData {
 }
@@ -17,4 +17,11 @@ __decorate([
     class_validator_1.IsString()
 ], AddRoleData.prototype, "groupId", void 0);
 exports.AddRoleData = AddRoleData;
+class ModifyRoleData {
+}
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsIn(['USER', 'MANAGER'])
+], ModifyRoleData.prototype, "type", void 0);
+exports.ModifyRoleData = ModifyRoleData;
 //# sourceMappingURL=types.js.map

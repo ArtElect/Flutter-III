@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addGroup = exports.getGroup = void 0;
+exports.modifyGroup = exports.addGroup = exports.getGroup = void 0;
 const database_1 = require("../database");
 exports.getGroup = async (account) => {
     const groups = await database_1.default.firestore().collection('group').get();
@@ -15,5 +15,9 @@ exports.getGroup = async (account) => {
 exports.addGroup = async (data) => {
     await database_1.default.firestore().collection('group').add(data);
     return { message: 'group created' };
+};
+exports.modifyGroup = async (groupId, data) => {
+    await database_1.default.firestore().collection('group').doc(groupId).update(data);
+    return { message: 'group updated' };
 };
 //# sourceMappingURL=index.js.map

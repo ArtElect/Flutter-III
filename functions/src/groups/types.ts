@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class AddGroupData {
   @IsString()
@@ -6,4 +6,14 @@ export class AddGroupData {
 
   @IsString()
   description!: string;
+}
+
+export class ModifyGroupData {
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
 }

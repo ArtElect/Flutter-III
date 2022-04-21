@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, IsOptional, IsIn } from 'class-validator';
 
 export class AddRoleData {
   @IsString()
@@ -6,4 +6,10 @@ export class AddRoleData {
 
   @IsString()
   groupId!: string;
+}
+
+export class ModifyRoleData {
+  @IsOptional()
+  @IsIn(['USER', 'MANAGER'])
+  type!: string;
 }
