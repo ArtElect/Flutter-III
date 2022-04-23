@@ -1,8 +1,7 @@
 import 'package:client/routes/routes.dart';
-import 'package:client/screens/groups.dart';
-import 'package:client/screens/layout.dart';
 import 'package:client/screens/mobile/home/small_home.dart';
-import 'package:client/screens/profile.dart';
+import 'package:client/screens/mobile/profile/small_profile.dart';
+import 'package:client/screens/mobile/project/small_project.dart';
 import 'package:client/screens/signIn.dart';
 import 'package:client/services/fire_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +24,10 @@ class GenerateRoutes {
       case Routes.home:
         if(_fireAuthService.isLogged) return routeBuilder(settings, const SmallHomePage());
         return unknownPage();
-      case Routes.groups:
-        return routeBuilder(settings, const GroupsPage());
+      case Routes.projects:
+        return routeBuilder(settings, const SmallProject());
       case Routes.profile:
-        return routeBuilder(settings, const ProfilePage());
+        return routeBuilder(settings, const SmallProfilePage());
       case Routes.signin:
         return routeBuilder(settings, const SignIn());
       default:
