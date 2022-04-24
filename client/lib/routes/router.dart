@@ -4,9 +4,15 @@ import 'package:client/screens/home.dart';
 import 'package:client/screens/groups.dart';
 import 'package:client/screens/projects.dart';
 import 'package:client/screens/profile.dart';
+import 'package:client/screens/mobile/home/small_home.dart';
+import 'package:client/screens/mobile/profile/small_profile.dart';
+import 'package:client/screens/mobile/project/small_project.dart';
+import 'package:client/screens/signIn.dart';
+import 'package:client/services/fire_auth.dart';
 import 'package:flutter/material.dart';
 
 class GenerateRoutes {
+  final FireAuthService _fireAuthService = FireAuthService();
 
   static Route routeBuilder(RouteSettings settings, Widget page) {
     return PageRouteBuilder(
@@ -37,11 +43,8 @@ class GenerateRoutes {
 
   static MaterialPageRoute<dynamic> unknownPage() {
     return MaterialPageRoute(builder: (_) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Error')
-        ),
-        body: const Center(
+      return const Scaffold(
+        body: Center(
           child: Text('Unknown Page'),
         ),
       );

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:client/routes/router.dart';
 import 'package:client/widgets/auth_wrapper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -20,6 +22,11 @@ void main() async {
     );
   } else {
     await Firebase.initializeApp();
+    FirebaseFirestore.instance.settings = const Settings(
+      host: 'localhost:8080',
+      sslEnabled: false,
+      persistenceEnabled: false,
+    );
   }
   runApp(const MyApp());
 }

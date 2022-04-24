@@ -1,20 +1,44 @@
+import 'package:adaptive_widgets/adaptive_widgets.dart';
+import 'package:client/models/user_model.dart';
 import 'package:client/screens/layout.dart';
+import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/signin.dart';
 import 'package:client/services/fire_auth.dart';
+import 'package:client/utils/secure_storage.dart';
 import 'package:flutter/material.dart';
 
-class AuthWrapper extends StatelessWidget {
-  AuthWrapper({ Key? key }) : super(key: key);
-
-  final FireAuthService _fireAuthService = FireAuthService();
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({ Key? key }) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  _AuthWrapperState createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  final FireAuthService _fireAuthService = FireAuthService();
+  final SecureStorage _storage = SecureStorage();
+  String? isLogged;
+  
+  @override
+  void initState() {
+    _storage.readSecureData("isLogged").then((value) {
+      setState(() {
+        isLogged = value;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: StreamBuilder(
+      body: StreamBuilder<UserModel?>(
         stream: _fireAuthService.authStateChanges,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.data != null && isLogged == 'true') {
+            if (AdaptiveWidget.isSmallScreen(screenSize)) return const SmallHomePage();
             return const LayoutPage();
           } else {
             return const SignIn();
