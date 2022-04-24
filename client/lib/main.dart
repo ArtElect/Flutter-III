@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:client/routes/router.dart';
 import 'package:client/widgets/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,16 @@ void main() async {
   runApp(const MyApp());
 }
 
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => { 
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    // etc.
+  };
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -31,6 +42,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Epitech Dashboard',
       debugShowCheckedModeBanner: false,
+      scrollBehavior: MyCustomScrollBehavior(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
@@ -50,6 +62,7 @@ class MyApp extends StatelessWidget {
           const ResponsiveBreakpoint.resize(1920, name: DESKTOP),
         ],
       ),
+      initialRoute: Routes.home,
       onGenerateRoute: (setting) => GenerateRoutes().generateRoute(setting),
       home: AuthWrapper(),
     );

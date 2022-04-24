@@ -1,45 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:client/constant/my_colors.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:client/components/cards/group_card.dart';
+import 'package:client/types/group.dart';
 
 class ActiveGroupsCard extends StatelessWidget {
-  const ActiveGroupsCard({Key? key}) : super(key: key);
+  final List<Group> groups;
+  const ActiveGroupsCard({Key? key, required this.groups}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GFCard(
-      boxFit: BoxFit.cover,
-      titlePosition: GFPosition.start,
-      margin: const EdgeInsets.all(0),
-      title: const GFListTile(
-        margin: EdgeInsets.all(0),
-        title: Text(
-          'Active groups',
-          style: TextStyle(
-            color: MyColors.text,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      height: 250,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Active groups',
+            style: TextStyle(
+              color: MyColors.text,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
-        ),
-      ),
-      content: SizedBox(
-        width: 710,
-        height: 120,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            GroupCard(name: "Admin", role: "Admin", description: "Admin group with all basic admin rights"),
-            GroupCard(name: "Manager", role: "Manager", description: "Manager group with all basic manager rights"),
-            GroupCard(name: "User", role: "User", description: "User group with only read right on assign project"),
-          ]
-        )
-      ),
-      buttonBar: GFButtonBar(
-        children: <Widget>[
-          GFButton(
-            onPressed: () {},
-            text: 'See more',
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(top: 12),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: groups.length,
+                separatorBuilder: (a, b) => const SizedBox(width: 10),
+                itemBuilder: (BuildContext context, int index) {
+                  return GroupCard(
+                    image: groups[index].url,
+                    name: groups[index].name,
+                    description: groups[index].description,
+                    onTap: () => {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('On Tap ${groups[index].name}'),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            onPressed: () {
+                              // Some code to undo the change.
+                            },
+                          ),
+                        ),
+                      ),
+                    },
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),
