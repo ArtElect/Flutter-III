@@ -17,7 +17,7 @@ class AuthWrapper extends StatefulWidget {
 class _AuthWrapperState extends State<AuthWrapper> {
   final FireAuthService _fireAuthService = FireAuthService();
   final SecureStorage _storage = SecureStorage();
-  late String isLogged;
+  String? isLogged;
   
   @override
   void initState() {
