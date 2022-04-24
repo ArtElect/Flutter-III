@@ -8,6 +8,7 @@ import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/mobile/profile/small_profile.dart';
 import 'package:client/screens/mobile/project/small_project.dart';
 import 'package:client/services/fire_auth.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class GenerateRoutes {
@@ -23,16 +24,27 @@ class GenerateRoutes {
     );
   }
 
+  Route verifyRoute(RouteSettings settings, Widget mobile, Widget web) {
+    if(_fireAuthService.isLogged) {
+      if(!kIsWeb) {
+        return routeBuilder(settings, mobile);
+      } else {
+        return routeBuilder(settings, web);
+      }
+    }
+    return unknownPage();
+  }
+
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.home:
-        return routeBuilder(settings, const HomePage());
+        return verifyRoute(settings, const SmallHomePage(), const HomePage());
       case Routes.groups:
         return routeBuilder(settings, const GroupsPage());
       case Routes.projects:
-        return routeBuilder(settings, const ProjectsPage());
+        return verifyRoute(settings, const SmallProject(), const ProjectsPage());
       case Routes.profile:
-        return routeBuilder(settings, const ProfilePage());
+        return verifyRoute(settings, const SmallProfilePage(), const ProfilePage());
       case Routes.signin:
         return routeBuilder(settings, const SignIn());
       default:
