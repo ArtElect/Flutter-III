@@ -43,7 +43,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   responsive_framework: ^0.1.7
   flutter_secure_storage: ^5.0.2
-  carousel_slider: ^4.0.0
   firebase_core: ^1.14.1
   cloud_firestore: ^3.1.12
   cloud_functions: ^3.2.12

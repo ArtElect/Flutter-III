@@ -7,7 +7,6 @@ import 'package:client/screens/profile.dart';
 import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/mobile/profile/small_profile.dart';
 import 'package:client/screens/mobile/project/small_project.dart';
-import 'package:client/screens/signIn.dart';
 import 'package:client/services/fire_auth.dart';
 import 'package:flutter/material.dart';
 

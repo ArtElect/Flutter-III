@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:client/routes/router.dart';
+import 'package:client/routes/routes.dart';
 import 'package:client/widgets/auth_wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
