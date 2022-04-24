@@ -8,6 +8,10 @@ import 'package:client/components/cards/active_groups_card.dart';
 import 'package:client/components/cards/active_projects_card.dart';
 import 'package:client/components/cards/project_progression_card.dart';
 import 'package:client/components/cards/group_members_card.dart';
+
+import 'package:client/types/member.dart';
+import 'package:client/types/group.dart';
+
 import 'package:client/constant/my_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,38 +22,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  /// Views to display
-  List<String> imageList = [
-    "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2017/12/13/00/23/christmas-3015776_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/19/10/55/christmas-market-4705877_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/20/00/03/road-4707345_960_720.jpg",
-    "https://cdn.pixabay.com/photo/2019/12/22/04/18/x-mas-4711785__340.jpg",
-    "https://cdn.pixabay.com/photo/2016/11/22/07/09/spruce-1848543__340.jpg"
-  ];
+  List<Group> groups = Group.getGroups();
+  List<Member> listOfMembers = Member.getMembers();
 
-  List<Object> groupList = [
-    {
-      "name": "Admin",
-      "members": [
-        {
-          "avatar_url":
-              "https://gravatar.com/avatar/231ed37a5279342e69c310a40e6d905f?s=400&d=robohash&r=x",
-          "name": "Zhiwen Wang"
-        },
-      ]
-    },
-    {
-      "name": "Développeur",
-      "members": [
-        {
-          "avatar_url":
-              "https://gravatar.com/avatar/3ff67eb871a16ba44582711d75d2c460?s=400&d=robohash&r=x",
-          "name": "Sacha du Bourg-Palette"
-        },
-      ]
-    },
-  ];
 
   Widget welcome({required String name}) {
     return Text(
@@ -84,13 +59,13 @@ class _HomePageState extends State<HomePage> {
         int index,
         int pageViewIndex,
       ) =>
-          projectProgressionCard(name: "Project A"),
+          const ProjectProgressionCard(name: "Project A", progression: 50, numberOfMembers: 15),
     );
   }
 
   Widget groupCarousel() {
     return CarouselSlider.builder(
-      itemCount: groupList.length,
+      itemCount: groups.length,
       options: CarouselOptions(
         aspectRatio: 16 / 9,
         viewportFraction: 0.8,
@@ -110,7 +85,7 @@ class _HomePageState extends State<HomePage> {
         int index,
         int pageViewIndex,
       ) =>
-          groupMembersCard(),
+          GroupMembersCard(name: groups[index].name, members: groups[index].members),
     );
   }
 
@@ -141,10 +116,10 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                activeGroupsCard(),
+                                ActiveGroupsCard(groups: groups),
                                 const SizedBox(width: 20, height: 20),
-                                Expanded(
-                                  child: activeProjectsCard(),
+                                const Expanded(
+                                  child: ActiveProjectsCard(),
                                 )
                               ],
                             ),

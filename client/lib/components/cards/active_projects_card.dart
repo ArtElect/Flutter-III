@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:client/constant/my_colors.dart';
 import 'package:getwidget/getwidget.dart';
 
-Widget activeProjectsCard() {
-  return GFCard(
+class ActiveProjectsCard extends StatelessWidget {
+  const ActiveProjectsCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GFCard(
       boxFit: BoxFit.cover,
       titlePosition: GFPosition.start,
       margin: const EdgeInsets.all(0),
@@ -57,5 +61,5 @@ Widget activeProjectsCard() {
         ],
       ),
     );
-
+  }
 }
