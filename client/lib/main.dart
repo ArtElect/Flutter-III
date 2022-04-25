@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
           const ResponsiveBreakpoint.resize(1920, name: DESKTOP),
         ],
       ),
-      initialRoute: Routes.home,
+      // initialRoute: Routes.home,
       onGenerateRoute: (setting) => GenerateRoutes().generateRoute(setting),
       home: AuthWrapper(),
     );

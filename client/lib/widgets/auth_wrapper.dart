@@ -1,6 +1,6 @@
 import 'package:adaptive_widgets/adaptive_widgets.dart';
 import 'package:client/models/user_model.dart';
-import 'package:client/screens/home.dart';
+import 'package:client/screens/web/home/home.dart';
 import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/signin.dart';
 import 'package:client/services/fire_auth.dart';

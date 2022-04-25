@@ -1,12 +1,13 @@
 import 'package:client/routes/routes.dart';
 import 'package:client/screens/signin.dart';
-import 'package:client/screens/home.dart';
-import 'package:client/screens/groups.dart';
-import 'package:client/screens/projects.dart';
-import 'package:client/screens/profile.dart';
+import 'package:client/screens/web/home/home.dart';
+import 'package:client/screens/web/group/groups.dart';
+import 'package:client/screens/web/project/projects.dart';
+import 'package:client/screens/web/profile/profile.dart';
 import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/mobile/profile/small_profile.dart';
 import 'package:client/screens/mobile/project/small_project.dart';
+import 'package:client/screens/unauthorized.dart';
 import 'package:client/services/fire_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -45,6 +46,8 @@ class GenerateRoutes {
         return verifyRoute(settings, const SmallProject(), const ProjectsPage());
       case Routes.profile:
         return verifyRoute(settings, const SmallProfilePage(), const ProfilePage());
+      case Routes.unauthorized:
+        return routeBuilder(settings, const UnauthorizedPage());
       case Routes.signin:
         return routeBuilder(settings, const SignIn());
       default:
