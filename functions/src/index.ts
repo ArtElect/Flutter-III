@@ -147,7 +147,7 @@ app.delete('/roles/:roleId', adminMiddleware, async (req, res, _next) => {
 });
 
 app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
-  res.send(await listRoles(res.locals.user.uid));
+  res.send(await listRoles());
 });
 
 // PROJECTS

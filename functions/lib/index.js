@@ -117,7 +117,7 @@ app.delete('/roles/:roleId', adminMiddleware, async (req, res, _next) => {
     res.send(await roles_1.deleteRole(req.params.roleId));
 });
 app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
-    res.send(await roles_1.listRoles(res.locals.user.uid));
+    res.send(await roles_1.listRoles());
 });
 // PROJECTS
 app.get('/projects', async (req, res, _next) => {
