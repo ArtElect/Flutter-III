@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const functions = require("firebase-functions");
 const accounts_1 = require("./accounts");
 const database_1 = require("./database");
+const rights_1 = require("./rights");
 const types_1 = require("./roles/types");
 const groups_1 = require("./groups");
 const types_2 = require("./groups/types");
@@ -15,6 +16,7 @@ const roles_1 = require("./roles");
 const types_3 = require("./projects/types");
 const projects_1 = require("./projects");
 const middlewares_1 = require("./middlewares");
+const types_4 = require("./accounts/types");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -77,6 +79,12 @@ app.post('/account', async (req, res, _next) => {
         res.send(account);
     }
 });
+app.patch('/account', middlewares_1.validationMiddleware(types_4.ModifyAccountData, 'body'), async (req, res, _next) => {
+    res.send(await accounts_1.updateAccount(res.locals.user.uid, req.body));
+});
+app.get('/accounts', adminMiddleware, async (req, res, _next) => {
+    res.send(await accounts_1.getAccounts());
+});
 // GROUPS
 app.get('/groups', async (req, res, _next) => {
     const account = await accounts_1.getAccountFromUserId(res.locals.user.uid);
@@ -88,6 +96,13 @@ app.post('/groups', adminMiddleware, middlewares_1.validationMiddleware(types_2.
 app.patch('/groups/:groupId', adminMiddleware, middlewares_1.validationMiddleware(types_2.ModifyGroupData, 'body'), async (req, res, _next) => {
     res.send(await groups_1.modifyGroup(req.params.groupId, req.body));
 });
+app.delete('/groups/:groupId', adminMiddleware, async (req, res, _next) => {
+    res.send(await groups_1.deleteGroup(req.params.groupId));
+});
+// RIGHTS
+app.get('/rights', async (req, res, _next) => {
+    res.send(await rights_1.listPossibleRights());
+});
 // ROLES
 app.get('/roles', async (req, res, _next) => {
     res.send(await roles_1.listAccountRoles(res.locals.user.uid));
@@ -98,6 +113,12 @@ app.post('/roles', adminMiddleware, middlewares_1.validationMiddleware(types_1.A
 app.patch('/roles/:roleId', adminMiddleware, middlewares_1.validationMiddleware(types_1.ModifyRoleData, 'body'), async (req, res, _next) => {
     res.send(await roles_1.modifyRole(req.params.roleId, req.body));
 });
+app.delete('/roles/:roleId', adminMiddleware, async (req, res, _next) => {
+    res.send(await roles_1.deleteRole(req.params.roleId));
+});
+app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
+    res.send(await roles_1.listRoles());
+});
 // PROJECTS
 app.get('/projects', async (req, res, _next) => {
     res.send(await projects_1.listAccountProjects(res.locals.user.uid));
@@ -107,6 +128,9 @@ app.post('/groups/:groupId/projects', middlewares_1.validationMiddleware(types_3
 });
 app.patch('/groups/:groupId/projects/:projectId', middlewares_1.validationMiddleware(types_3.ModifyProjectData, 'body'), async (req, res, _next) => {
     res.send(await projects_1.modifyProject(req.params.projectId, req.params.groupId, res.locals.user.uid, req.body));
+});
+app.delete('/groups/:groupId/projects/:projectId', async (req, res, _next) => {
+    res.send(await projects_1.deleteProject(req.params.projectId, req.params.groupId, res.locals.user.uid));
 });
 /*
 app.put('/posts/:id/like', async (req, res, _next) => {

@@ -25,3 +25,8 @@ export const modifyGroup = async (groupId: string, data: AddGroupData) => {
   await database.firestore().collection('group').doc(groupId).update(data);
   return { message: 'group updated' };
 };
+
+export const deleteGroup = async (groupId: string) => {
+  await database.firestore().collection('group').doc(groupId).delete();
+  return { message: 'group deleted' };
+}

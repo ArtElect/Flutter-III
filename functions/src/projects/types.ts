@@ -6,6 +6,9 @@ export class AddProjectData {
 
   @IsString()
   description!: string;
+
+  @IsString()
+  image!: string;
 }
 
 export class ModifyProjectData {

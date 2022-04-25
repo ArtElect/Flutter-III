@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateAccountData = void 0;
+exports.ModifyAccountData = exports.CreateAccountData = void 0;
 const class_validator_1 = require("class-validator");
 class CreateAccountData {
 }
@@ -14,4 +14,10 @@ __decorate([
     class_validator_1.IsString()
 ], CreateAccountData.prototype, "userId", void 0);
 exports.CreateAccountData = CreateAccountData;
+class ModifyAccountData {
+}
+__decorate([
+    class_validator_1.IsString()
+], ModifyAccountData.prototype, "image", void 0);
+exports.ModifyAccountData = ModifyAccountData;
 //# sourceMappingURL=types.js.map

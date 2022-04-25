@@ -16,6 +16,9 @@ __decorate([
 __decorate([
     class_validator_1.IsString()
 ], AddProjectData.prototype, "description", void 0);
+__decorate([
+    class_validator_1.IsString()
+], AddProjectData.prototype, "image", void 0);
 exports.AddProjectData = AddProjectData;
 class ModifyProjectData {
 }
