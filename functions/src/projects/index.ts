@@ -60,6 +60,7 @@ export const addProject = async (groupId: string, userId: string, data: AddProje
   await database.firestore().collection('project').add({
     title: data.title,
     description: data.description,
+    image: data.image,
     group: groupRef
   })
   return { message: 'project created' };
