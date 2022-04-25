@@ -2,24 +2,24 @@ import 'package:admin/components/sidebar.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
-class GroupsPage extends StatefulWidget {
-  const GroupsPage({ Key? key }) : super(key: key);
+class ProjectPage extends StatefulWidget {
+  const ProjectPage({ Key? key }) : super(key: key);
 
   @override
-  _GroupsPageState createState() => _GroupsPageState();
+  _ProjectPageState createState() => _ProjectPageState();
 }
 
-class _GroupsPageState extends State<GroupsPage> {
+class _ProjectPageState extends State<ProjectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Row(
         children: const [
-          Sidebar(selectedIndex: 1),
+          Sidebar(selectedIndex: 2),
           Expanded(
             child: Center(
-              child: Text("Group Page")
+              child: Text("Project Page")
             )
           )
         ],
