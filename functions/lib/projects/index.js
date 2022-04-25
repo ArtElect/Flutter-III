@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProject = exports.modifyProject = exports.addProject = exports.listAccountProjects = void 0;
+exports.listGroupProjects = exports.deleteProject = exports.modifyProject = exports.addProject = exports.listAccountProjects = void 0;
 const database_1 = require("../database");
 const accounts_1 = require("../accounts");
 const rights_1 = require("../rights");
@@ -91,5 +91,36 @@ exports.deleteProject = async (projectId, groupId, userId) => {
     }
     await database_1.default.firestore().collection('project').doc(projectId).delete();
     return { message: 'project deleted' };
+};
+exports.listGroupProjects = async (userId, groupId) => {
+    const account = await accounts_1.getAccountFromUserId(userId);
+    const accountRef = await database_1.default.firestore().collection('account').doc(account.id);
+    const groupRef = await database_1.default.firestore().collection('group').doc(groupId);
+    const roles = await database_1.default.firestore()
+        .collection('role')
+        .where('account', '==', accountRef)
+        .where('group', '==', groupRef)
+        .get();
+    return Promise.all(roles.docs.map(async (role) => {
+        const data = role.data();
+        const groupRef = await data.group.get();
+        const group = groupRef.data();
+        const accountRef = await data.account.get();
+        const account = accountRef.data();
+        data.account.get();
+        const projectsDocs = await database_1.default.firestore().collection('project')
+            .where('group', '==', data.group)
+            .get();
+        const projects = projectsDocs.docs.map((pd) => {
+            return Object.assign({ id: pd.id }, pd.data());
+        });
+        return {
+            group,
+            account,
+            projects,
+            id: role.id,
+            type: data.type,
+        };
+    }));
 };
 //# sourceMappingURL=index.js.map

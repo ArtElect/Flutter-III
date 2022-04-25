@@ -85,12 +85,22 @@ app.get('/account', async (req, res, _next) => {
   res.send(await getAccountFromUserId(res.locals.user.uid));
 });
 
-app.post('/account', async (req, res, _next) => {
+app.post('/user-account', async (req, res, _next) => {
   const existAccount = await getAccountFromUserId(res.locals.user.uid);
   if (existAccount) {
     res.send(existAccount);
   } else {
-    const account = await createAccount({ userId: res.locals.user.uid });
+    const account = await createAccount({ userId: res.locals.user.uid }, 'USER');
+    res.send(account);
+  }
+});
+
+app.post('/admin-account', async (req, res, _next) => {
+  const existAccount = await getAccountFromUserId(res.locals.user.uid);
+  if (existAccount) {
+    res.send(existAccount);
+  } else {
+    const account = await createAccount({ userId: res.locals.user.uid }, 'ADMIN');
     res.send(account);
   }
 });
@@ -153,6 +163,10 @@ app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
 // PROJECTS
 
 app.get('/projects', async (req, res, _next) => {
+  res.send(await listAccountProjects(res.locals.user.uid));
+});
+
+app.get('/groups/:groupId/projects', async (req, res, _next) => {
   res.send(await listAccountProjects(res.locals.user.uid));
 });
 

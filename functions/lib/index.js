@@ -69,13 +69,23 @@ app.use(userMiddleware);
 app.get('/account', async (req, res, _next) => {
     res.send(await accounts_1.getAccountFromUserId(res.locals.user.uid));
 });
-app.post('/account', async (req, res, _next) => {
+app.post('/user-account', async (req, res, _next) => {
     const existAccount = await accounts_1.getAccountFromUserId(res.locals.user.uid);
     if (existAccount) {
         res.send(existAccount);
     }
     else {
-        const account = await accounts_1.createAccount({ userId: res.locals.user.uid });
+        const account = await accounts_1.createAccount({ userId: res.locals.user.uid }, 'USER');
+        res.send(account);
+    }
+});
+app.post('/admin-account', async (req, res, _next) => {
+    const existAccount = await accounts_1.getAccountFromUserId(res.locals.user.uid);
+    if (existAccount) {
+        res.send(existAccount);
+    }
+    else {
+        const account = await accounts_1.createAccount({ userId: res.locals.user.uid }, 'ADMIN');
         res.send(account);
     }
 });
@@ -121,6 +131,9 @@ app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
 });
 // PROJECTS
 app.get('/projects', async (req, res, _next) => {
+    res.send(await projects_1.listAccountProjects(res.locals.user.uid));
+});
+app.get('/groups/:groupId/projects', async (req, res, _next) => {
     res.send(await projects_1.listAccountProjects(res.locals.user.uid));
 });
 app.post('/groups/:groupId/projects', middlewares_1.validationMiddleware(types_3.AddProjectData, 'body'), async (req, res, _next) => {

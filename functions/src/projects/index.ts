@@ -105,3 +105,42 @@ export const deleteProject = async (projectId: string, groupId: string, userId: 
   await database.firestore().collection('project').doc(projectId).delete();
   return { message: 'project deleted' };
 }
+
+export const listGroupProjects = async (userId: string, groupId: string) => {
+  const account = await getAccountFromUserId(userId)
+  const accountRef = await database.firestore().collection('account').doc(account!.id);
+  const groupRef = await database.firestore().collection('group').doc(groupId);
+  const roles = await database.firestore()
+    .collection('role')
+    .where('account', '==', accountRef)
+    .where('group', '==', groupRef)
+    .get();
+  return Promise.all(roles.docs.map(async (role) => {
+    const data = role.data();
+
+    const groupRef = await data.group.get();
+    const group = groupRef.data();
+
+    const accountRef = await data.account.get();
+    const account = accountRef.data();
+    data.account.get();
+
+    const projectsDocs = await database.firestore().collection('project')
+      .where('group', '==', data.group)
+      .get();
+
+    const projects = projectsDocs.docs.map((pd) => {
+      return {
+        id: pd.id,
+        ...pd.data(),
+      }
+    })
+    return {
+      group,
+      account,
+      projects,
+      id: role.id,
+      type: data.type,
+    }
+  }));
+}
