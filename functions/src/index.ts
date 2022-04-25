@@ -5,7 +5,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as functions from 'firebase-functions';
 
-import { createAccount, getAccountFromUserId } from './accounts';
+import {createAccount, getAccountFromUserId, updateAccount} from './accounts';
 
 import database from './database';
 import { listPossibleRights } from "./rights";
@@ -17,6 +17,7 @@ import { AddProjectData, ModifyProjectData } from "./projects/types";
 import { addProject, listAccountProjects, modifyProject, deleteProject } from "./projects";
 
 import { validationMiddleware } from './middlewares';
+import {ModifyAccountData} from "./accounts/types";
 
 const app = express();
 
@@ -92,6 +93,10 @@ app.post('/account', async (req, res, _next) => {
     const account = await createAccount({ userId: res.locals.user.uid });
     res.send(account);
   }
+});
+
+app.patch('/account', validationMiddleware(ModifyAccountData, 'body'), async (req, res, _next) => {
+  res.send(await updateAccount(res.locals.user.uid, req.body));
 });
 
 // GROUPS

@@ -16,6 +16,7 @@ const roles_1 = require("./roles");
 const types_3 = require("./projects/types");
 const projects_1 = require("./projects");
 const middlewares_1 = require("./middlewares");
+const types_4 = require("./accounts/types");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -77,6 +78,9 @@ app.post('/account', async (req, res, _next) => {
         const account = await accounts_1.createAccount({ userId: res.locals.user.uid });
         res.send(account);
     }
+});
+app.patch('/account', middlewares_1.validationMiddleware(types_4.ModifyAccountData, 'body'), async (req, res, _next) => {
+    res.send(await accounts_1.updateAccount(res.locals.user.uid, req.body));
 });
 // GROUPS
 app.get('/groups', async (req, res, _next) => {
