@@ -82,6 +82,9 @@ app.post('/account', async (req, res, _next) => {
 app.patch('/account', middlewares_1.validationMiddleware(types_4.ModifyAccountData, 'body'), async (req, res, _next) => {
     res.send(await accounts_1.updateAccount(res.locals.user.uid, req.body));
 });
+app.get('/accounts', adminMiddleware, async (req, res, _next) => {
+    res.send(await accounts_1.getAccounts());
+});
 // GROUPS
 app.get('/groups', async (req, res, _next) => {
     const account = await accounts_1.getAccountFromUserId(res.locals.user.uid);
@@ -112,6 +115,9 @@ app.patch('/roles/:roleId', adminMiddleware, middlewares_1.validationMiddleware(
 });
 app.delete('/roles/:roleId', adminMiddleware, async (req, res, _next) => {
     res.send(await roles_1.deleteRole(req.params.roleId));
+});
+app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
+    res.send(await roles_1.listRoles(res.locals.user.uid));
 });
 // PROJECTS
 app.get('/projects', async (req, res, _next) => {

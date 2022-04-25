@@ -1,4 +1,4 @@
-import { CreateAccountData, ModifyAccountData } from "./types";
+import {CreateAccountData, ModifyAccountData} from "./types";
 
 import database from "../database";
 
@@ -30,3 +30,13 @@ export const updateAccount = async (userId: string, data: ModifyAccountData) => 
   await database.firestore().collection('account').doc(accounts.docs[0].id).update(data);
   return { message: 'account updated' };
 }
+
+export const getAccounts = async () => {
+  const accounts = await database.firestore().collection('account').get();
+  return accounts.docs.map((account: any) => {
+    return {
+      id: account.id,
+      ...account.data()
+    };
+  });
+};

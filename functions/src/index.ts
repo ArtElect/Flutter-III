@@ -5,14 +5,14 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as functions from 'firebase-functions';
 
-import {createAccount, getAccountFromUserId, updateAccount} from './accounts';
+import {createAccount, getAccountFromUserId, getAccounts, updateAccount} from './accounts';
 
 import database from './database';
 import { listPossibleRights } from "./rights";
 import { AddRoleData, ModifyRoleData } from "./roles/types";
-import {addGroup, deleteGroup, getGroup, modifyGroup} from './groups';
+import { addGroup, deleteGroup, getGroup, modifyGroup } from './groups';
 import { AddGroupData, ModifyGroupData } from './groups/types';
-import {addRole, deleteRole, listAccountRoles, modifyRole} from "./roles";
+import { addRole, deleteRole, listAccountRoles, modifyRole, listRoles } from "./roles";
 import { AddProjectData, ModifyProjectData } from "./projects/types";
 import { addProject, listAccountProjects, modifyProject, deleteProject } from "./projects";
 
@@ -99,6 +99,11 @@ app.patch('/account', validationMiddleware(ModifyAccountData, 'body'), async (re
   res.send(await updateAccount(res.locals.user.uid, req.body));
 });
 
+app.get('/accounts', adminMiddleware, async (req, res, _next) => {
+  res.send(await getAccounts());
+});
+
+
 // GROUPS
 
 app.get('/groups', async (req, res, _next) => {
@@ -139,6 +144,10 @@ app.patch('/roles/:roleId', adminMiddleware, validationMiddleware(ModifyRoleData
 
 app.delete('/roles/:roleId', adminMiddleware, async (req, res, _next) => {
   res.send(await deleteRole(req.params.roleId));
+});
+
+app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
+  res.send(await listRoles(res.locals.user.uid));
 });
 
 // PROJECTS
