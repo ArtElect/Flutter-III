@@ -1,9 +1,6 @@
+import 'package:client/services/fire_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'package:client/constant/my_colors.dart';
-
-import 'package:client/components/navbar/navbar.dart';
-import 'package:client/components/cards/signin_card.dart';
+import 'package:flutter_login/flutter_login.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -13,26 +10,20 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: Navbar(),
-      body: Content(),
-    );
-  }
-}
-
-class Content extends StatelessWidget {
-  const Content({Key? key}) : super(key: key);
+  final FireAuthService _firebaseAuth = FireAuthService();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color : MyColors.background,
-      child : const Center(
-        child: SignInCard(),
+    return Scaffold(
+      body: FlutterLogin(
+        title: 'EPITECH',
+        onLogin: (data) => _firebaseAuth.signIn(email: data.name, password: data.password),
+        onSignup: (data) =>  _firebaseAuth.resgister(email: data.name ?? '', password: data.password ?? ''),
+        onSubmitAnimationCompleted: () => Navigator.popAndPushNamed(context, '/home'),
+        hideForgotPasswordButton: true,
+        loginAfterSignUp: false,
+        onRecoverPassword: (_) => Future(() => null),
       ),
     );
   }
 }
-

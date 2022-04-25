@@ -1,69 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:client/constant/my_colors.dart';
-import 'package:getwidget/getwidget.dart';
 
 class GroupCard extends StatelessWidget {
+  final String image;
   final String name;
-  final String role;
   final String description;
+  final GestureTapCallback onTap;
+
   const GroupCard({
     Key? key,
+    required this.image,
     required this.name,
-    required this.role,
     required this.description,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 220,
-      height: 120,
-      padding: const EdgeInsets.all(0),
-      child: GFCard(
-        boxFit: BoxFit.cover,
-        titlePosition: GFPosition.start,
-        margin: const EdgeInsets.all(0),
-        title: GFListTile(
-          margin: const EdgeInsets.all(0),
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          title: Text(
-            name,
-            style: const TextStyle(
-              color: MyColors.text,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+      height: 180,
+      width: 250,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.5),
+            BlendMode.darken,
+          ),
+          image: NetworkImage(image),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                fontSize: 24,
+              ),
             ),
           ),
-          subTitle: Text(
-            'Participates as a $role',
-            style: const TextStyle(
-              color: MyColors.text,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Text(
+              description,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
             ),
           ),
-        ),
-        content: Text(
-          description,
-          textAlign: TextAlign.start,
-          style: const TextStyle(
-            color: MyColors.text,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
-        ),
-        // buttonBar: GFButtonBar(
-        //   children: <Widget>[
-        //     GFButton(
-        //       onPressed: () {},
-        //       text: 'Buy',
-        //     ),
-        //     GFButton(
-        //       onPressed: () {},
-        //       text: 'Cancel',
-        //     ),
-        //   ],
-        // ),
+        ],
       ),
     );
   }
