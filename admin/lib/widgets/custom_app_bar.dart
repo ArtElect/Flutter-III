@@ -1,4 +1,5 @@
 import 'package:admin/config/my_colors.dart';
+import 'package:admin/routes/routes.dart';
 import 'package:admin/services/fire_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.logout),
           tooltip: 'Logout',
-          onPressed: () => FireAuthService().signOut(),
+          onPressed: () {
+            FireAuthService().signOut();
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (Route<dynamic> route) => false);
+          }
         ),
       ],
     );

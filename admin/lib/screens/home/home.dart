@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             print(snapshot.data);
-            _fireAuthService.createAccountInDB(snapshot.data.toString());
             return Row(
               children: [
                 const Sidebar(selectedIndex: 0,),

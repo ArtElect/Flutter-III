@@ -40,7 +40,8 @@ class FireAuthService {
     debugPrint('Name: $email, Password: $password');
     try {
       _storage.writeSecureData('isLogged', 'true');
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      createAccountInDB(await result.user!.getIdToken());
       return null;
     } on FirebaseAuthException catch(e) {
       debugPrint(e.code);
@@ -64,11 +65,17 @@ class FireAuthService {
     debugPrint('Name: $email, Password: $password');
     try {
       return Future.delayed(delay).then((_) async {
-        await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+        UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
         return null;
       });
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      debugPrint(e.code);
+      switch(e.code) {
+        case 'email-already-in-use':
+          return 'The email is already in use';
+        default:
+          return e.code;
+      }
     }
   }
 }
