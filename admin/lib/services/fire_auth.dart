@@ -1,6 +1,8 @@
 
+import 'package:admin/models/db_user_model.dart';
+import 'package:admin/services/user_service.dart';
 import 'package:admin/utils/secure_storage.dart';
-import 'package:admin/models/user_model.dart';
+import 'package:admin/models/fire_user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,13 +10,14 @@ import 'package:flutter/material.dart';
 
 class FireAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final UserService _userService = UserService();
   final SecureStorage _storage = SecureStorage();
   final String fireStoreHost = kIsWeb ? 'http://localhost:5001' : 'http://10.0.2.2:5001';
   final client = Dio();
 
-  UserModel? _fetchUserData(User? user) => user != null ? UserModel(uid: user.uid, email: user.email) : null;
-  UserModel? get getCurrentUser => _fetchUserData(_firebaseAuth.currentUser);
-  Stream<UserModel?> get authStateChanges => _firebaseAuth.authStateChanges().map(_fetchUserData);
+  FirebaseUserModel? _fetchUserData(User? user) => user != null ? FirebaseUserModel(uid: user.uid, email: user.email) : null;
+  FirebaseUserModel? get getCurrentUser => _fetchUserData(_firebaseAuth.currentUser);
+  Stream<FirebaseUserModel?> get authStateChanges => _firebaseAuth.authStateChanges().map(_fetchUserData);
   Future<String>? get getIdToken => _firebaseAuth.currentUser?.getIdToken();
   bool get isLogged => _firebaseAuth.currentUser != null ? true : false;
 
@@ -38,10 +41,15 @@ class FireAuthService {
   Future<String?> signIn({required String email, required String password}) async {
     debugPrint('Name: $email, Password: $password');
     try {
-      _storage.writeSecureData('isLogged', 'true');
       UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      createAccountInDB(await result.user!.getIdToken());
-      return null;
+      createAccountInDB(await result.user!.getIdToken(true));
+      DbUserModel user = await _userService.fetchDbUser(await result.user!.getIdToken(true));
+      if (user.role == 'ADMIN') {
+        _storage.writeSecureData('isLogged', 'true');
+        return null;
+      } else {
+        return 'This is not an administrator account';
+      }
     } on FirebaseAuthException catch(e) {
       debugPrint(e.code);
       switch(e.code) {
