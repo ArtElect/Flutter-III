@@ -1,3 +1,4 @@
+import 'package:client/routes/routes.dart';
 import 'package:client/services/fire_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:client/constant/my_colors.dart';
@@ -20,7 +21,10 @@ class Navbar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.logout),
           tooltip: 'Logout',
-          onPressed: () => FireAuthService().signOut(),
+          onPressed: () {
+            FireAuthService().signOut();
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.signin, (Route<dynamic> route) => false);
+          }
         ),
       ],
     );
