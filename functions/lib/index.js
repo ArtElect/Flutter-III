@@ -69,7 +69,7 @@ app.use(userMiddleware);
 app.get('/account', async (req, res, _next) => {
     res.send(await accounts_1.getAccountFromUserId(res.locals.user.uid));
 });
-app.post('/user-account', async (req, res, _next) => {
+app.post('/account', async (req, res, _next) => {
     const existAccount = await accounts_1.getAccountFromUserId(res.locals.user.uid);
     if (existAccount) {
         res.send(existAccount);

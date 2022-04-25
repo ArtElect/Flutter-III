@@ -85,7 +85,7 @@ app.get('/account', async (req, res, _next) => {
   res.send(await getAccountFromUserId(res.locals.user.uid));
 });
 
-app.post('/user-account', async (req, res, _next) => {
+app.post('/account', async (req, res, _next) => {
   const existAccount = await getAccountFromUserId(res.locals.user.uid);
   if (existAccount) {
     res.send(existAccount);
