@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsIn } from 'class-validator';
+import { IsString, IsArray } from 'class-validator';
 
 export class AddRoleData {
   @IsString()
@@ -9,7 +9,6 @@ export class AddRoleData {
 }
 
 export class ModifyRoleData {
-  @IsOptional()
-  @IsIn(['USER', 'MANAGER'])
-  type!: string;
+  @IsArray()
+  rightsId!: [string];
 }

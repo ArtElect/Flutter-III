@@ -2,6 +2,7 @@ import { AddProjectData } from './types';
 
 import database from "../database";
 import { getAccountFromUserId } from "../accounts";
+import { getRightId } from "../rights";
 
 export const listAccountProjects = async (userId: string) => {
   const account = await getAccountFromUserId(userId)
@@ -42,15 +43,18 @@ export const listAccountProjects = async (userId: string) => {
 
 export const addProject = async (groupId: string, userId: string, data: AddProjectData) => {
   const account = await getAccountFromUserId(userId)
-  const accountRef = await database.firestore().collection('account').doc(account!.id);
-  const groupRef = await database.firestore().doc(`group/${groupId}`);
-  const canEdit = await database.firestore()
+  const accountRef = database.firestore().collection('account').doc(account!.id);
+  const groupRef = database.firestore().doc(`group/${groupId}`);
+  const createRightId = await getRightId('CREATE');
+
+  const canCreate = await database.firestore()
     .collection('role')
     .where('account', '==', accountRef)
     .where('group', '==', groupRef)
-    .where('type', '==', 'MANAGER')
+    .where('rights', 'array-contains', database.firestore().collection('right').doc(createRightId))
     .get()
-  if (canEdit.size === 0) {
+  // @ts-ignore
+  if (account!.role !== 'ADMIN' && canCreate.size === 0) {
     throw new Error('Unauthorized');
   }
   await database.firestore().collection('project').add({
@@ -63,17 +67,40 @@ export const addProject = async (groupId: string, userId: string, data: AddProje
 
 export const modifyProject = async (projectId: string, groupId: string, userId: string, data: AddProjectData) => {
   const account = await getAccountFromUserId(userId)
-  const accountRef = await database.firestore().collection('account').doc(account!.id);
-  const groupRef = await database.firestore().doc(`group/${groupId}`);
-  const canEdit = await database.firestore()
+  const accountRef = database.firestore().collection('account').doc(account!.id);
+  const groupRef = database.firestore().doc(`group/${groupId}`);
+  const updateRightId = await getRightId('UPDATE');
+
+  const canUpdate = await database.firestore()
     .collection('role')
     .where('account', '==', accountRef)
     .where('group', '==', groupRef)
-    .where('type', '==', 'MANAGER')
+    .where('rights', 'array-contains', database.firestore().collection('right').doc(updateRightId))
     .get()
-  if (canEdit.size === 0) {
+  // @ts-ignore
+  if (account!.role !== 'ADMIN' && canUpdate.size === 0) {
     throw new Error('Unauthorized');
   }
   await database.firestore().collection('project').doc(projectId).update(data);
   return { message: 'project updated' };
+}
+
+export const deleteProject = async (projectId: string, groupId: string, userId: string) => {
+  const account = await getAccountFromUserId(userId)
+  const accountRef = database.firestore().collection('account').doc(account!.id);
+  const groupRef = database.firestore().doc(`group/${groupId}`);
+  const deleteRightId = await getRightId('DELETE');
+
+  const canDelete = await database.firestore()
+    .collection('role')
+    .where('account', '==', accountRef)
+    .where('group', '==', groupRef)
+    .where('rights', 'array-contains', database.firestore().collection('right').doc(deleteRightId))
+    .get()
+  // @ts-ignore
+  if (account!.role !== 'ADMIN' && canDelete.size === 0) {
+    throw new Error('Unauthorized');
+  }
+  await database.firestore().collection('project').doc(projectId).delete();
+  return { message: 'project deleted' };
 }

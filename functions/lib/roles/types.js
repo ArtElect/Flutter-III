@@ -20,8 +20,7 @@ exports.AddRoleData = AddRoleData;
 class ModifyRoleData {
 }
 __decorate([
-    class_validator_1.IsOptional(),
-    class_validator_1.IsIn(['USER', 'MANAGER'])
-], ModifyRoleData.prototype, "type", void 0);
+    class_validator_1.IsArray()
+], ModifyRoleData.prototype, "rightsId", void 0);
 exports.ModifyRoleData = ModifyRoleData;
 //# sourceMappingURL=types.js.map

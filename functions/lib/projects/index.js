@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modifyProject = exports.addProject = exports.listAccountProjects = void 0;
+exports.deleteProject = exports.modifyProject = exports.addProject = exports.listAccountProjects = void 0;
 const database_1 = require("../database");
 const accounts_1 = require("../accounts");
+const rights_1 = require("../rights");
 exports.listAccountProjects = async (userId) => {
     const account = await accounts_1.getAccountFromUserId(userId);
     const accountRef = await database_1.default.firestore().collection('account').doc(account.id);
@@ -34,15 +35,17 @@ exports.listAccountProjects = async (userId) => {
 };
 exports.addProject = async (groupId, userId, data) => {
     const account = await accounts_1.getAccountFromUserId(userId);
-    const accountRef = await database_1.default.firestore().collection('account').doc(account.id);
-    const groupRef = await database_1.default.firestore().doc(`group/${groupId}`);
-    const canEdit = await database_1.default.firestore()
+    const accountRef = database_1.default.firestore().collection('account').doc(account.id);
+    const groupRef = database_1.default.firestore().doc(`group/${groupId}`);
+    const createRightId = await rights_1.getRightId('CREATE');
+    const canCreate = await database_1.default.firestore()
         .collection('role')
         .where('account', '==', accountRef)
         .where('group', '==', groupRef)
-        .where('type', '==', 'MANAGER')
+        .where('rights', 'array-contains', database_1.default.firestore().collection('right').doc(createRightId))
         .get();
-    if (canEdit.size === 0) {
+    // @ts-ignore
+    if (account.role !== 'ADMIN' && canCreate.size === 0) {
         throw new Error('Unauthorized');
     }
     await database_1.default.firestore().collection('project').add({
@@ -54,18 +57,38 @@ exports.addProject = async (groupId, userId, data) => {
 };
 exports.modifyProject = async (projectId, groupId, userId, data) => {
     const account = await accounts_1.getAccountFromUserId(userId);
-    const accountRef = await database_1.default.firestore().collection('account').doc(account.id);
-    const groupRef = await database_1.default.firestore().doc(`group/${groupId}`);
-    const canEdit = await database_1.default.firestore()
+    const accountRef = database_1.default.firestore().collection('account').doc(account.id);
+    const groupRef = database_1.default.firestore().doc(`group/${groupId}`);
+    const updateRightId = await rights_1.getRightId('UPDATE');
+    const canUpdate = await database_1.default.firestore()
         .collection('role')
         .where('account', '==', accountRef)
         .where('group', '==', groupRef)
-        .where('type', '==', 'MANAGER')
+        .where('rights', 'array-contains', database_1.default.firestore().collection('right').doc(updateRightId))
         .get();
-    if (canEdit.size === 0) {
+    // @ts-ignore
+    if (account.role !== 'ADMIN' && canUpdate.size === 0) {
         throw new Error('Unauthorized');
     }
     await database_1.default.firestore().collection('project').doc(projectId).update(data);
     return { message: 'project updated' };
+};
+exports.deleteProject = async (projectId, groupId, userId) => {
+    const account = await accounts_1.getAccountFromUserId(userId);
+    const accountRef = database_1.default.firestore().collection('account').doc(account.id);
+    const groupRef = database_1.default.firestore().doc(`group/${groupId}`);
+    const deleteRightId = await rights_1.getRightId('DELETE');
+    const canDelete = await database_1.default.firestore()
+        .collection('role')
+        .where('account', '==', accountRef)
+        .where('group', '==', groupRef)
+        .where('rights', 'array-contains', database_1.default.firestore().collection('right').doc(deleteRightId))
+        .get();
+    // @ts-ignore
+    if (account.role !== 'ADMIN' && canDelete.size === 0) {
+        throw new Error('Unauthorized');
+    }
+    await database_1.default.firestore().collection('project').doc(projectId).delete();
+    return { message: 'project deleted' };
 };
 //# sourceMappingURL=index.js.map
