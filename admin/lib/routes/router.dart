@@ -1,13 +1,10 @@
-import 'package:client/routes/routes.dart';
-import 'package:client/screens/signin.dart';
-import 'package:client/screens/home.dart';
-import 'package:client/screens/groups.dart';
-import 'package:client/screens/projects.dart';
-import 'package:client/screens/profile.dart';
-import 'package:client/screens/mobile/home/small_home.dart';
-import 'package:client/screens/mobile/profile/small_profile.dart';
-import 'package:client/screens/mobile/project/small_project.dart';
-import 'package:client/services/fire_auth.dart';
+import 'package:admin/routes/routes.dart';
+import 'package:admin/screens/groups/groups.dart';
+import 'package:admin/screens/home/home.dart';
+import 'package:admin/screens/login/login.dart';
+import 'package:admin/screens/profile/profile.dart';
+import 'package:admin/screens/project/project.dart';
+import 'package:admin/services/fire_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
@@ -24,7 +21,7 @@ class GenerateRoutes {
     );
   }
 
-  Route verifyRoute(RouteSettings settings, Widget mobile, Widget web) {
+  /*Route responsive(RouteSettings settings, Widget mobile, Widget web) {
     if(_fireAuthService.isLogged) {
       if(!kIsWeb) {
         return routeBuilder(settings, mobile);
@@ -33,20 +30,24 @@ class GenerateRoutes {
       }
     }
     return unknownPage();
-  }
+  }*/
 
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.home:
-        return verifyRoute(settings, const SmallHomePage(), const HomePage());
+        if(_fireAuthService.isLogged) return routeBuilder(settings, const HomePage());
+        return unknownPage();
       case Routes.groups:
-        return routeBuilder(settings, const GroupsPage());
+        if(_fireAuthService.isLogged) return routeBuilder(settings, const GroupsPage());
+        return unknownPage();
       case Routes.projects:
-        return verifyRoute(settings, const SmallProject(), const ProjectsPage());
+        if(_fireAuthService.isLogged) return routeBuilder(settings, const ProjectPage());
+        return unknownPage();
       case Routes.profile:
-        return verifyRoute(settings, const SmallProfilePage(), const ProfilePage());
-      case Routes.signin:
-        return routeBuilder(settings, const SignIn());
+        if(_fireAuthService.isLogged) return routeBuilder(settings, const ProfilePage());
+        return unknownPage();
+      case Routes.login:
+        return routeBuilder(settings, const LoginPage());
       default:
         return unknownPage();
     }
