@@ -11,7 +11,6 @@ class FireAuthService {
   final SecureStorage _storage = SecureStorage();
   final String fireStoreHost = kIsWeb ? 'http://localhost:5001' : 'http://10.0.2.2:5001';
   final client = Dio();
-  Duration delay = const Duration(milliseconds: 1500);
 
   UserModel? _fetchUserData(User? user) => user != null ? UserModel(uid: user.uid, email: user.email) : null;
   UserModel? get getCurrentUser => _fetchUserData(_firebaseAuth.currentUser);
@@ -63,12 +62,18 @@ class FireAuthService {
   Future<String?> resgister({required String email, required String password}) async {
     debugPrint('Name: $email, Password: $password');
     try {
-      return Future.delayed(delay).then((_) async {
-        await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-        return null;
-      });
+      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      return null;
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      debugPrint(e.code);
+      switch(e.code) {
+        case "email-already-in-use":
+          return 'The email is already in use';
+        case "weak-password":
+          return 'Password should be at least 6 characters';
+        default:
+          return e.code;
+      }
     }
   }
 }
