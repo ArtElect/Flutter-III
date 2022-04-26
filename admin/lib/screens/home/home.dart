@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                                                     shape: BoxShape.circle,
                                                     image: DecorationImage(
                                                       fit: BoxFit.fill,
-                                                      image: NetworkImage(snapshot.data![index].image.toString()),
+                                                      image: NetworkImage(snapshot.data![index].image!),
                                                     )
                                                 )
                                             ),
