@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                                                     )
                                                 )
                                             ),
-                                            Text(snapshot.data![index].id.toString()),
+                                            Text(snapshot.data![index].id!),
                                           ],
                                         )
                                     );
