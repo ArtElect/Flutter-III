@@ -16,8 +16,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FireAuthService _fireAuthService = FireAuthService();
 
-  userRedirection() {
-    print("test");
+  userRedirection(String id) {
+    print(id);
   }
 
   @override
@@ -33,45 +33,41 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const Sidebar(selectedIndex: 0,),
                 Expanded(
-                  child: Container(
-                    child: FutureBuilder<List<DbUserModel>> (
-                        future: _fireAuthService.getAccounts(snapshot.data!),
-                        builder: (context, snapshot) {
-                          if (snapshot.data != null) {
-                            return Container(
-                              child: ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: userRedirection,
-                                      child: Row(
-                                          children: [
-                                            Container(
-                                                width: 100.0,
-                                                height: 100.0,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: NetworkImage(snapshot.data![index].image!),
-                                                    )
+                  child: FutureBuilder<List<DbUserModel>> (
+                      future: _fireAuthService.getAccounts(snapshot.data!),
+                      builder: (context, snapshot) {
+                        if (snapshot.data != null) {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: userRedirection(snapshot.data![index].id!),
+                                  child: Row(
+                                      children: [
+                                        Container(
+                                            width: 100.0,
+                                            height: 100.0,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: NetworkImage(snapshot.data![index].image!),
                                                 )
-                                            ),
-                                            const Padding(padding: EdgeInsets.only(left: 10)),
-                                            Text(snapshot.data![index].id!),
-                                            const Padding(padding: EdgeInsets.only(bottom: 10)),
-                                          ],
-                                        )
-                                    );
-                                  }
-                              )
-                            );
-                          } else {
-                            print('${snapshot.error}');
-                            return const Center(child: CircularProgressIndicator());
-                          }
+                                            )
+                                        ),
+                                        const Padding(padding: EdgeInsets.only(left: 10)),
+                                        Text(snapshot.data![index].id!),
+                                        const Padding(padding: EdgeInsets.only(bottom: 10)),
+                                      ],
+                                    )
+                                );
+                              }
+                          );
+                        } else {
+                          print('${snapshot.error}');
+                          return const Center(child: CircularProgressIndicator());
                         }
-                    )
+                      }
                   ),
                 ),
               ],
