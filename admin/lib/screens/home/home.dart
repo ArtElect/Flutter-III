@@ -16,9 +16,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FireAuthService _fireAuthService = FireAuthService();
 
+  userRedirection() {
+    print("test");
+  }
+
   @override
   Widget build(BuildContext context){
-
     return Scaffold(
       drawerEdgeDragWidth: 0,
       appBar: const CustomAppBar(),
@@ -36,7 +39,30 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, snapshot) {
                           if (snapshot.data != null) {
                             return Container(
-                              child: Text(snapshot.data![0].userId.toString()),
+                              child: ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: userRedirection,
+                                      child: Row(
+                                          children: [
+                                            Container(
+                                                width: 100.0,
+                                                height: 100.0,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: NetworkImage(snapshot.data![index].image.toString()),
+                                                    )
+                                                )
+                                            ),
+                                            Text(snapshot.data![index].id.toString()),
+                                          ],
+                                        )
+                                    );
+                                  }
+                              )
                             );
                           } else {
                             print('${snapshot.error}');
