@@ -38,6 +38,28 @@ class FireAuthService {
     }
   }
 
+  Future<List<DbUserModel>> getAccounts(String token) async {
+    final response = await client.post(
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/accounts',
+      options: Options(
+        headers: {'Authorization':'Bearer ' + token},
+      ),
+    );
+    if (response.statusCode == 200) {
+      List<DbUserModel> dbUserModelList = [];
+      final json = response.data;
+
+      for (var jsondata in json) {
+        dbUserModelList.add(DbUserModel.fromJson(jsondata));
+      }
+
+      return dbUserModelList;
+    } else {
+      print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
+      throw Exception('Failed to create account in database');
+    }
+  }
+
   Future<String?> signIn({required String email, required String password}) async {
     debugPrint('Name: $email, Password: $password');
     try {
