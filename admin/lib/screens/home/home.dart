@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> {
                                                     )
                                                 )
                                             ),
+                                            const Padding(padding: EdgeInsets.only(left: 10)),
                                             Text(snapshot.data![index].id!),
                                           ],
                                         )
