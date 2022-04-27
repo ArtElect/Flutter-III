@@ -54,15 +54,18 @@ class FireAuthService {
 
   Future<String?> signIn({required String email, required String password}) async {
     debugPrint('Name: $email, Password: $password');
+    DbUserModel user;
     try {
       UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      createAccountInDB(await result.user!.getIdToken(true));
-      DbUserModel user = await fetchCurrentDbUser(await result.user!.getIdToken(true));
-      if (user.role == 'ADMIN') {
-        _storage.writeSecureData('isLogged', 'true');
-        return null;
-      } else {
-        return 'This is not an administrator account';
+      String? res = await createAccountInDB(await result.user!.getIdToken(true));
+      if (res == 'account created') {
+        user = await fetchCurrentDbUser(await result.user!.getIdToken(true));
+        if (user.role == 'ADMIN') {
+          _storage.writeSecureData('isLogged', 'true');
+          return null;
+        } else {
+          return 'This is not an administrator account';
+        }
       }
     } on FirebaseAuthException catch(e) {
       debugPrint(e.code);
