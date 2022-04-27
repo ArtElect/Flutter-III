@@ -29,10 +29,10 @@ class GroupService {
     }
   }
 
-  Future<String> createGroup(String name, String description) async {
+  Future<String> createGroup(String title, String description) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
-      'name': name,
+      'title': title,
       'description': description,
     };
     final response = await client.post(
@@ -52,10 +52,10 @@ class GroupService {
     }
   }
 
-  Future<String> updateGroup(String name, String description, String groupId) async {
+  Future<String> updateGroup(String title, String description, String groupId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
-      'name': name,
+      'title': title,
       'description': description,
     };
     final response = await client.patch(
