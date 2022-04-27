@@ -21,31 +21,24 @@ class GenerateRoutes {
     );
   }
 
-  /*Route responsive(RouteSettings settings, Widget mobile, Widget web) {
+  Route isLogged(RouteSettings settings, Widget child) {
     if(_fireAuthService.isLogged) {
-      if(!kIsWeb) {
-        return routeBuilder(settings, mobile);
-      } else {
-        return routeBuilder(settings, web);
-      }
+        return routeBuilder(settings, child);
+    } else {
+      return unknownPage();
     }
-    return unknownPage();
-  }*/
+  }
 
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.home:
-        if(_fireAuthService.isLogged) return routeBuilder(settings, const HomePage());
-        return unknownPage();
+        return isLogged(settings, const HomePage());
       case Routes.groups:
-        if(_fireAuthService.isLogged) return routeBuilder(settings, const GroupsPage());
-        return unknownPage();
+        return isLogged(settings, const GroupsPage());
       case Routes.projects:
-        if(_fireAuthService.isLogged) return routeBuilder(settings, const ProjectPage());
-        return unknownPage();
+        return isLogged(settings, const ProjectPage());
       case Routes.profile:
-        if(_fireAuthService.isLogged) return routeBuilder(settings, const ProfilePage());
-        return unknownPage();
+        return isLogged(settings, const ProfilePage());
       case Routes.login:
         return routeBuilder(settings, const LoginPage());
       default:

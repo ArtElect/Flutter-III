@@ -39,7 +39,7 @@ class FireAuthService {
   }
 
   Future<List<DbUserModel>> getAccounts(String token) async {
-    final response = await client.get(
+    final response = await client.post(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/accounts',
       options: Options(
         headers: {'Authorization':'Bearer ' + token},
