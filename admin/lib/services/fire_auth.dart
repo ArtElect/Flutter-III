@@ -1,6 +1,5 @@
 
 import 'package:admin/models/db_user_model.dart';
-import 'package:admin/services/user_service.dart';
 import 'package:admin/utils/secure_storage.dart';
 import 'package:admin/models/fire_user_model.dart';
 import 'package:dio/dio.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/material.dart';
 
 class FireAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final UserService _userService = UserService();
   final SecureStorage _storage = SecureStorage();
   final String fireStoreHost = kIsWeb ? 'http://localhost:5001' : 'http://10.0.2.2:5001';
   final client = Dio();
@@ -20,6 +18,22 @@ class FireAuthService {
   Stream<FirebaseUserModel?> get authStateChanges => _firebaseAuth.authStateChanges().map(_fetchUserData);
   Future<String>? get getIdToken => _firebaseAuth.currentUser?.getIdToken();
   bool get isLogged => _firebaseAuth.currentUser != null ? true : false;
+
+  Future<DbUserModel> fetchCurrentDbUser(String token) async {
+    final response = await client.get(
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/account',
+      options: Options(
+        headers: {'Authorization':'Bearer ' + token},
+      ),
+    );
+    if (response.statusCode == 200) {
+      final json = DbUserModel.fromJson(response.data);
+      return json;
+    } else {
+      print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
+      throw Exception('Failed to fetch the current user from database');
+    }
+  }
 
   Future<String?> createAccountInDB(String token) async {
     final response = await client.post(
@@ -38,34 +52,12 @@ class FireAuthService {
     }
   }
 
-  Future<List<DbUserModel>> getAccounts(String token) async {
-    final response = await client.post(
-      '$fireStoreHost/flutter-iii-8a868/us-central1/api/accounts',
-      options: Options(
-        headers: {'Authorization':'Bearer ' + token},
-      ),
-    );
-    if (response.statusCode == 200) {
-      List<DbUserModel> dbUserModelList = [];
-      final json = response.data;
-
-      for (var jsondata in json) {
-        dbUserModelList.add(DbUserModel.fromJson(jsondata));
-      }
-
-      return dbUserModelList;
-    } else {
-      print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
-      throw Exception('Failed to create account in database');
-    }
-  }
-
   Future<String?> signIn({required String email, required String password}) async {
     debugPrint('Name: $email, Password: $password');
     try {
       UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       createAccountInDB(await result.user!.getIdToken(true));
-      DbUserModel user = await _userService.fetchDbUser(await result.user!.getIdToken(true));
+      DbUserModel user = await fetchCurrentDbUser(await result.user!.getIdToken(true));
       if (user.role == 'ADMIN') {
         _storage.writeSecureData('isLogged', 'true');
         return null;
