@@ -13,7 +13,7 @@ class GroupMembersCard extends StatelessWidget {
     required this.members,
   }) : super(key: key);
 
-    List<Widget> getListOfMembers() {
+  List<Widget> getListOfMembers() {
     List<Widget> childs = [];
     for (var i = 0; i < members.length; i++) {
       childs.add(

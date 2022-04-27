@@ -4,11 +4,11 @@ import 'package:client/models/user_model.dart';
 
 class RoleModel {
   final String id;
-  final GroupModel groups;
-  List<RightModel> rights = [];
-  final UserModel users;
+  final GroupModel group;
+  final List<RightModel> rights;
+  final UserModel user;
 
-  RoleModel({required this.id, required this.groups, required this.rights, required this.users});
+  RoleModel({required this.id, required this.group, required this.rights, required this.user});
 
   factory RoleModel.fromJSON(Map<String, dynamic> json) {
     List<RightModel> listOfRight = [];
@@ -19,9 +19,9 @@ class RoleModel {
 
     return RoleModel(
       id: json['id'],
-      groups: GroupModel.fromJSON(json['groups']),
+      group: GroupModel.fromJSON(json['group']),
       rights: listOfRight,
-      users: UserModel.fromJSON(json['account'])
+      user: UserModel.fromJSON(json['account'])
     );
   }
 }

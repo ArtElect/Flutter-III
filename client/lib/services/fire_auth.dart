@@ -1,4 +1,3 @@
-
 import 'package:client/models/firebase_user_model.dart';
 import 'package:client/utils/secure_storage.dart';
 import 'package:dio/dio.dart';

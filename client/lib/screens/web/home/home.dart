@@ -13,8 +13,9 @@ import 'package:client/components/unauthorized/unauthorized.dart';
 import 'package:client/types/member.dart';
 import 'package:client/types/group.dart';
 
-import 'package:client/models/role_model.dart';
-import 'package:client/services/role.dart';
+import 'package:client/models/group_projects_model.dart';
+import 'package:client/models/project_model.dart';
+import 'package:client/services/project.dart';
 
 import 'package:client/constant/my_colors.dart';
 
@@ -28,7 +29,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Group> groups = Group.getGroups();
   List<Member> listOfMembers = Member.getMembers();
-  final RoleService _roleService = RoleService();
+  final ProjectService _projectService = ProjectService();
 
   Widget welcome({required String name}) {
     return Text(
@@ -41,20 +42,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget projectCarousel() {
+  Widget projectCarousel(List<ProjectModel> projects) {
     return CarouselSlider.builder(
-      itemCount: 2,
+      itemCount: projects.length,
       options: CarouselOptions(
         aspectRatio: 16 / 9,
         viewportFraction: 0.8,
         initialPage: 0,
         enableInfiniteScroll: false,
         reverse: false,
-        // autoPlay: true,
-        // autoPlayInterval: Duration(seconds: 3),
-        // autoPlayAnimationDuration:
-        //     Duration(milliseconds: 800),
-        // autoPlayCurve: Curves.fastOutSlowIn,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration:
+            const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
         enlargeCenterPage: true,
         scrollDirection: Axis.horizontal,
       ),
@@ -63,8 +64,8 @@ class _HomePageState extends State<HomePage> {
         int index,
         int pageViewIndex,
       ) =>
-          const ProjectProgressionCard(
-              name: "Project A", progression: 50, numberOfMembers: 15),
+          ProjectProgressionCard(
+              name: projects[index].title!, progression: 50, numberOfMembers: 15),
     );
   }
 
@@ -77,11 +78,11 @@ class _HomePageState extends State<HomePage> {
         initialPage: 0,
         enableInfiniteScroll: false,
         reverse: false,
-        // autoPlay: true,
-        // autoPlayInterval: Duration(seconds: 3),
-        // autoPlayAnimationDuration:
-        //     Duration(milliseconds: 800),
-        // autoPlayCurve: Curves.fastOutSlowIn,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration:
+            const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
         enlargeCenterPage: true,
         scrollDirection: Axis.horizontal,
       ),
@@ -95,67 +96,66 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildHome() {
-    return Row(
-      children: [
-        const Sidebar(selectedIndex: 0),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 50,
-              vertical: 30,
-            ),
-            height: double.infinity,
-            color: MyColors.background,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                welcome(name: "Zhiwen"),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Row(
-                      children: [
-                        // Left side
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ActiveGroupsCard(groups: groups),
-                              const SizedBox(width: 20, height: 20),
-                              const Expanded(
-                                child: ActiveProjectsCard(),
-                              )
-                            ],
-                          ),
-                        ),
+  Widget _buildContent(List<GroupProjectsModel> groups) {
+    if (groups.isEmpty) {
+      return const Expanded(child: UnauthorizedBody());
+    }
 
-                        // Right side
-                        Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          width: 350,
-                          // color: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(child: groupCarousel()),
-                              const Divider(
-                                  thickness: 5, color: MyColors.background),
-                              Expanded(child: projectCarousel()),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 50,
+          vertical: 30,
         ),
-      ],
+        height: double.infinity,
+        color: MyColors.background,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            welcome(name: "Zhiwen"),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: Row(
+                  children: [
+                    // Left side
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ActiveGroupsCard(groups: groups),
+                          const SizedBox(width: 20, height: 20),
+                          Expanded(
+                            child: ActiveProjectsCard(projects: _projectService.activeProjects),
+                          )
+                        ],
+                      ),
+                    ),
+
+                    // Right side
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      width: 350,
+                      // color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(child: groupCarousel()),
+                          const Divider(
+                              thickness: 5, color: MyColors.background),
+                          Expanded(child: projectCarousel(_projectService.activeProjects)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -163,18 +163,24 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Navbar(),
-      body: FutureBuilder<List<RoleModel>>(
-        future: _roleService.getRoles(),
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            print(snapshot.data);
-            return _buildHome();
-          } else {
-            print(snapshot.data);
-            print('${snapshot.error}');
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: Row(
+        children: [
+          const Sidebar(selectedIndex: 0),
+          FutureBuilder<List<GroupProjectsModel>>(
+            future: _projectService.getGroupsProjects(),
+            builder: (context, snapshot) {
+              if (snapshot.data != null) {
+                return _buildContent(snapshot.data!);
+              } else {
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }

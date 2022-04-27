@@ -1,7 +1,7 @@
 class UserModel {
-  final String userId;
-  final String role;
-  final String image;
+  final String? userId;
+  final String? role;
+  final String? image;
 
   UserModel({required this.userId, required this.role, required this.image});
 

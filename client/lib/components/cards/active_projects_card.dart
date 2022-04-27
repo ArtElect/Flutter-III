@@ -1,9 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:client/constant/my_colors.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:client/models/project_model.dart';
 
 class ActiveProjectsCard extends StatelessWidget {
-  const ActiveProjectsCard({Key? key}) : super(key: key);
+  final List<ProjectModel> projects;
+  const ActiveProjectsCard({Key? key, required this.projects})
+      : super(key: key);
+
+  List<Widget> _buildProjectTile() {
+    List<Widget> childs = [];
+
+    for (var i = 0; i < projects.length; i++) {
+      childs.add(
+        ListTile(
+          contentPadding: const EdgeInsets.only(left: 0),
+          leading: const GFAvatar(),
+          title: Text(
+            projects[i].title!,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            projects[i].description!,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: const Icon(Icons.more_vert),
+          onTap: () => {},
+        ),
+      );
+    }
+    return childs;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +52,7 @@ class ActiveProjectsCard extends StatelessWidget {
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          ListTile(
-            contentPadding: const EdgeInsets.only(left: 0),
-            leading: const GFAvatar(),
-            title: const Text(
-              'Project A',
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: const Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing',
-              overflow: TextOverflow.ellipsis,
-            ),
-            trailing: const Icon(Icons.more_vert),
-            onTap: () => {},
-          ),
+          ..._buildProjectTile()
         ],
       ),
       buttonBar: GFButtonBar(
