@@ -25,7 +25,9 @@ class _GroupsPageState extends State<GroupsPage> {
               title: Text(data.title ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
               subtitle: Text(data.description ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
             ),
-            onTap: (){},
+            onTap: () {
+              Navigator.of(context).popAndPushNamed("/groups/detail", arguments: data);
+            },
           ),
         ),
       );

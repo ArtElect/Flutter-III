@@ -1,4 +1,6 @@
+import 'package:admin/models/groups_model.dart';
 import 'package:admin/routes/routes.dart';
+import 'package:admin/screens/groups/group_detail.dart';
 import 'package:admin/screens/groups/groups.dart';
 import 'package:admin/screens/home/home.dart';
 import 'package:admin/screens/home/user_information.dart';
@@ -40,6 +42,9 @@ class GenerateRoutes {
         return isLogged(settings, UserInformationPage(dbUserModel: dbUserModel));
       case Routes.groups:
         return isLogged(settings, const GroupsPage());
+      case Routes.groupDetail:
+        final groupsModel = settings.arguments as GroupsModel;
+        return isLogged(settings, GroupsDetailPage(groupsModel: groupsModel));
       case Routes.projects:
         return isLogged(settings, const ProjectPage());
       case Routes.profile:
