@@ -18,10 +18,6 @@ class _HomePageState extends State<HomePage> {
   final FireAuthService _fireAuthService = FireAuthService();
   final UserService _userService = UserService();
 
-  userRedirection(String id) {
-    print(id);
-  }
-
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -43,7 +39,9 @@ class _HomePageState extends State<HomePage> {
                             itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
-                                  onTap: userRedirection(snapshot.data![index].id!),
+                                  onTap: () {
+                                    Navigator.of(context).popAndPushNamed("/home/userinfo");
+                                  },
                                   child: Row(
                                       children: [
                                         Container(

@@ -1,6 +1,7 @@
 import 'package:admin/routes/routes.dart';
 import 'package:admin/screens/groups/groups.dart';
 import 'package:admin/screens/home/home.dart';
+import 'package:admin/screens/home/user_information.dart';
 import 'package:admin/screens/login/login.dart';
 import 'package:admin/screens/profile/profile.dart';
 import 'package:admin/screens/project/project.dart';
@@ -33,6 +34,8 @@ class GenerateRoutes {
     switch (settings.name) {
       case Routes.home:
         return isLogged(settings, const HomePage());
+      case Routes.userInformation:
+        return isLogged(settings, const UserInformationPage());
       case Routes.groups:
         return isLogged(settings, const GroupsPage());
       case Routes.projects:
