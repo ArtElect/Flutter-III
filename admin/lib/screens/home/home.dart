@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).popAndPushNamed("/home/userinfo");
+                                    Navigator.of(context).popAndPushNamed("/home/userinfo", arguments: snapshot.data![index]);
                                   },
                                   child: Row(
                                       children: [

@@ -6,6 +6,7 @@ import 'package:admin/screens/login/login.dart';
 import 'package:admin/screens/profile/profile.dart';
 import 'package:admin/screens/project/project.dart';
 import 'package:admin/services/fire_auth.dart';
+import 'package:admin/models/db_user_model.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,8 @@ class GenerateRoutes {
       case Routes.home:
         return isLogged(settings, const HomePage());
       case Routes.userInformation:
-        return isLogged(settings, const UserInformationPage());
+        final dbUserModel = settings.arguments as DbUserModel;
+        return isLogged(settings, UserInformationPage(dbUserModel: dbUserModel));
       case Routes.groups:
         return isLogged(settings, const GroupsPage());
       case Routes.projects:
