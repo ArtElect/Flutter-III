@@ -2,6 +2,7 @@ import 'package:admin/components/sidebar.dart';
 import 'package:admin/config/my_colors.dart';
 import 'package:admin/models/db_user_model.dart';
 import 'package:admin/services/fire_auth.dart';
+import 'package:admin/services/user_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FireAuthService _fireAuthService = FireAuthService();
+  final UserService _userService = UserService();
 
   userRedirection(String id) {
     print(id);
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                 const Sidebar(selectedIndex: 0,),
                 Expanded(
                   child: FutureBuilder<List<DbUserModel>> (
-                      future: _fireAuthService.getAccounts(snapshot.data!),
+                      future: _userService.getAccounts(),
                       builder: (context, snapshot) {
                         if (snapshot.data != null) {
                           return ListView.builder(
