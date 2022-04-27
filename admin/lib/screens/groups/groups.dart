@@ -46,6 +46,7 @@ class _GroupsPageState extends State<GroupsPage> {
               builder: (context, snapshot) {
                 if(snapshot.data != null) {
                   return SingleChildScrollView(
+                    controller: ScrollController(),
                     child: Column(
                       children:  _generateText(snapshot.data),
                     ),
