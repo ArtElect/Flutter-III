@@ -42,15 +42,18 @@ class _GroupsPageState extends State<GroupsPage> {
       body: Row(
         children: [
           const Sidebar(selectedIndex: 1),
-          Expanded(
+          Flexible(
             child: FutureBuilder<List<GroupsModel>>(
               future: _groupService.fetchGroups(),
               builder: (context, snapshot) {
                 if(snapshot.data != null) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children:  _generateText(snapshot.data),
-                    ),
+                  return ListView.builder(
+                    controller: ScrollController(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children:  _generateText(snapshot.data),
+                      );
+                    },
                   );
                 } else {
                   return const Center(child: CircularProgressIndicator());

@@ -1,42 +1,43 @@
-import 'package:admin/models/groups_model.dart';
+import 'package:admin/models/project_model.dart';
 import 'package:admin/services/fire_auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-class GroupService {
+class ProjectService {
   final String fireStoreHost = kIsWeb ? 'http://localhost:5001' : 'http://10.0.2.2:5001';
   final FireAuthService _fireAuthService = FireAuthService();
   final client = Dio();
   
-  Future<List<GroupsModel>> fetchGroups() async {
+  Future<List<ProjectModel>> fetchProjects() async {
     String token = await _fireAuthService.getIdToken ?? '';
     final response = await client.get(
-      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups',
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/projects',
       options: Options(
         headers: {'Authorization':'Bearer ' + token},
       ),
     );
     if (response.statusCode == 200) {
       final json = response.data;
-      List<GroupsModel> groups = [];
+      List<ProjectModel> projects = [];
       for(var data in json) {
-        groups.add(GroupsModel.fromJson(data));
+        projects.add(ProjectModel.fromJson(data));
       }
-      return groups;
+      return projects;
     } else {
       print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
-      throw Exception('Failed to fetch groups from database');
+      throw Exception('Failed to fetch projects from database');
     }
   }
 
-  Future<String> createGroup(String title, String description) async {
+  Future<String> createProject(String name, String description, String image, String groupId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
-      'title': title,
+      'title': name,
       'description': description,
+      'image': image,
     };
     final response = await client.post(
-      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups',
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId/projects',
       data: data,
       options: Options(
         headers: {'Authorization':'Bearer ' + token},
@@ -48,18 +49,18 @@ class GroupService {
       return json['message'];
     } else {
       print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
-      throw Exception('Failed to create group in database');
+      throw Exception('Failed to create project in database');
     }
   }
 
-  Future<String> updateGroup(String title, String description, String groupId) async {
+  Future<String> updateProject(String title, String description, String groupId, String projectId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
       'title': title,
       'description': description,
     };
     final response = await client.patch(
-      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId',
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId/projects/$projectId',
       data: data,
       options: Options(
         headers: {'Authorization':'Bearer ' + token},
@@ -71,14 +72,14 @@ class GroupService {
       return json['message'];
     } else {
       print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
-      throw Exception('Failed to update group in database');
+      throw Exception('Failed to update project in database');
     }
   }
 
-  Future<String> deleteGroup(String groupId) async {
+  Future<String> deleteGroup(String groupId, String projectId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     final response = await client.delete(
-      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId',
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId/projects/$projectId',
       options: Options(
         headers: {'Authorization':'Bearer ' + token},
       ),
@@ -89,7 +90,7 @@ class GroupService {
       return json['message'];
     } else {
       print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
-      throw Exception('Failed to delete group in database');
+      throw Exception('Failed to delete project in database');
     }
   }
 }
