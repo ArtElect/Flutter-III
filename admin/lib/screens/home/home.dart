@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                 Flexible(
                   child: FutureBuilder<List<DbUserModel>>(
                     future: _userService.getAccounts(),
-                    builder: (context, snapchat) {
+                    builder: (context, snapshot) {
                       if(snapshot.data != null) {
                         return Column(
                           children: [
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                                         Text('Users', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                                       ],
                                     ),
-                                    UserDatatable(users: snapchat.data),
+                                    UserDatatable(users: snapshot.data),
                                   ],
                                 ),
                               ),
