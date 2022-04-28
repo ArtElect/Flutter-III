@@ -29,15 +29,56 @@ class RolesService {
     }
   }
 
-  Future<String> createRoles(String groupId, String accountId) async {
+  Future<List<RolesModel>> fetchAllUsersRoles() async {
+    String token = await _fireAuthService.getIdToken ?? '';
+    final response = await client.get(
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/admin/roles',
+      options: Options(
+        headers: {'Authorization':'Bearer ' + token},
+      ),
+    );
+    if (response.statusCode == 200) {
+      final json = response.data;
+      List<RolesModel> roles = [];
+      for(var data in json) {
+        roles.add(RolesModel.fromJson(data));
+      }
+      return roles;
+    } else {
+      print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
+      throw Exception('Failed to fetch all users roles from database');
+    }
+  }
+
+  Future<String> createGroupRole(String groupId, String roleName, List<String> rightsId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
       'groupId': groupId,
-      'accountId': accountId,
+      'name': roleName,
+      'rightsId': rightsId,
     };
     final response = await client.post(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/roles',
       data: data,
+      options: Options(
+        headers: {'Authorization':'Bearer ' + token},
+      ),
+    );
+    if (response.statusCode == 200) {
+      final json = response.data;
+      if (json['message'] != null) print(json['message']);
+      return json['message'];
+    } else {
+      print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
+      throw Exception('Failed to create role in database');
+    }
+  }
+
+  Future<String> assignGroupRoleToUser(String roleId, String AccountId) async {
+    String token = await _fireAuthService.getIdToken ?? '';
+
+    final response = await client.post(
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/roles/$roleId/assign?accountId=$AccountId',
       options: Options(
         headers: {'Authorization':'Bearer ' + token},
       ),
@@ -74,7 +115,7 @@ class RolesService {
     }
   }
 
-  Future<String> deleteRoles(String roleId) async {
+  Future<String> deleteRole(String roleId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     final response = await client.delete(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/roles/$roleId',
