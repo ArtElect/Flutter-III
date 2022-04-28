@@ -60,6 +60,12 @@ class _GroupsPageState extends State<GroupsPage> {
               }
             ),
           ),
+          FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).popAndPushNamed("/groups/addGroup");
+              }
+          )
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:admin/models/groups_model.dart';
 import 'package:admin/routes/routes.dart';
+import 'package:admin/screens/groups/add_group.dart';
 import 'package:admin/screens/groups/group_detail.dart';
 import 'package:admin/screens/groups/groups.dart';
 import 'package:admin/screens/home/home.dart';
@@ -45,6 +46,8 @@ class GenerateRoutes {
       case Routes.groupDetail:
         final groupsModel = settings.arguments as GroupsModel;
         return isLogged(settings, GroupsDetailPage(groupsModel: groupsModel));
+      case Routes.addGroup:
+        return isLogged(settings, const AddGroupPage());
       case Routes.projects:
         return isLogged(settings, const ProjectPage());
       case Routes.profile:
