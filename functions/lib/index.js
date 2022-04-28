@@ -69,23 +69,23 @@ app.use(userMiddleware);
 app.get('/account', async (req, res, _next) => {
     res.send(await accounts_1.getAccountFromUserId(res.locals.user.uid));
 });
-app.post('/account', async (req, res, _next) => {
+app.post('/account', middlewares_1.validationMiddleware(types_4.CreateAccountData, 'body'), async (req, res, _next) => {
     const existAccount = await accounts_1.getAccountFromUserId(res.locals.user.uid);
     if (existAccount) {
         res.send(existAccount);
     }
     else {
-        const account = await accounts_1.createAccount({ userId: res.locals.user.uid }, 'USER');
+        const account = await accounts_1.createAccount(Object.assign({ userId: res.locals.user.uid }, req.body), 'USER');
         res.send(account);
     }
 });
-app.post('/admin-account', async (req, res, _next) => {
+app.post('/admin-account', middlewares_1.validationMiddleware(types_4.CreateAccountData, 'body'), async (req, res, _next) => {
     const existAccount = await accounts_1.getAccountFromUserId(res.locals.user.uid);
     if (existAccount) {
         res.send(existAccount);
     }
     else {
-        const account = await accounts_1.createAccount({ userId: res.locals.user.uid }, 'ADMIN');
+        const account = await accounts_1.createAccount(Object.assign({ userId: res.locals.user.uid }, req.body), 'ADMIN');
         res.send(account);
     }
 });

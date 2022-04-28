@@ -16,6 +16,9 @@ __decorate([
 __decorate([
     class_validator_1.IsString()
 ], AddGroupData.prototype, "description", void 0);
+__decorate([
+    class_validator_1.IsString()
+], AddGroupData.prototype, "image", void 0);
 exports.AddGroupData = AddGroupData;
 class ModifyGroupData {
 }
@@ -27,5 +30,9 @@ __decorate([
     class_validator_1.IsOptional(),
     class_validator_1.IsString()
 ], ModifyGroupData.prototype, "description", void 0);
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsString()
+], ModifyGroupData.prototype, "image", void 0);
 exports.ModifyGroupData = ModifyGroupData;
 //# sourceMappingURL=types.js.map
