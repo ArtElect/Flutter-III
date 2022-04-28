@@ -9,12 +9,12 @@ import {createAccount, getAccountFromUserId, getAccounts, updateAccount} from '.
 
 import database from './database';
 import { listPossibleRights } from "./rights";
-import { AddRoleData, ModifyRoleData } from "./roles/types";
+import { AddRoleData, ModifyRoleData, AssignRoleData } from "./roles/types";
 import { addGroup, deleteGroup, getGroup, modifyGroup } from './groups';
 import { AddGroupData, ModifyGroupData } from './groups/types';
-import { addRole, deleteRole, listAccountRoles, modifyRole, listRoles } from "./roles";
+import { addRole, deleteRole, listAccountRoles, modifyRole, listRoles, assignRole } from "./roles";
 import { AddProjectData, ModifyProjectData } from "./projects/types";
-import { addProject, listAccountProjects, modifyProject, deleteProject } from "./projects";
+import {addProject, listAccountProjects, modifyProject, deleteProject, listGroupProjects} from "./projects";
 
 import { validationMiddleware } from './middlewares';
 import {ModifyAccountData} from "./accounts/types";
@@ -148,6 +148,11 @@ app.post('/roles', adminMiddleware, validationMiddleware(AddRoleData, 'body'), a
   res.send(await addRole(req.body));
 });
 
+app.post('/roles/:id/assign', adminMiddleware, validationMiddleware(AssignRoleData, 'query'), async (req, res, _next) => {
+  // @ts-ignore
+  res.send(await assignRole(req.params.id, req.query.accountId));
+});
+
 app.patch('/roles/:roleId', adminMiddleware, validationMiddleware(ModifyRoleData, 'body'), async (req, res, _next) => {
   res.send(await modifyRole(req.params.roleId, req.body));
 });
@@ -167,7 +172,7 @@ app.get('/projects', async (req, res, _next) => {
 });
 
 app.get('/groups/:groupId/projects', async (req, res, _next) => {
-  res.send(await listAccountProjects(res.locals.user.uid));
+  res.send(await listGroupProjects(res.locals.user.uid, req.params.groupId));
 });
 
 app.post('/groups/:groupId/projects', validationMiddleware(AddProjectData, 'body'), async (req, res, _next) => {

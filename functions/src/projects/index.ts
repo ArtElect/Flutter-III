@@ -9,17 +9,13 @@ export const listAccountProjects = async (userId: string) => {
   const accountRef = await database.firestore().collection('account').doc(account!.id);
   const roles = await database.firestore()
     .collection('role')
-    .where('account', '==', accountRef)
+    .where('accounts', 'array-contains', database.firestore().collection('account').doc(accountRef.id))
     .get();
   return Promise.all(roles.docs.map(async (role) => {
     const data = role.data();
 
     const groupRef = await data.group.get();
     const group = groupRef.data();
-
-    const accountRef = await data.account.get();
-    const account = accountRef.data();
-    data.account.get();
 
     const projectsDocs = await database.firestore().collection('project')
       .where('group', '==', data.group)
@@ -33,7 +29,6 @@ export const listAccountProjects = async (userId: string) => {
     })
     return {
       group,
-      account,
       projects,
       id: role.id,
       type: data.type,
@@ -47,14 +42,24 @@ export const addProject = async (groupId: string, userId: string, data: AddProje
   const groupRef = database.firestore().doc(`group/${groupId}`);
   const createRightId = await getRightId('CREATE');
 
-  const canCreate = await database.firestore()
+  const roles = await database.firestore()
     .collection('role')
-    .where('account', '==', accountRef)
+    .where('accounts', 'array-contains', database.firestore().collection('account').doc(accountRef.id))
     .where('group', '==', groupRef)
-    .where('rights', 'array-contains', database.firestore().collection('right').doc(createRightId))
     .get()
+  const canCreate = (await Promise.all(roles.docs.map(async (r) => {
+    const data = r.data();
+    const rights = await Promise.all(data.rights.map(async (r: any) => {
+      const d = await r.get();
+      return {
+        id: d.id,
+        ...d.data()
+      }})
+    );
+    return rights.filter((d: any) => d.id === createRightId);
+  }))).flat();
   // @ts-ignore
-  if (account!.role !== 'ADMIN' && canCreate.size === 0) {
+  if (account.role !== 'ADMIN' && canCreate.length === 0) {
     throw new Error('Unauthorized');
   }
   await database.firestore().collection('project').add({
@@ -72,14 +77,24 @@ export const modifyProject = async (projectId: string, groupId: string, userId: 
   const groupRef = database.firestore().doc(`group/${groupId}`);
   const updateRightId = await getRightId('UPDATE');
 
-  const canUpdate = await database.firestore()
+  let roles = await database.firestore()
     .collection('role')
-    .where('account', '==', accountRef)
+    .where('accounts', 'array-contains', database.firestore().collection('account').doc(accountRef.id))
     .where('group', '==', groupRef)
-    .where('rights', 'array-contains', database.firestore().collection('right').doc(updateRightId))
     .get()
+  const canUpdate = (await Promise.all(roles.docs.map(async (r) => {
+    const data = r.data();
+    const rights = await Promise.all(data.rights.map(async (r: any) => {
+      const d = await r.get();
+      return {
+        id: d.id,
+        ...d.data()
+      }})
+    );
+    return rights.filter((d: any) => d.id === updateRightId);
+  }))).flat();
   // @ts-ignore
-  if (account!.role !== 'ADMIN' && canUpdate.size === 0) {
+  if (account!.role !== 'ADMIN' && canUpdate.length === 0) {
     throw new Error('Unauthorized');
   }
   await database.firestore().collection('project').doc(projectId).update(data);
@@ -92,14 +107,24 @@ export const deleteProject = async (projectId: string, groupId: string, userId: 
   const groupRef = database.firestore().doc(`group/${groupId}`);
   const deleteRightId = await getRightId('DELETE');
 
-  const canDelete = await database.firestore()
+  const roles = await database.firestore()
     .collection('role')
-    .where('account', '==', accountRef)
+    .where('accounts', 'array-contains', database.firestore().collection('account').doc(accountRef.id))
     .where('group', '==', groupRef)
-    .where('rights', 'array-contains', database.firestore().collection('right').doc(deleteRightId))
     .get()
+  const canDelete = (await Promise.all(roles.docs.map(async (r) => {
+    const data = r.data();
+    const rights = await Promise.all(data.rights.map(async (r: any) => {
+      const d = await r.get();
+      return {
+        id: d.id,
+        ...d.data()
+      }})
+    );
+    return rights.filter((d: any) => d.id === deleteRightId);
+  }))).flat();
   // @ts-ignore
-  if (account!.role !== 'ADMIN' && canDelete.size === 0) {
+  if (account!.role !== 'ADMIN' && canDelete.length === 0) {
     throw new Error('Unauthorized');
   }
   await database.firestore().collection('project').doc(projectId).delete();
@@ -112,7 +137,7 @@ export const listGroupProjects = async (userId: string, groupId: string) => {
   const groupRef = await database.firestore().collection('group').doc(groupId);
   const roles = await database.firestore()
     .collection('role')
-    .where('account', '==', accountRef)
+    .where('accounts', 'array-contains', database.firestore().collection('account').doc(accountRef.id))
     .where('group', '==', groupRef)
     .get();
   return Promise.all(roles.docs.map(async (role) => {
@@ -120,10 +145,6 @@ export const listGroupProjects = async (userId: string, groupId: string) => {
 
     const groupRef = await data.group.get();
     const group = groupRef.data();
-
-    const accountRef = await data.account.get();
-    const account = accountRef.data();
-    data.account.get();
 
     const projectsDocs = await database.firestore().collection('project')
       .where('group', '==', data.group)
@@ -137,7 +158,6 @@ export const listGroupProjects = async (userId: string, groupId: string) => {
     })
     return {
       group,
-      account,
       projects,
       id: role.id,
       type: data.type,

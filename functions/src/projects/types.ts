@@ -19,4 +19,8 @@ export class ModifyProjectData {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
 }
