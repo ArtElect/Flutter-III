@@ -29,10 +29,11 @@ class GroupService {
     }
   }
 
-  Future<String> createGroup(String title, String description) async {
+  Future<String> createGroup(String title, String name, String description) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
       'title': title,
+      'name' : name,
       'description': description,
     };
     final response = await client.post(

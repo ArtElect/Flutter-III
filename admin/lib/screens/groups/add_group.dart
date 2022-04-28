@@ -102,7 +102,9 @@ class _AddGroupPageState extends State<AddGroupPage> {
                                     if (_titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty) {
                                       _groupService.createGroup(
                                           _titleController.text,
+                                          _titleController.text,
                                           _descriptionController.text);
+                                      Navigator.of(context).popAndPushNamed("/groups");
                                     }
                                   });
                                 },

@@ -90,6 +90,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                                       _titleController.text.isEmpty ? widget.groupsModel.title! : _titleController.text,
                                       _descriptionController.text.isEmpty ? widget.groupsModel.description! : _descriptionController.text,
                                       widget.groupsModel.id!);
+                                  Navigator.of(context).popAndPushNamed("/groups");
                                 });
                               },
                               child: const Text("Update"),
@@ -103,6 +104,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                               onPressed: () {
                                 setState(() {
                                   _groupService.deleteGroup(widget.groupsModel.id!);
+                                  Navigator.of(context).popAndPushNamed("/groups");
                                 });
                               },
                               child: const Text("Delete"),
