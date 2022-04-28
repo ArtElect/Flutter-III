@@ -14,24 +14,22 @@ class GroupsPage extends StatefulWidget {
 class _GroupsPageState extends State<GroupsPage> {
   final GroupService _groupService = GroupService();
 
-  List<Widget> _generateText(List<GroupsModel>? groups) {
+  List<Widget> _generateText(GroupsModel? group) {
     List<Widget> result = [];
-    for(var data in groups!) {
       result.add(
         Center(
           heightFactor: 1.5,
           child: InkWell(
             child: ListTile(
-              title: Text(data.title ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-              subtitle: Text(data.description ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+              title: Text(group!.title ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+              subtitle: Text(group.description ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
             ),
             onTap: () {
-              Navigator.of(context).popAndPushNamed("/groups/detail", arguments: data);
+              Navigator.of(context).popAndPushNamed("/groups/detail", arguments: group);
             },
           ),
         ),
       );
-    }
     return result;
   }
   
@@ -49,9 +47,10 @@ class _GroupsPageState extends State<GroupsPage> {
                 if(snapshot.data != null) {
                   return ListView.builder(
                     controller: ScrollController(),
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Column(
-                        children:  _generateText(snapshot.data),
+                        children:  _generateText(snapshot.data![index]),
                       );
                     },
                   );
