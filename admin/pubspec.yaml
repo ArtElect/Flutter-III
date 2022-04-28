@@ -39,6 +39,8 @@ dependencies:
   responsive_framework: ^0.1.7
   carousel_slider: ^4.1.1
   side_navigation: ^1.0.2
+  multi_select_flutter: ^4.1.2
+  data_table_2: ^2.2.1
   getwidget: ^2.0.5
   flutter_secure_storage: ^5.0.2
   firebase_core: ^1.14.1
