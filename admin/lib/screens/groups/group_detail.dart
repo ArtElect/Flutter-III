@@ -85,6 +85,19 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                                   primary: Colors.white,
                                   onPrimary: Colors.blue
                               )
+                          ),
+                          const Padding(padding: EdgeInsets.only(bottom: 10)),
+                          ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _groupService.deleteGroup(widget.groupsModel.id!);
+                                });
+                              },
+                              child: const Text("Delete"),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  onPrimary: Colors.red
+                              )
                           )
                         ],
                       ),
