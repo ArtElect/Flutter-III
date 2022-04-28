@@ -29,9 +29,12 @@ class UserService {
     }
   }
 
-  Future<String?> updateCurrentAccountImage(String imageUrl) async {
+  Future<String?> updateCurrentAccount(String firstname, String lastname, String pseudo, String imageUrl) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
+      "firstname": firstname,
+      "lastname": lastname,
+      "pseudo": pseudo,
       "image": imageUrl,
     };
     final response = await client.patch(
