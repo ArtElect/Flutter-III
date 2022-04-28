@@ -47,6 +47,18 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                       child: Column(
                         children: [
                           const Padding(padding: EdgeInsets.only(top: 10)),
+                          Container(
+                              width: 100.0,
+                              height: 100.0,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage("https://logowik.com/content/uploads/images/flutter5786.jpg"),
+                                  )
+                              )
+                          ),
+                          const Padding(padding: EdgeInsets.only(bottom: 10)),
                           SizedBox(
                             width: 300,
                             child: TextField(
