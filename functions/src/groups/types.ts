@@ -6,6 +6,9 @@ export class AddGroupData {
 
   @IsString()
   description!: string;
+
+  @IsString()
+  image!: string;
 }
 
 export class ModifyGroupData {
@@ -16,4 +19,8 @@ export class ModifyGroupData {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
 }

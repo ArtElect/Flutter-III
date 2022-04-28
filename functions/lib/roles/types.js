@@ -6,16 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModifyRoleData = exports.AddRoleData = void 0;
+exports.AssignRoleData = exports.ModifyRoleData = exports.AddRoleData = void 0;
 const class_validator_1 = require("class-validator");
 class AddRoleData {
 }
 __decorate([
     class_validator_1.IsString()
-], AddRoleData.prototype, "accountId", void 0);
+], AddRoleData.prototype, "groupId", void 0);
 __decorate([
     class_validator_1.IsString()
-], AddRoleData.prototype, "groupId", void 0);
+], AddRoleData.prototype, "name", void 0);
+__decorate([
+    class_validator_1.IsArray()
+], AddRoleData.prototype, "rightsId", void 0);
 exports.AddRoleData = AddRoleData;
 class ModifyRoleData {
 }
@@ -23,4 +26,10 @@ __decorate([
     class_validator_1.IsArray()
 ], ModifyRoleData.prototype, "rightsId", void 0);
 exports.ModifyRoleData = ModifyRoleData;
+class AssignRoleData {
+}
+__decorate([
+    class_validator_1.IsString()
+], AssignRoleData.prototype, "accountId", void 0);
+exports.AssignRoleData = AssignRoleData;
 //# sourceMappingURL=types.js.map

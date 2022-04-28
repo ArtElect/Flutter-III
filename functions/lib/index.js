@@ -75,7 +75,17 @@ app.post('/account', async (req, res, _next) => {
         res.send(existAccount);
     }
     else {
-        const account = await accounts_1.createAccount({ userId: res.locals.user.uid });
+        const account = await accounts_1.createAccount({ userId: res.locals.user.uid }, 'USER');
+        res.send(account);
+    }
+});
+app.post('/admin-account', async (req, res, _next) => {
+    const existAccount = await accounts_1.getAccountFromUserId(res.locals.user.uid);
+    if (existAccount) {
+        res.send(existAccount);
+    }
+    else {
+        const account = await accounts_1.createAccount({ userId: res.locals.user.uid }, 'ADMIN');
         res.send(account);
     }
 });
@@ -110,6 +120,10 @@ app.get('/roles', async (req, res, _next) => {
 app.post('/roles', adminMiddleware, middlewares_1.validationMiddleware(types_1.AddRoleData, 'body'), async (req, res, _next) => {
     res.send(await roles_1.addRole(req.body));
 });
+app.post('/roles/:id/assign', adminMiddleware, middlewares_1.validationMiddleware(types_1.AssignRoleData, 'query'), async (req, res, _next) => {
+    // @ts-ignore
+    res.send(await roles_1.assignRole(req.params.id, req.query.accountId));
+});
 app.patch('/roles/:roleId', adminMiddleware, middlewares_1.validationMiddleware(types_1.ModifyRoleData, 'body'), async (req, res, _next) => {
     res.send(await roles_1.modifyRole(req.params.roleId, req.body));
 });
@@ -122,6 +136,9 @@ app.get('/admin/roles', adminMiddleware, async (req, res, _next) => {
 // PROJECTS
 app.get('/projects', async (req, res, _next) => {
     res.send(await projects_1.listAccountProjects(res.locals.user.uid));
+});
+app.get('/groups/:groupId/projects', async (req, res, _next) => {
+    res.send(await projects_1.listGroupProjects(res.locals.user.uid, req.params.groupId));
 });
 app.post('/groups/:groupId/projects', middlewares_1.validationMiddleware(types_3.AddProjectData, 'body'), async (req, res, _next) => {
     res.send(await projects_1.addProject(req.params.groupId, res.locals.user.uid, req.body));

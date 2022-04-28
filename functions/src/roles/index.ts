@@ -9,7 +9,7 @@ export const listAccountRoles = async (userId: string) => {
   const accountRef = await database.firestore().collection('account').doc(account!.id);
   const roles = await database.firestore()
     .collection('role')
-    .where('account', '==', accountRef)
+    .where('accounts', 'array-contains', database.firestore().collection('account').doc(accountRef.id))
     .get();
   return Promise.all(roles.docs.map(async (role) => {
     const data = role.data();
@@ -17,20 +17,23 @@ export const listAccountRoles = async (userId: string) => {
     const groupRef = await data.group.get();
     const group = groupRef.data();
 
-    const accountRef = await data.account.get();
-    const account = accountRef.data();
-
     const rights = await Promise.all(data.rights.map(async (r: any) => {
       const rightRef = await r.get();
       return rightRef.data();
     }));
 
+    const accounts = await Promise.all(data.accounts.map(async (a: any) => {
+      const aRef = await a.get();
+      return aRef.data();
+    }));
+
     return {
       group,
       rights,
-      account,
+      accounts,
       id: role.id,
       type: data.type,
+      name: data.name,
     }
   }));
 }
@@ -40,18 +43,32 @@ export const addRole = async (data: AddRoleData) => {
   if (readRight.size !== 1) {
     throw new Error('Invalid rights');
   }
-  await database.firestore().collection('role').add({
+  const role = await database.firestore().collection('role').add({
+    name: data.name,
+    group: database.firestore().doc(`group/${data.groupId}`),
     rights: [database.firestore().collection('right').doc(readRight.docs[0].id)],
-    account: database.firestore().doc(`account/${data.accountId}`),
-    group: database.firestore().doc(`group/${data.groupId}`)
+    accounts: [],
   })
+  const rights = await Promise.all(data.rightsId.map(async (r) => database.firestore().collection('right').doc(r)));
+  await Promise.all(rights.map(r => database.firestore().collection('role').doc(role.id).update({
+    rights: database.firestore.FieldValue.arrayUnion(r),
+  })));
   return { message: 'role added' };
+}
+
+export const assignRole = async (roleId: string, accountId: string) => {
+  const role = database.firestore().collection('role').doc(roleId);
+  const account = database.firestore().collection('account').doc(accountId);
+  await database.firestore().collection('role').doc(role.id).update({
+    accounts: database.firestore.FieldValue.arrayUnion(account),
+  });
+  return { message: 'user assigned to role' }
 }
 
 export const modifyRole = async (roleId: string, data: ModifyRoleData) => {
   const rights = await Promise.all(data.rightsId.map(async (r) => database.firestore().collection('right').doc(r)));
   const readRightId = await getRightId('READ');
-  await database.firestore().collection('role').doc(roleId).set({ rights: [database.firestore().collection('right').doc(readRightId)] }, { merge: true });
+  await database.firestore().collection('role').doc(roleId).update({ rights: [database.firestore().collection('right').doc(readRightId)] });
   await Promise.all(rights.map(r => database.firestore().collection('role').doc(roleId).update({
     rights: database.firestore.FieldValue.arrayUnion(r),
   })));
@@ -74,20 +91,23 @@ export const listRoles = async () => {
     const groupRef = await data.group.get();
     const group = groupRef.data();
 
-    const accountRef = await data.account.get();
-    const account = accountRef.data();
-
     const rights = await Promise.all(data.rights.map(async (r: any) => {
       const rightRef = await r.get();
       return rightRef.data();
     }));
 
+    const accounts = await Promise.all(data.accounts.map(async (a: any) => {
+      const aRef = await a.get();
+      return aRef.data();
+    }));
+
     return {
       group,
       rights,
-      account,
+      accounts,
       id: role.id,
       type: data.type,
+      name: data.name,
     }
   }));
 }
