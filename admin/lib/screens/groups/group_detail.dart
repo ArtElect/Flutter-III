@@ -44,24 +44,31 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                     child: SizedBox(
                       height: 400,
                       width: 400,
-                      child: ListView(
+                      child: Column(
                         children: [
-                          TextField(
-                            controller: _titleController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: widget.groupsModel.title
+                          const Padding(padding: EdgeInsets.only(top: 10)),
+                          SizedBox(
+                            width: 300,
+                            child: TextField(
+                              controller: _titleController,
+                              decoration: InputDecoration(
+                                  border: const OutlineInputBorder(),
+                                  labelText: widget.groupsModel.title
+                              ),
+                              keyboardType: TextInputType.phone,
                             ),
-                            keyboardType: TextInputType.phone,
                           ),
                           const Padding(padding: EdgeInsets.only(bottom: 10)),
-                          TextField(
-                            controller: _descriptionController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: widget.groupsModel.description
+                          SizedBox(
+                            width: 300,
+                            child: TextField(
+                              controller: _descriptionController,
+                              decoration: InputDecoration(
+                                  border: const OutlineInputBorder(),
+                                  labelText: widget.groupsModel.description
+                              ),
+                              keyboardType: TextInputType.phone,
                             ),
-                            keyboardType: TextInputType.phone,
                           ),
                           const Padding(padding: EdgeInsets.only(bottom: 10)),
                           ElevatedButton(
