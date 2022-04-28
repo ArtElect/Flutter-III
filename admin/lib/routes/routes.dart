@@ -4,4 +4,5 @@ class Routes {
   static const String groups = "/groups";
   static const String projects = "/projects";
   static const String profile = "/profile";
+  static const String roles = "/roles";
 }
