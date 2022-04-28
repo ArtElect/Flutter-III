@@ -13,11 +13,33 @@ class CreateAccountData {
 __decorate([
     class_validator_1.IsString()
 ], CreateAccountData.prototype, "userId", void 0);
+__decorate([
+    class_validator_1.IsString()
+], CreateAccountData.prototype, "firstname", void 0);
+__decorate([
+    class_validator_1.IsString()
+], CreateAccountData.prototype, "lastname", void 0);
+__decorate([
+    class_validator_1.IsString()
+], CreateAccountData.prototype, "pseudo", void 0);
 exports.CreateAccountData = CreateAccountData;
 class ModifyAccountData {
 }
 __decorate([
+    class_validator_1.IsOptional(),
     class_validator_1.IsString()
 ], ModifyAccountData.prototype, "image", void 0);
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsString()
+], ModifyAccountData.prototype, "firstname", void 0);
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsString()
+], ModifyAccountData.prototype, "lastname", void 0);
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsString()
+], ModifyAccountData.prototype, "pseudo", void 0);
 exports.ModifyAccountData = ModifyAccountData;
 //# sourceMappingURL=types.js.map

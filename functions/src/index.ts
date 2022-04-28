@@ -17,7 +17,7 @@ import { AddProjectData, ModifyProjectData } from "./projects/types";
 import {addProject, listAccountProjects, modifyProject, deleteProject, listGroupProjects} from "./projects";
 
 import { validationMiddleware } from './middlewares';
-import {ModifyAccountData} from "./accounts/types";
+import {CreateAccountData, ModifyAccountData} from "./accounts/types";
 
 const app = express();
 
@@ -85,22 +85,22 @@ app.get('/account', async (req, res, _next) => {
   res.send(await getAccountFromUserId(res.locals.user.uid));
 });
 
-app.post('/account', async (req, res, _next) => {
+app.post('/account', validationMiddleware(CreateAccountData, 'body'), async (req, res, _next) => {
   const existAccount = await getAccountFromUserId(res.locals.user.uid);
   if (existAccount) {
     res.send(existAccount);
   } else {
-    const account = await createAccount({ userId: res.locals.user.uid }, 'USER');
+    const account = await createAccount({ userId: res.locals.user.uid, ...req.body }, 'USER');
     res.send(account);
   }
 });
 
-app.post('/admin-account', async (req, res, _next) => {
+app.post('/admin-account', validationMiddleware(CreateAccountData, 'body'), async (req, res, _next) => {
   const existAccount = await getAccountFromUserId(res.locals.user.uid);
   if (existAccount) {
     res.send(existAccount);
   } else {
-    const account = await createAccount({ userId: res.locals.user.uid }, 'ADMIN');
+    const account = await createAccount({ userId: res.locals.user.uid, ...req.body }, 'ADMIN');
     res.send(account);
   }
 });
