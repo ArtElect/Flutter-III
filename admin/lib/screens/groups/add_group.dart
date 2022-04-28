@@ -14,6 +14,8 @@ class _AddGroupPageState extends State<AddGroupPage> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   final GroupService _groupService = GroupService();
+  bool _validateTitle = false;
+  bool _validateDescription = false;
 
   @override
   void initState() {
@@ -62,9 +64,10 @@ class _AddGroupPageState extends State<AddGroupPage> {
                               width: 300,
                               child: TextField(
                                 controller: _titleController,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: "Enter a title"
+                                decoration: InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    labelText: "Enter a title",
+                                    errorText: _validateTitle ? "This field can not be empty" : null,
                                 ),
                                 keyboardType: TextInputType.phone,
                               ),
@@ -74,9 +77,10 @@ class _AddGroupPageState extends State<AddGroupPage> {
                               width: 300,
                               child: TextField(
                                 controller: _descriptionController,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                     border: OutlineInputBorder(),
-                                    labelText: "Enter a description"
+                                    labelText: "Enter a description",
+                                    errorText: _validateDescription ? "This field can not be empty" : null,
                                 ),
                                 keyboardType: TextInputType.phone,
                               ),
@@ -85,9 +89,21 @@ class _AddGroupPageState extends State<AddGroupPage> {
                             ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    _groupService.createGroup(
-                                        _titleController.text,
-                                        _descriptionController.text);
+                                    if (_titleController.text.isEmpty) {
+                                      _validateTitle = true;
+                                    } else if (_titleController.text.isNotEmpty) {
+                                      _validateTitle = false;
+                                    }
+                                    if  (_descriptionController.text.isEmpty) {
+                                      _validateDescription = true;
+                                    } else if (_descriptionController.text.isNotEmpty) {
+                                      _validateDescription = false;
+                                    }
+                                    if (_titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty) {
+                                      _groupService.createGroup(
+                                          _titleController.text,
+                                          _descriptionController.text);
+                                    }
                                   });
                                 },
                                 child: const Text("Create"),
