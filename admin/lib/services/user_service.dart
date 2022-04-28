@@ -28,4 +28,26 @@ class UserService {
       throw Exception('Failed to fetch users from database');
     }
   }
+
+  Future<String?> updateCurrentAccountImage(String imageUrl) async {
+    String token = await _fireAuthService.getIdToken ?? '';
+    Map<String, dynamic> data = {
+      "image": imageUrl,
+    };
+    final response = await client.patch(
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/account',
+      data: data,
+      options: Options(
+        headers: {'Authorization':'Bearer ' + token},
+      ),
+    );
+    if (response.statusCode == 200) {
+      final json = response.data;
+      if (json['message'] != null) print(json['message']);
+      return json['message'];
+    } else {
+      print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
+      throw Exception('Failed to update current user image in database');
+    }
+  }
 }
