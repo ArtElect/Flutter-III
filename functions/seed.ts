@@ -9,22 +9,28 @@ const rights = ['CREATE', 'READ', 'UPDATE', 'DELETE'];
 
 const groups = [{
     name: 'GAME DEV',
-    description: 'Description du groupe GAME DEV'
+    description: 'Description du groupe GAME DEV',
+    image: 'imageUrl'
   }, {
     name: 'APP DEV',
-    description: 'Description du groupe APP DEV'
+    description: 'Description du groupe APP DEV',
+    image: 'imageUrl'
   }, {
     name: 'WEB DEV',
-    description: 'Description du groupe WEB DEV'
+    description: 'Description du groupe WEB DEV',
+    image: 'imageUrl'
   }, {
     name: 'IOT ARCHITECTURE',
-    description: 'Description du groupe IOT ARCHITECTURE'
+    description: 'Description du groupe IOT ARCHITECTURE',
+    image: 'imageUrl'
   }, {
     name: 'BLUETOOTH LE',
-    description: 'Description du groupe BLUETOOTH LE'
+    description: 'Description du groupe BLUETOOTH LE',
+    image: 'imageUrl'
   }, {
     name: 'MACHINE LEARNING',
-    description: 'Description du groupe MACHINE LEARNING'
+    description: 'Description du groupe MACHINE LEARNING',
+    image: 'imageUrl'
   }
 ];
 
