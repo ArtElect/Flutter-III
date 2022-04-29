@@ -13,11 +13,11 @@ export const getAccountFromUserId = async (userId: string) => {
   };
 };
 
-export const createAccount = async (data: CreateAccountData) => {
+export const createAccount = async (data: CreateAccountData, role: string) => {
   await database.firestore().collection('account').add({
     ...data,
     image: '',
-    role: 'USER',
+    role,
   });
   return { message: 'account created' };
 };

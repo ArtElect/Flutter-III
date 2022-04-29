@@ -29,12 +29,12 @@ class ProjectService {
     }
   }
 
-  Future<String> createProject(String name, String description, String image, String groupId) async {
+  Future<String> createProject(String name, String description, String imageUrl, String groupId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
       'title': name,
       'description': description,
-      'image': image,
+      'image': imageUrl,
     };
     final response = await client.post(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId/projects',
@@ -53,11 +53,12 @@ class ProjectService {
     }
   }
 
-  Future<String> updateProject(String title, String description, String groupId, String projectId) async {
+  Future<String> updateProject(String title, String description, String imageUrl, String groupId, String projectId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
       'title': title,
       'description': description,
+      'image': imageUrl,
     };
     final response = await client.patch(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId/projects/$projectId',

@@ -9,8 +9,8 @@ exports.getAccountFromUserId = async (userId) => {
     }
     return Object.assign({ id: accounts.docs[0].id }, accounts.docs[0].data());
 };
-exports.createAccount = async (data) => {
-    await database_1.default.firestore().collection('account').add(Object.assign(Object.assign({}, data), { image: '', role: 'USER' }));
+exports.createAccount = async (data, role) => {
+    await database_1.default.firestore().collection('account').add(Object.assign(Object.assign({}, data), { image: '', role }));
     return { message: 'account created' };
 };
 exports.updateAccount = async (userId, data) => {

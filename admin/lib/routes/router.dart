@@ -8,6 +8,7 @@ import 'package:admin/screens/home/user_information.dart';
 import 'package:admin/screens/login/login.dart';
 import 'package:admin/screens/profile/profile.dart';
 import 'package:admin/screens/project/project.dart';
+import 'package:admin/screens/roles/roles.dart';
 import 'package:admin/services/fire_auth.dart';
 import 'package:admin/models/db_user_model.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -50,6 +51,8 @@ class GenerateRoutes {
         return isLogged(settings, const AddGroupPage());
       case Routes.projects:
         return isLogged(settings, const ProjectPage());
+      case Routes.roles:
+        return isLogged(settings, const RolesPage());
       case Routes.profile:
         return isLogged(settings, const ProfilePage());
       case Routes.login:

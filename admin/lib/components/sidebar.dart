@@ -11,7 +11,7 @@ class Sidebar extends StatefulWidget {
 }
 
 class _SidebarState extends State<Sidebar> {
-  List<String> sidebarItems = ["/home", "/groups", "/projects", "/profile"];
+  List<String> sidebarItems = ["/home", "/groups", "/projects", "/roles", "/profile"];
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +29,10 @@ class _SidebarState extends State<Sidebar> {
         SideNavigationBarItem(
           icon: Icons.dashboard,
           label: 'Project',
+        ),
+        SideNavigationBarItem(
+          icon: Icons.admin_panel_settings,
+          label: 'Roles',
         ),
         SideNavigationBarItem(
           icon: Icons.person,

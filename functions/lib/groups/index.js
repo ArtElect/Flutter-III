@@ -4,9 +4,15 @@ exports.deleteGroup = exports.modifyGroup = exports.addGroup = exports.getGroup 
 const database_1 = require("../database");
 exports.getGroup = async (account) => {
     const groups = await database_1.default.firestore().collection('group').get();
-    const groupsData = groups.docs.map((group) => {
-        return Object.assign({ id: group.id }, group.data());
-    });
+    const groupsData = await Promise.all(groups.docs.map(async (group) => {
+        const data = group.data();
+        const projects = await database_1.default.firestore().collection('project')
+            .where('group', '==', database_1.default.firestore().collection('group').doc(group.id))
+            .get();
+        return Object.assign(Object.assign({}, data), { projects: projects.docs.map((p) => {
+                return Object.assign({ id: p.id }, p.data());
+            }), id: group.id });
+    }));
     if (account.role === 'ADMIN') {
         return groupsData;
     }

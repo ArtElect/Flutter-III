@@ -58,12 +58,14 @@ class FireAuthService {
     try {
       UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       String? res = await createAccountInDB(await result.user!.getIdToken(true));
-      if (res == 'account created') {
-        user = await fetchCurrentDbUser(await result.user!.getIdToken(true));
+      DbUserModel user = await fetchCurrentDbUser(await result.user!.getIdToken(true));
+      if (res == 'account created' || user.role == 'USER') {
         if (user.role == 'ADMIN') {
           _storage.writeSecureData('isLogged', 'true');
           return null;
         } else {
+          await _firebaseAuth.signOut();
+          _storage.writeSecureData('isLogged', 'false');
           return 'This is not an administrator account';
         }
       }

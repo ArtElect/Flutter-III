@@ -1,18 +1,15 @@
-import 'package:admin/models/db_user_model.dart';
 import 'package:admin/models/groups_model.dart';
 
 class ProjectModel {
   GroupsModel? group;
-  DbUserModel? account;
   List<SingleProjectModel>? projects;
   String? id;
   
-  ProjectModel({this.group, this.account, this.projects, this.id});
+  ProjectModel({this.group, this.projects, this.id});
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) {
     return ProjectModel(
       group: GroupsModel.fromJson(json['group']),
-      account: DbUserModel.fromJson(json['account']),
       projects: List<SingleProjectModel>.from(json["projects"].map((x) => SingleProjectModel.fromJson(x))),
       id: json['id'],
     );
