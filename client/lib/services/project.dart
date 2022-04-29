@@ -29,6 +29,7 @@ class ProjectService {
         }
       }
       getActiveGroupsProjects(groupProjects);
+      print('groupProjects : ' + groupProjects.toString());
       return groupProjects;
     } catch (error, stacktrace) {
       throw Exception("Exception occured: $error stackTrace: $stacktrace");

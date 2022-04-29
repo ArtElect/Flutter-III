@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:client/constant/my_colors.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:client/models/project_model.dart';
+import 'package:client/components/empty/empty_card.dart';
 
 class ActiveProjectsCard extends StatelessWidget {
   final List<ProjectModel> projects;
@@ -32,6 +33,20 @@ class ActiveProjectsCard extends StatelessWidget {
     return childs;
   }
 
+  Widget _buildContent() {
+    if (projects.isEmpty) {
+      return const Expanded(
+        child: EmptyCard(str: "No active projects have been found")
+      );
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ..._buildProjectTile(),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GFCard(
@@ -49,31 +64,24 @@ class ActiveProjectsCard extends StatelessWidget {
           ),
         ),
       ),
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ..._buildProjectTile()
-        ],
-      ),
-      buttonBar: GFButtonBar(
-        // textDirection: TextDirection.ltr,
-        // alignment: WrapAlignment.end,
-        // runAlignment: WrapAlignment.end,
-        // crossAxisAlignment: WrapCrossAlignment.end,
-        children: <Widget>[
-          GFButton(
-            onPressed: () {},
-            text: 'See more',
-            type: GFButtonType.transparent,
-            focusElevation: 0,
-            hoverElevation: 0,
-            highlightElevation: 0,
-            hoverColor: Colors.white,
-            focusColor: Colors.white,
-            position: GFPosition.end,
-          ),
-        ],
-      ),
+      content: _buildContent(),
+      buttonBar: projects.isNotEmpty
+          ? GFButtonBar(
+              children: <Widget>[
+                GFButton(
+                  onPressed: () {},
+                  text: 'See more',
+                  type: GFButtonType.transparent,
+                  focusElevation: 0,
+                  hoverElevation: 0,
+                  highlightElevation: 0,
+                  hoverColor: Colors.white,
+                  focusColor: Colors.white,
+                  position: GFPosition.end,
+                ),
+              ],
+            )
+          : null,
     );
   }
 }

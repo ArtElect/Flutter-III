@@ -9,6 +9,7 @@ import 'package:client/components/cards/active_projects_card.dart';
 import 'package:client/components/cards/project_progression_card.dart';
 import 'package:client/components/cards/group_members_card.dart';
 import 'package:client/components/unauthorized/unauthorized.dart';
+import 'package:client/components/empty/empty_card.dart';
 
 import 'package:client/types/member.dart';
 import 'package:client/types/group.dart';
@@ -27,8 +28,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Group> groups = Group.getGroups();
-  List<Member> listOfMembers = Member.getMembers();
+  List<Group> tmpGroups = Group.getGroups();
+  List<Member> tmpListOfMembers = Member.getMembers();
   final ProjectService _projectService = ProjectService();
 
   Widget welcome({required String name}) {
@@ -42,7 +43,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget projectCarousel(List<ProjectModel> projects) {
+  Widget projectCarousel({required List<ProjectModel> projects}) {
+    if (projects.isEmpty) {
+      return const EmptyCard(str: "No project avaible");
+    }
     return CarouselSlider.builder(
       itemCount: projects.length,
       options: CarouselOptions(
@@ -69,7 +73,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget groupCarousel() {
+  Widget groupCarousel({required List<GroupProjectsModel> groups}) {
+    if (groups.isEmpty) {
+      return const EmptyCard(str: "No group avaible");
+    }
+
     return CarouselSlider.builder(
       itemCount: groups.length,
       options: CarouselOptions(
@@ -92,15 +100,11 @@ class _HomePageState extends State<HomePage> {
         int pageViewIndex,
       ) =>
           GroupMembersCard(
-              name: groups[index].name, members: groups[index].members),
+              name: groups[index].group.name!, members: tmpGroups[index].members),
     );
   }
 
   Widget _buildContent(List<GroupProjectsModel> groups) {
-    if (groups.isEmpty) {
-      return const Expanded(child: UnauthorizedBody());
-    }
-
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(
@@ -142,10 +146,10 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(child: groupCarousel()),
+                          Expanded(child: groupCarousel(groups: groups)),
                           const Divider(
                               thickness: 5, color: MyColors.background),
-                          Expanded(child: projectCarousel(_projectService.activeProjects)),
+                          Expanded(child: projectCarousel(projects: _projectService.activeProjects)),
                         ],
                       ),
                     ),

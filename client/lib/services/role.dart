@@ -25,6 +25,7 @@ class RoleService {
           roles.add(RoleModel.fromJSON(data));
         }
       }
+      print("Roles : " + roles.toString());
       return roles;
     } catch (error, stacktrace) {
       throw Exception("Exception occured: $error stackTrace: $stacktrace");

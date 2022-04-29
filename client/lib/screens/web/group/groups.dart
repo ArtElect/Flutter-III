@@ -4,6 +4,7 @@ import 'package:client/components/navbar/navbar.dart';
 import 'package:client/components/sidebar/sidebar.dart';
 import 'package:client/components/cards/group_card.dart';
 import 'package:client/components/unauthorized/unauthorized.dart';
+import 'package:client/components/empty/empty_card.dart';
 
 import 'package:client/models/role_model.dart';
 
@@ -34,7 +35,7 @@ class _GroupsPageState extends State<GroupsPage> {
 
   Widget _buildContent(List<RoleModel> groups) {
     if (groups.isEmpty) {
-      return const Expanded(child: UnauthorizedBody());
+      return const Expanded(child: EmptyCard(str: "No group has been assigned to you"));
     }
     return Expanded(
       child: Container(

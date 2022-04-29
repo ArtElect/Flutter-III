@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:client/constant/my_colors.dart';
 
 class EmptyBody extends StatelessWidget {
-  const EmptyBody({Key? key}) : super(key: key);
+  final String str;
+  const EmptyBody({Key? key, required this.str}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +18,15 @@ class EmptyBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Text(
-              'Oops it seems that the group has no project yet',
-              style: const TextStyle(
-                color: MyColors.text,
-                fontWeight: FontWeight.bold,
-                fontSize: 36,
-              ),
+          Text(
+            str,
+            style: const TextStyle(
+              color: MyColors.text,
+              fontWeight: FontWeight.bold,
+              fontSize: 36,
             ),
           ),
-          Center(child:Image.asset('assets/images/empty.png')),
+          Center(child: Image.asset('assets/images/empty.png')),
         ],
       ),
     );

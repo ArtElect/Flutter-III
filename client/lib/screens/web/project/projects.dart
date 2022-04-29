@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:client/components/navbar/navbar.dart';
 import 'package:client/components/sidebar/sidebar.dart';
 import 'package:client/components/cards/group_card.dart';
-import 'package:client/components/empty/empty.dart';
+import 'package:client/components/empty/empty_body.dart';
 import 'package:client/components/unauthorized/unauthorized.dart';
 
 import 'package:client/models/group_projects_model.dart';
@@ -45,8 +45,8 @@ class _ProjectsPageState extends State<ProjectsPage> {
       return const Expanded(child: UnauthorizedBody());
     }
     group = _projectService.getProjectsByGroupId(screenArgv.groupId);
-    if (group.projects.length == 0) {
-      return const Expanded(child: EmptyBody());
+    if (group.projects.isEmpty) {
+      return const Expanded(child: EmptyBody(str: "No project has been assigned to you"));
     }
     return Expanded(
         child: Container(

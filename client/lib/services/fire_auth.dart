@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:client/models/firebase_user_model.dart';
 import 'package:client/utils/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/flutter_login.dart';
 
 class FireAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -17,17 +19,26 @@ class FireAuthService {
   Future<String>? get getIdToken => _firebaseAuth.currentUser?.getIdToken(true);
   bool get isLogged => _firebaseAuth.currentUser != null ? true : false;
 
-  Future<String?> createAccountInDB() async {
+  Future<String?> createAccountInDB({required SignupData signupData }) async {
     String? token = await getIdToken;
+    Map<String, dynamic> data = {
+      "firstname": signupData.additionalSignupData?['firstName'],
+      "lastname": signupData.additionalSignupData?['lastName'],
+      "pseudo": signupData.additionalSignupData?['pseudo'],
+    };
     final response = await client.post(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/account',
       options: Options(
-        headers: {'Authorization':'Bearer ' + token!},
+        headers: {
+          'Authorization':'Bearer ' + token!,
+          'Content-Type':'application/json'
+        },
       ),
+      data: data,
     );
     if (response.statusCode == 200) {
       final json = response.data;
-      if (json['message'] != null) print(json['message']);
+      print(json);
       return json['message'];
     } else {
       print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
@@ -38,9 +49,8 @@ class FireAuthService {
   Future<String?> signIn({required String email, required String password}) async {
     debugPrint('Name: $email, Password: $password');
     try {
-      _storage.writeSecureData('isLogged', 'true');
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      createAccountInDB();
+      _storage.writeSecureData('isLogged', 'true');
       return null;
     } on FirebaseAuthException catch(e) {
       debugPrint(e.code);
@@ -60,11 +70,18 @@ class FireAuthService {
     await _firebaseAuth.signOut();
   }
 
-  Future<String?> resgister({required String email, required String password}) async {
-    debugPrint('Name: $email, Password: $password');
+  Future<String?> register({required SignupData signupData}) async {
+    debugPrint('Name: ${signupData.name}, Password: ${signupData.password}');
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-      return null;
+      UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(email: signupData.name!, password: signupData.password!);
+      String? res = await createAccountInDB(signupData: signupData);
+
+      if (res == 'account created') {
+        return null;
+      } else {
+        result.user?.delete();
+        return 'Account creation failed, please try again';
+      }
     } on FirebaseAuthException catch (e) {
       debugPrint(e.code);
       switch(e.code) {
