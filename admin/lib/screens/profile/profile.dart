@@ -154,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               controller: _imageController,
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(),
-                                                labelText: snapshot.data!.image!.isNotEmpty ? snapshot.data!.image : "Enter a image url",
+                                                labelText: snapshot.data!.image!.isNotEmpty ? snapshot.data!.image : "Enter an image url",
                                               ),
                                               keyboardType: TextInputType.phone,
                                             ),

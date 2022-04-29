@@ -15,6 +15,7 @@ class GroupsDetailPage extends StatefulWidget {
 class _GroupsDetailPageState extends State<GroupsDetailPage> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
+  late TextEditingController _imageController;
   final GroupService _groupService = GroupService();
 
   @override
@@ -22,12 +23,14 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
     super.initState();
     _titleController = TextEditingController();
     _descriptionController = TextEditingController();
+    _imageController = TextEditingController();
   }
 
   @override
   void dispose() {
     _descriptionController.dispose();
     _titleController.dispose();
+    _imageController.dispose();
     super.dispose();
   }
 
@@ -50,11 +53,11 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                           Container(
                               width: 100.0,
                               height: 100.0,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     fit: BoxFit.fill,
-                                    image: NetworkImage("https://logowik.com/content/uploads/images/flutter5786.jpg"),
+                                    image: NetworkImage(widget.groupsModel.image!),
                                   )
                               )
                           ),
@@ -83,12 +86,25 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                             ),
                           ),
                           const Padding(padding: EdgeInsets.only(bottom: 10)),
+                          SizedBox(
+                            width: 300,
+                            child: TextField(
+                              controller: _imageController,
+                              decoration: InputDecoration(
+                                  border: const OutlineInputBorder(),
+                                  labelText: widget.groupsModel.image
+                              ),
+                              keyboardType: TextInputType.phone,
+                            ),
+                          ),
+                          const Padding(padding: EdgeInsets.only(bottom: 10)),
                           ElevatedButton(
                               onPressed: () {
                                 setState(() {
                                   _groupService.updateGroup(
                                       _titleController.text.isEmpty ? widget.groupsModel.name! : _titleController.text,
                                       _descriptionController.text.isEmpty ? widget.groupsModel.description! : _descriptionController.text,
+                                      _imageController.text.isEmpty ? widget.groupsModel.image! : _imageController.text,
                                       widget.groupsModel.id!);
                                   Navigator.of(context).popAndPushNamed("/groups");
                                 });

@@ -13,21 +13,25 @@ class AddGroupPage extends StatefulWidget {
 class _AddGroupPageState extends State<AddGroupPage> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
+  late TextEditingController _imageController;
   final GroupService _groupService = GroupService();
   bool _validateTitle = false;
   bool _validateDescription = false;
+  bool _validateImage = false;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController();
     _descriptionController = TextEditingController();
+    _imageController = TextEditingController();
   }
 
   @override
   void dispose() {
     _descriptionController.dispose();
     _titleController.dispose();
+    _imageController.dispose();
     super.dispose();
   }
 
@@ -86,6 +90,19 @@ class _AddGroupPageState extends State<AddGroupPage> {
                               ),
                             ),
                             const Padding(padding: EdgeInsets.only(bottom: 10)),
+                            SizedBox(
+                              width: 300,
+                              child: TextField(
+                                controller: _imageController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Enter an image url",
+                                  errorText: _validateImage ? "This field can not be empty" : null,
+                                ),
+                                keyboardType: TextInputType.phone,
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(bottom: 10)),
                             ElevatedButton(
                                 onPressed: () {
                                   setState(() {
@@ -99,7 +116,12 @@ class _AddGroupPageState extends State<AddGroupPage> {
                                     } else if (_descriptionController.text.isNotEmpty) {
                                       _validateDescription = false;
                                     }
-                                    if (_titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty) {
+                                    if  (_imageController.text.isEmpty) {
+                                      _validateImage = true;
+                                    } else if (_imageController.text.isNotEmpty) {
+                                      _validateImage = false;
+                                    }
+                                    if (_titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty && _imageController.text.isNotEmpty) {
                                       _groupService.createGroup(
                                           _titleController.text,
                                           _titleController.text,
