@@ -1,4 +1,5 @@
 import 'package:admin/components/sidebar.dart';
+import 'package:admin/models/db_user_model.dart';
 import 'package:admin/routes/routes.dart';
 import 'package:admin/services/fire_auth.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
@@ -13,28 +14,135 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final FireAuthService _fireAuthService = FireAuthService();
+  late TextEditingController _imageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _imageController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _imageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: Row(
-        children: [
-          const Sidebar(selectedIndex: 3),
-          Expanded(
-            child: Center(
-              child: GFButton(
-                text: 'Log out',
-                size: GFSize.LARGE,
-                textStyle: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                onPressed: () {
-                  FireAuthService().signOut();
-                  Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (Route<dynamic> route) => false);
-                }
-              ),
-            ),
-          )
-        ],
-      ),
+      body: FutureBuilder<String>(
+          future: _fireAuthService.getIdToken,
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return Row(
+                children: [
+                  const Sidebar(selectedIndex: 3),
+                  Expanded(
+                    child: FutureBuilder<DbUserModel> (
+                        future: _fireAuthService.fetchCurrentDbUser(snapshot.data!),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            return Center(
+                              child: Card(
+                                child: SizedBox(
+                                  height: 500,
+                                  width: 400,
+                                  child: Column(
+                                    children: [
+                                      const Padding(padding: EdgeInsets.only(top: 10)),
+                                      Container(
+                                          width: 100.0,
+                                          height: 100.0,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: NetworkImage(
+                                                    snapshot.data!.image!),
+                                              )
+                                          )
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        padding: const EdgeInsets.all(20.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                          border: Border.all(color: Colors.grey),
+                                        ),
+                                        child: Text("Id: " + snapshot.data!.id!),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        padding: const EdgeInsets.all(20.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                          border: Border.all(color: Colors.grey),
+                                        ),
+                                        child: Text(
+                                            "User id: " + snapshot.data!.userId!),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        padding: const EdgeInsets.all(20.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                          border: Border.all(color: Colors.grey),
+                                        ),
+                                        child: Text("Role: " + snapshot.data!.role!),
+                                      ),
+                                      const Padding(padding: EdgeInsets.only(bottom: 10)),
+                                      SizedBox(
+                                        width: 300,
+                                        child: TextField(
+                                          controller: _imageController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: snapshot.data!.image,
+                                          ),
+                                          keyboardType: TextInputType.phone,
+                                        ),
+                                      ),
+                                      const Padding(padding: EdgeInsets.only(bottom: 10)),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              if (_imageController.text.isNotEmpty) {
+                                                print("test");
+                                              }
+                                            });
+                                          },
+                                          child: const Text("Update"),
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Colors.white,
+                                              onPrimary: Colors.blue
+                                          )
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            print('${snapshot.error}');
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                        }
+                        ),
+                  )
+                ],
+              );
+            } else {
+              print('${snapshot.error}');
+              return const Center(child: CircularProgressIndicator());
+            }
+          }
+       ),
     );
   }
 }
