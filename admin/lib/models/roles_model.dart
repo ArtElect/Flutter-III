@@ -7,15 +7,17 @@ class RolesModel {
   List<RightsModel>? rights;
   DbUserModel? account;
   String? id;
+  String? name;
 
-  RolesModel({this.group, this.rights, this.account, this.id});
+  RolesModel({this.group, this.rights, this.account, this.id, this.name});
 
   factory RolesModel.fromJson(Map<String, dynamic> json) {
     return RolesModel(
-      group: json['group'],
-      rights: json['rights'],
-      account: json['account'],
+      group: GroupsModel.fromJson(json['group']),
+      rights: List<RightsModel>.from(json['rights'].map((x) => RightsModel.fromJson(x))),
+      account: DbUserModel.fromJson(json['account']),
       id: json['id'],
+      name: json['name'],
     );
   }
 }

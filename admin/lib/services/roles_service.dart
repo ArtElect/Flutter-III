@@ -93,7 +93,7 @@ class RolesService {
     }
   }
 
-  Future<String> updateRole(List<String> rightId, String roleId) async {
+  Future<String> updateGorupRole(List<String> rightId, String roleId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
       'rightsId': rightId,
