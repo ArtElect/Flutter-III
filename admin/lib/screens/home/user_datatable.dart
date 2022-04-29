@@ -24,18 +24,18 @@ class _UserDatatableState extends State<UserDatatable> {
             columnSpacing: 12,
             horizontalMargin: 12,
             minWidth: 200,
-            columns: [
-              const DataColumn2(
+            columns: const [
+              DataColumn2(
                 label: Text('ID'),
                 size: ColumnSize.L,
               ),
-              const DataColumn(
+              DataColumn(
                 label: Text('UserId'),
               ),
-              const DataColumn(
+              DataColumn(
                 label: Text('Role'),
               ),
-              const DataColumn(
+              DataColumn(
                 label: Text('Image'),
               ),
             ],
@@ -46,7 +46,7 @@ class _UserDatatableState extends State<UserDatatable> {
                   DataCell(Text(widget.users![index].id ?? 'null')),
                   DataCell(Text(widget.users![index].userId ?? 'null')),
                   DataCell(Text(widget.users![index].role ?? 'null')),
-                  DataCell(Text(widget.users![index].image?? 'null')),
+                  DataCell(widget.users![index].image != '' ? SizedBox(height: 40,child: Image.network(widget.users![index].image!)) : const Text('No image uploaded')),
                 ]))),
         ],
       ),

@@ -6,6 +6,8 @@ class Routes {
   static const String groupDetail = "/groups/detail";
   static const String addGroup = "/groups/addGroup";
   static const String projects = "/projects";
+  static const String projectDetail = "/projects/detail";
+  static const String addProject = "/projects/addProject";
   static const String profile = "/profile";
   static const String roles = "/roles";
 }

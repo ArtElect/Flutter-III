@@ -2,7 +2,7 @@ import 'package:admin/components/sidebar.dart';
 import 'package:admin/models/db_user_model.dart';
 import 'package:admin/services/fire_auth.dart';
 import 'package:admin/services/user_service.dart';
-import 'package:admin/widgets/user_datatable.dart';
+import 'package:admin/screens/home/user_datatable.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 

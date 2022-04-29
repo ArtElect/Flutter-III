@@ -1,5 +1,6 @@
 import 'package:admin/components/sidebar.dart';
 import 'package:admin/models/groups_model.dart';
+import 'package:admin/routes/routes.dart';
 import 'package:admin/services/group_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _GroupsPageState extends State<GroupsPage> {
               subtitle: Text(group.description ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
             ),
             onTap: () {
-              Navigator.of(context).popAndPushNamed("/groups/detail", arguments: group);
+              Navigator.of(context).popAndPushNamed(Routes.groupDetail, arguments: group);
             },
           ),
         ),
@@ -65,7 +66,7 @@ class _GroupsPageState extends State<GroupsPage> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            Navigator.of(context).popAndPushNamed("/groups/addGroup");
+            Navigator.of(context).popAndPushNamed(Routes.addGroup);
           }
       ),
     );

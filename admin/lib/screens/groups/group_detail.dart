@@ -1,29 +1,30 @@
 import 'package:admin/components/sidebar.dart';
 import 'package:admin/models/groups_model.dart';
+import 'package:admin/routes/routes.dart';
 import 'package:admin/services/group_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class GroupsDetailPage extends StatefulWidget {
   final GroupsModel groupsModel;
-  GroupsDetailPage({ Key? key, required this.groupsModel}) : super(key: key);
+  const GroupsDetailPage({ Key? key, required this.groupsModel}) : super(key: key);
 
   @override
   _GroupsDetailPageState createState() => _GroupsDetailPageState();
 }
 
 class _GroupsDetailPageState extends State<GroupsDetailPage> {
-  late TextEditingController _titleController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _imageController;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
   final GroupService _groupService = GroupService();
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController();
-    _descriptionController = TextEditingController();
-    _imageController = TextEditingController();
+    _titleController.value = _titleController.value.copyWith(text: widget.groupsModel.name);
+    _descriptionController.value = _descriptionController.value.copyWith(text: widget.groupsModel.description);
+    _imageController.value = _descriptionController.value.copyWith(text: widget.groupsModel.image!);
   }
 
   @override
@@ -68,7 +69,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                               controller: _titleController,
                               decoration: InputDecoration(
                                   border: const OutlineInputBorder(),
-                                  labelText: widget.groupsModel.name
+                                  labelText: 'Title',
                               ),
                               keyboardType: TextInputType.phone,
                             ),
@@ -80,7 +81,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                               controller: _descriptionController,
                               decoration: InputDecoration(
                                   border: const OutlineInputBorder(),
-                                  labelText: widget.groupsModel.description
+                                  labelText: 'Description',
                               ),
                               keyboardType: TextInputType.phone,
                             ),
@@ -92,7 +93,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                               controller: _imageController,
                               decoration: InputDecoration(
                                   border: const OutlineInputBorder(),
-                                  labelText: widget.groupsModel.image
+                                  labelText: 'ImageUrl',
                               ),
                               keyboardType: TextInputType.phone,
                             ),
@@ -106,7 +107,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                                       _descriptionController.text.isEmpty ? widget.groupsModel.description! : _descriptionController.text,
                                       _imageController.text.isEmpty ? widget.groupsModel.image! : _imageController.text,
                                       widget.groupsModel.id!);
-                                  Navigator.of(context).popAndPushNamed("/groups");
+                                  Navigator.of(context).popAndPushNamed(Routes.groups);
                                 });
                               },
                               child: const Text("Update"),
@@ -120,7 +121,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                               onPressed: () {
                                 setState(() {
                                   _groupService.deleteGroup(widget.groupsModel.id!);
-                                  Navigator.of(context).popAndPushNamed("/groups");
+                                  Navigator.of(context).popAndPushNamed(Routes.groups);
                                 });
                               },
                               child: const Text("Delete"),

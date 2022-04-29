@@ -1,9 +1,9 @@
 import 'package:admin/components/sidebar.dart';
 import 'package:admin/models/groups_model.dart';
-import 'package:admin/models/project_model.dart';
+import 'package:admin/routes/routes.dart';
 import 'package:admin/services/project_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
-import 'package:admin/widgets/project_datatable.dart';
+import 'package:admin/screens/project/project_datatable.dart';
 import 'package:flutter/material.dart';
 
 class ProjectPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class ProjectPage extends StatefulWidget {
 }
 
 class _ProjectPageState extends State<ProjectPage> {
-  ProjectService _projectService = ProjectService();
+  final ProjectService _projectService = ProjectService();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _ProjectPageState extends State<ProjectPage> {
                 if(snapshot.data != null) {
                   return Column(
                     children: [
-                      Container(
+                      SizedBox(
                         width: size.width*0.6,
                         child: SingleChildScrollView(
                           controller: ScrollController(),
@@ -46,7 +46,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                   Text('Projects', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              ProjectDatatable(groups: snapshot.data),
+                              ProjectDatatable(groups: snapshot.data!),
                             ],
                           ),
                         ),
@@ -60,6 +60,12 @@ class _ProjectPageState extends State<ProjectPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).popAndPushNamed(Routes.addProject);
+        }
       ),
     );
   }

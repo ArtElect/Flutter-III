@@ -1,4 +1,5 @@
 import 'package:admin/models/groups_model.dart';
+import 'package:admin/models/project_model.dart';
 import 'package:admin/routes/routes.dart';
 import 'package:admin/screens/groups/add_group.dart';
 import 'package:admin/screens/groups/group_detail.dart';
@@ -7,7 +8,9 @@ import 'package:admin/screens/home/home.dart';
 import 'package:admin/screens/home/user_information.dart';
 import 'package:admin/screens/login/login.dart';
 import 'package:admin/screens/profile/profile.dart';
+import 'package:admin/screens/project/add_project.dart';
 import 'package:admin/screens/project/project.dart';
+import 'package:admin/screens/project/project_detail.dart';
 import 'package:admin/screens/roles/roles.dart';
 import 'package:admin/services/fire_auth.dart';
 import 'package:admin/models/db_user_model.dart';
@@ -51,6 +54,11 @@ class GenerateRoutes {
         return isLogged(settings, const AddGroupPage());
       case Routes.projects:
         return isLogged(settings, const ProjectPage());
+      case Routes.projectDetail:
+        final project = settings.arguments as ProjectModel;
+        return isLogged(settings, ProjectDetailPage(project: project));
+      case Routes.addProject:
+        return isLogged(settings, const AddProjectPage());
       case Routes.roles:
         return isLogged(settings, const RolesPage());
       case Routes.profile:
