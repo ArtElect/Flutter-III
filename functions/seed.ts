@@ -8,22 +8,22 @@ admin.initializeApp({ projectId });
 const rights = ['CREATE', 'READ', 'UPDATE', 'DELETE'];
 
 const groups = [{
-    title: 'GAME DEV',
+    name: 'GAME DEV',
     description: 'Description du groupe GAME DEV'
   }, {
-    title: 'APP DEV',
+    name: 'APP DEV',
     description: 'Description du groupe APP DEV'
   }, {
-    title: 'WEB DEV',
+    name: 'WEB DEV',
     description: 'Description du groupe WEB DEV'
   }, {
-    title: 'IOT ARCHITECTURE',
+    name: 'IOT ARCHITECTURE',
     description: 'Description du groupe IOT ARCHITECTURE'
   }, {
-    title: 'BLUETOOTH LE',
+    name: 'BLUETOOTH LE',
     description: 'Description du groupe BLUETOOTH LE'
   }, {
-    title: 'MACHINE LEARNING',
+    name: 'MACHINE LEARNING',
     description: 'Description du groupe MACHINE LEARNING'
   }
 ];

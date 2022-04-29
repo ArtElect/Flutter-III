@@ -30,5 +30,9 @@ __decorate([
     class_validator_1.IsOptional(),
     class_validator_1.IsString()
 ], ModifyProjectData.prototype, "description", void 0);
+__decorate([
+    class_validator_1.IsOptional(),
+    class_validator_1.IsString()
+], ModifyProjectData.prototype, "image", void 0);
 exports.ModifyProjectData = ModifyProjectData;
 //# sourceMappingURL=types.js.map

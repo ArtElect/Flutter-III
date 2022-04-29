@@ -1,11 +1,30 @@
-import { IsString } from 'class-validator';
+import {IsOptional, IsString} from 'class-validator';
 
 export class CreateAccountData {
   @IsString()
-  userId!: string;
+  firstname!: string;
+
+  @IsString()
+  lastname!: string;
+
+  @IsString()
+  pseudo!: string;
 }
 
 export class ModifyAccountData {
+  @IsOptional()
   @IsString()
-  image!: string;
+  image?: string;
+
+  @IsOptional()
+  @IsString()
+  firstname?: string;
+
+  @IsOptional()
+  @IsString()
+  lastname?: string;
+
+  @IsOptional()
+  @IsString()
+  pseudo?: string;
 }
