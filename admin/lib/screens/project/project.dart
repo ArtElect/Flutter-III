@@ -34,7 +34,6 @@ class _ProjectPageState extends State<ProjectPage> {
                     children: [
                       Container(
                         width: size.width*0.6,
-                        height: size.height*0.5,
                         child: SingleChildScrollView(
                           controller: ScrollController(),
                           child: Column(
