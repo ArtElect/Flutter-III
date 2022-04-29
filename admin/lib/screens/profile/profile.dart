@@ -16,16 +16,26 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final FireAuthService _fireAuthService = FireAuthService();
   late TextEditingController _imageController;
+  late TextEditingController _firstnameController;
+  late TextEditingController _lastnameController;
+  late TextEditingController _pseudoController;
+
 
   @override
   void initState() {
     super.initState();
     _imageController = TextEditingController();
+    _firstnameController = TextEditingController();
+    _lastnameController = TextEditingController();
+    _pseudoController = TextEditingController();
   }
 
   @override
   void dispose() {
     _imageController.dispose();
+    _firstnameController.dispose();
+    _lastnameController.dispose();
+    _pseudoController.dispose();
     super.dispose();
   }
 
@@ -95,6 +105,42 @@ class _ProfilePageState extends State<ProfilePage> {
                                           border: Border.all(color: Colors.grey),
                                         ),
                                         child: Text("Role: " + snapshot.data!.role!),
+                                      ),
+                                      const Padding(padding: EdgeInsets.only(bottom: 10)),
+                                      SizedBox(
+                                        width: 300,
+                                        child: TextField(
+                                          controller: _firstnameController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: snapshot.data!.firstname,
+                                          ),
+                                          keyboardType: TextInputType.phone,
+                                        ),
+                                      ),
+                                      const Padding(padding: EdgeInsets.only(bottom: 10)),
+                                      SizedBox(
+                                        width: 300,
+                                        child: TextField(
+                                          controller: _lastnameController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: snapshot.data!.lastname,
+                                          ),
+                                          keyboardType: TextInputType.phone,
+                                        ),
+                                      ),
+                                      const Padding(padding: EdgeInsets.only(bottom: 10)),
+                                      SizedBox(
+                                        width: 300,
+                                        child: TextField(
+                                          controller: _pseudoController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: snapshot.data!.pseudo,
+                                          ),
+                                          keyboardType: TextInputType.phone,
+                                        ),
                                       ),
                                       const Padding(padding: EdgeInsets.only(bottom: 10)),
                                       SizedBox(
