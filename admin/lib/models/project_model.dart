@@ -1,32 +1,14 @@
-import 'package:admin/models/groups_model.dart';
-
 class ProjectModel {
-  GroupsModel? group;
-  List<SingleProjectModel>? projects;
-  String? id;
-  
-  ProjectModel({this.group, this.projects, this.id});
-
-  factory ProjectModel.fromJson(Map<String, dynamic> json) {
-    return ProjectModel(
-      group: GroupsModel.fromJson(json['group']),
-      projects: List<SingleProjectModel>.from(json["projects"].map((x) => SingleProjectModel.fromJson(x))),
-      id: json['id'],
-    );
-  }
-}
-
-class SingleProjectModel {
   String? projectId;
   String? image;
   String? description;
   String? title;
   String? groupId;
   
-  SingleProjectModel({this.projectId, this.image, this.description, this.title, this.groupId});
+  ProjectModel({this.projectId, this.image, this.description, this.title, this.groupId});
 
-  factory SingleProjectModel.fromJson(Map<String, dynamic> json) {
-    return SingleProjectModel(
+  factory ProjectModel.fromJson(Map<String, dynamic> json) {
+    return ProjectModel(
       projectId: json['id'],
       image: json['image'],
       description: json['description'],

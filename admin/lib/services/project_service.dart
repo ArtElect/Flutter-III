@@ -1,4 +1,4 @@
-import 'package:admin/models/project_model.dart';
+import 'package:admin/models/groups_model.dart';
 import 'package:admin/services/fire_auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -8,19 +8,19 @@ class ProjectService {
   final FireAuthService _fireAuthService = FireAuthService();
   final client = Dio();
   
-  Future<List<ProjectModel>> fetchProjects() async {
+  Future<List<GroupsModel>> fetchProjects() async {
     String token = await _fireAuthService.getIdToken ?? '';
     final response = await client.get(
-      '$fireStoreHost/flutter-iii-8a868/us-central1/api/projects',
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups',
       options: Options(
         headers: {'Authorization':'Bearer ' + token},
       ),
     );
     if (response.statusCode == 200) {
       final json = response.data;
-      List<ProjectModel> projects = [];
+      List<GroupsModel> projects = [];
       for(var data in json) {
-        projects.add(ProjectModel.fromJson(data));
+        projects.add(GroupsModel.fromJson(data));
       }
       return projects;
     } else {
