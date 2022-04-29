@@ -19,7 +19,7 @@ class FireAuthService {
   Stream<FirebaseUserModel?> get authStateChanges => _firebaseAuth.authStateChanges().map(_fetchUserData);
   Future<String>? get getIdToken => _firebaseAuth.currentUser?.getIdToken();
   bool get isLogged => _firebaseAuth.currentUser != null ? true : false;
-  
+
   Future<DbUserModel> fetchCurrentDbUser(String token) async {
     final response = await client.get(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/account',

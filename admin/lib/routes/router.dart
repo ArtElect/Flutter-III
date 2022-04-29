@@ -1,11 +1,16 @@
+import 'package:admin/models/groups_model.dart';
 import 'package:admin/routes/routes.dart';
+import 'package:admin/screens/groups/add_group.dart';
+import 'package:admin/screens/groups/group_detail.dart';
 import 'package:admin/screens/groups/groups.dart';
 import 'package:admin/screens/home/home.dart';
+import 'package:admin/screens/home/user_information.dart';
 import 'package:admin/screens/login/login.dart';
 import 'package:admin/screens/profile/profile.dart';
 import 'package:admin/screens/project/project.dart';
 import 'package:admin/screens/roles/roles.dart';
 import 'package:admin/services/fire_auth.dart';
+import 'package:admin/models/db_user_model.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
@@ -34,8 +39,16 @@ class GenerateRoutes {
     switch (settings.name) {
       case Routes.home:
         return isLogged(settings, const HomePage());
+      case Routes.userInformation:
+        final dbUserModel = settings.arguments as DbUserModel;
+        return isLogged(settings, UserInformationPage(dbUserModel: dbUserModel));
       case Routes.groups:
         return isLogged(settings, const GroupsPage());
+      case Routes.groupDetail:
+        final groupsModel = settings.arguments as GroupsModel;
+        return isLogged(settings, GroupsDetailPage(groupsModel: groupsModel));
+      case Routes.addGroup:
+        return isLogged(settings, const AddGroupPage());
       case Routes.projects:
         return isLogged(settings, const ProjectPage());
       case Routes.roles:
