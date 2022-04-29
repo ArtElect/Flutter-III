@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
         future: _fireAuthService.getIdToken,
         builder: (context, snapshot) {
           if (snapshot.data != null) {
-            print(snapshot.data);
             return Row(
               children: [
                 const Sidebar(selectedIndex: 0,),

@@ -12,9 +12,6 @@ class CreateAccountData {
 }
 __decorate([
     class_validator_1.IsString()
-], CreateAccountData.prototype, "userId", void 0);
-__decorate([
-    class_validator_1.IsString()
 ], CreateAccountData.prototype, "firstname", void 0);
 __decorate([
     class_validator_1.IsString()
