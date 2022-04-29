@@ -1,11 +1,12 @@
+import 'package:admin/models/groups_model.dart';
 import 'package:admin/models/project_model.dart';
 import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 
 class ProjectDatatable extends StatefulWidget {
-  final List<ProjectModel>? projects;
+  final List<GroupsModel>? groups;
 
-  const ProjectDatatable({Key? key, this.projects}) : super(key: key);
+  const ProjectDatatable({Key? key, this.groups}) : super(key: key);
 
   @override
   _ProjectDatatableState createState() => _ProjectDatatableState();
@@ -13,17 +14,17 @@ class ProjectDatatable extends StatefulWidget {
 
 class _ProjectDatatableState extends State<ProjectDatatable> {
 
-  List<DataRow> _generateDataCells(List<ProjectModel>? projects) {
+  List<DataRow> _generateDataCells(List<GroupsModel>? groups) {
     List<DataRow> dataRows = [];
 
-    for (var row in projects ?? []) {
-      for (var project in row.projects ?? []) {
-       dataRows.add(DataRow(
+    for (GroupsModel group in groups ?? []) {
+      for (ProjectModel project in group.projects ?? []) {
+        dataRows.add(DataRow(
           cells: [
-            DataCell(Text(row.id ?? 'null')),
+            DataCell(Text(project.projectId ?? 'null')),
             DataCell(Text(project.title ?? 'null')),
             DataCell(Text(project.description ?? 'null')),
-            DataCell(Text(row.group.name ?? 'null')),
+            DataCell(Text(group.name ?? 'null')),
             DataCell(Text(project.image ?? 'null')),
           ]));
       }
@@ -61,7 +62,7 @@ class _ProjectDatatableState extends State<ProjectDatatable> {
                 label: Text('image'),
               ),
             ],
-            rows: _generateDataCells(widget.projects)),
+            rows: _generateDataCells(widget.groups)),
         ],
       ),
     );

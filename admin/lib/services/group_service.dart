@@ -29,11 +29,12 @@ class GroupService {
     }
   }
 
-  Future<String> createGroup(String title, String description) async {
+  Future<String> createGroup(String name, String description, String imageUrl) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
-      'title': title,
+      'name': name,
       'description': description,
+      'image': imageUrl,
     };
     final response = await client.post(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups',
@@ -52,11 +53,12 @@ class GroupService {
     }
   }
 
-  Future<String> updateGroup(String title, String description, String groupId) async {
+  Future<String> updateGroup(String name, String description, String imageUrl, String groupId) async {
     String token = await _fireAuthService.getIdToken ?? '';
     Map<String, dynamic> data = {
-      'title': title,
+      'name': name,
       'description': description,
+      'image': imageUrl,
     };
     final response = await client.patch(
       '$fireStoreHost/flutter-iii-8a868/us-central1/api/groups/$groupId',

@@ -1,4 +1,5 @@
 import 'package:admin/components/sidebar.dart';
+import 'package:admin/models/groups_model.dart';
 import 'package:admin/models/project_model.dart';
 import 'package:admin/services/project_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
@@ -25,7 +26,7 @@ class _ProjectPageState extends State<ProjectPage> {
         children: [
           const Sidebar(selectedIndex: 2),
           Flexible(
-            child: FutureBuilder<List<ProjectModel>>(
+            child: FutureBuilder<List<GroupsModel>>(
               future: _projectService.fetchProjects(),
               builder: (context, snapshot) {
                 if(snapshot.data != null) {
@@ -46,7 +47,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                   Text('Projects', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              ProjectDatatable(projects: snapshot.data),
+                              ProjectDatatable(groups: snapshot.data),
                             ],
                           ),
                         ),
