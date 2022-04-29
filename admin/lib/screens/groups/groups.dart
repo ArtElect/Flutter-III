@@ -21,7 +21,7 @@ class _GroupsPageState extends State<GroupsPage> {
           heightFactor: 1.5,
           child: InkWell(
             child: ListTile(
-              title: Text(group!.title ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+              title: Text(group!.name ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
               subtitle: Text(group.description ?? 'null', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
             ),
             onTap: () {

@@ -65,7 +65,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                               controller: _titleController,
                               decoration: InputDecoration(
                                   border: const OutlineInputBorder(),
-                                  labelText: widget.groupsModel.title
+                                  labelText: widget.groupsModel.name
                               ),
                               keyboardType: TextInputType.phone,
                             ),
@@ -87,7 +87,7 @@ class _GroupsDetailPageState extends State<GroupsDetailPage> {
                               onPressed: () {
                                 setState(() {
                                   _groupService.updateGroup(
-                                      _titleController.text.isEmpty ? widget.groupsModel.title! : _titleController.text,
+                                      _titleController.text.isEmpty ? widget.groupsModel.name! : _titleController.text,
                                       _descriptionController.text.isEmpty ? widget.groupsModel.description! : _descriptionController.text,
                                       widget.groupsModel.id!);
                                   Navigator.of(context).popAndPushNamed("/groups");
