@@ -72,6 +72,7 @@ class _BigGroupsPageState extends State<BigGroupsPage> {
                           arguments: ProjectsScreenArguments(
                             groupId: groups[index].id,
                             roleName: groups[index].name,
+                            members: groups[index].users,
                             rights: groups[index].rights
                           ),
                         ),

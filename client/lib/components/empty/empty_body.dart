@@ -26,7 +26,11 @@ class EmptyBody extends StatelessWidget {
               fontSize: 36,
             ),
           ),
-          Center(child: Image.asset('assets/images/empty.png')),
+          Expanded(
+            child: Center(
+              child: Image.asset('assets/images/empty.png'),
+            ),
+          ),
         ],
       ),
     );

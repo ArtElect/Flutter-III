@@ -4,6 +4,8 @@ import 'package:client/screens/web/home/big_home.dart';
 import 'package:client/screens/web/group/big_groups.dart';
 import 'package:client/screens/web/project/big_projects.dart';
 import 'package:client/screens/web/project/big_project_detail.dart';
+import 'package:client/screens/web/project/big_project_create.dart';
+import 'package:client/screens/web/project/big_project_update.dart';
 import 'package:client/screens/web/profile/big_profile.dart';
 import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/mobile/profile/small_profile.dart';
@@ -46,6 +48,10 @@ class GenerateRoutes {
         return verifyRoute(settings, const SmallProject(), const BigProjectsPage());
       case Routes.projectDetail:
         return routeBuilder(settings, const BigProjectDetailPage());
+      case Routes.projectCreate:
+        return routeBuilder(settings, const BigProjectCreatePage());
+      case Routes.projectUpdate:
+        return routeBuilder(settings, const BigProjectUpdatePage());
       case Routes.profile:
         return verifyRoute(settings, const SmallProfilePage(), const BigProfilePage());
       case Routes.signin:

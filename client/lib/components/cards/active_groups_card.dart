@@ -34,6 +34,7 @@ class ActiveGroupsCard extends StatelessWidget {
               arguments: ProjectsScreenArguments(
                 groupId: roles[index].id,
                 roleName: roles[index].name,
+                members: roles[index].users,
                 rights: roles[index].rights
               ),
             ),

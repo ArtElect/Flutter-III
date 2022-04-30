@@ -10,9 +10,11 @@ import 'package:client/components/unauthorized/unauthorized.dart';
 import 'package:client/models/group_projects_model.dart';
 import 'package:client/models/project_model.dart';
 import 'package:client/models/right_model.dart';
+import 'package:client/models/user_model.dart';
 import 'package:client/services/project.dart';
 
 import 'package:client/screens/web/project/big_project_detail.dart';
+import 'package:client/screens/web/project/big_project_create.dart';
 
 import 'package:client/constant/my_colors.dart';
 import 'package:client/utils/color_checker.dart';
@@ -20,10 +22,15 @@ import 'package:client/utils/color_checker.dart';
 class ProjectsScreenArguments {
   final String groupId;
   final String roleName;
+  final List<UserModel> members;
   final List<RightModel> rights;
 
-  ProjectsScreenArguments(
-      {required this.groupId, required this.roleName, required this.rights});
+  ProjectsScreenArguments({
+    required this.groupId,
+    required this.roleName,
+    required this.rights,
+    required this.members,
+  });
 }
 
 class BigProjectsPage extends StatefulWidget {
@@ -48,7 +55,15 @@ class _BigProjectsPageState extends State<BigProjectsPage> {
             text: right.name,
             color: ColorChecker.getColorByName(name: right.name),
             shape: GFButtonShape.pills,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                Routes.projectCreate,
+                arguments: ProjectCreateScreenArguments(
+                  groupId: screenArgv.groupId,
+                  roleName: screenArgv.roleName,
+                ),
+              );
+            },
           ),
         );
       }
@@ -135,6 +150,7 @@ class _BigProjectsPageState extends State<BigProjectsPage> {
                               arguments: ProjectDetailScreenArguments(
                                 groupId: screenArgv.groupId,
                                 roleName: screenArgv.roleName,
+                                members: screenArgv.members,
                                 projectId: group.projects[index].id!,
                                 rights: rights,
                               ),
@@ -144,7 +160,7 @@ class _BigProjectsPageState extends State<BigProjectsPage> {
                       },
                     ),
                   )
-                : const EmptyBody(str: "no project was found"),
+                : const EmptyBody(str: "No project was found"),
           ),
         ],
       ),
