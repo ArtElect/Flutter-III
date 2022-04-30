@@ -65,7 +65,7 @@ class _AssignRolePageState extends State<AssignRolePage> {
                                   _selectedRole!,
                                   _selectedAccount!,
                                 );
-                                Navigator.of(context).popAndPushNamed(Routes.roles);
+                                Navigator.of(context).popAndPushNamed(Routes.roles).then((value) => setState(() {}));
                                 setState(() {});
                               }
                             },
@@ -74,7 +74,7 @@ class _AssignRolePageState extends State<AssignRolePage> {
                               onPrimary: MyColors.blue,
                             ),
                             child: const Text(
-                              'Create',
+                              'Assign',
                               style: TextStyle(fontWeight: FontWeight.bold,),
                             ),
                           ),
