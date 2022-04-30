@@ -1,20 +1,20 @@
 import 'package:admin/components/sidebar.dart';
-import 'package:admin/models/groups_model.dart';
+import 'package:admin/models/roles_model.dart';
 import 'package:admin/routes/routes.dart';
-import 'package:admin/services/project_service.dart';
+import 'package:admin/screens/roles/role_datatable.dart';
+import 'package:admin/services/roles_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
-import 'package:admin/screens/project/project_datatable.dart';
 import 'package:flutter/material.dart';
 
-class ProjectPage extends StatefulWidget {
-  const ProjectPage({ Key? key }) : super(key: key);
+class RolesPage extends StatefulWidget {
+  const RolesPage({ Key? key }) : super(key: key);
 
   @override
-  _ProjectPageState createState() => _ProjectPageState();
+  _RolesPageState createState() => _RolesPageState();
 }
 
-class _ProjectPageState extends State<ProjectPage> {
-  final ProjectService _projectService = ProjectService();
+class _RolesPageState extends State<RolesPage> {
+  final RolesService _rolesService = RolesService();
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,10 @@ class _ProjectPageState extends State<ProjectPage> {
       appBar: const CustomAppBar(),
       body: Row(
         children: [
-          const Sidebar(selectedIndex: 2),
+          const Sidebar(selectedIndex: 3),
           Flexible(
-            child: FutureBuilder<List<GroupsModel>>(
-              future: _projectService.fetchProjects(),
+            child: FutureBuilder<List<RolesModel>>(
+              future: _rolesService.fetchAllUsersRoles(),
               builder: (context, snapshot) {
                 if(snapshot.data != null) {
                   return Column(
@@ -43,10 +43,10 @@ class _ProjectPageState extends State<ProjectPage> {
                               Row(
                                 children: const [
                                   SizedBox(width: 20),
-                                  Text('Projects', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                                  Text('Roles', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                              ProjectDatatable(groups: snapshot.data!),
+                              RoleDatatable(roles: snapshot.data!),
                             ],
                           ),
                         ),
@@ -64,7 +64,7 @@ class _ProjectPageState extends State<ProjectPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).popAndPushNamed(Routes.addProject);
+          Navigator.of(context).popAndPushNamed(Routes.addRoles);
         }
       ),
     );

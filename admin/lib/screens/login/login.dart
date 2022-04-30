@@ -9,16 +9,19 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final FireAuthService _firebaseAuth = FireAuthService();
     
-    return Scaffold(
-      body: FlutterLogin(
-        title: 'EPITECH',
-        onLogin: (data) => _firebaseAuth.signIn(email: data.name, password: data.password),
-        onSignup: (data) =>  _firebaseAuth.resgister(email: data.name ?? '', password: data.password ?? ''),
-        onSubmitAnimationCompleted: () => Navigator.popAndPushNamed(context, '/home'),
-        hideForgotPasswordButton: true,
-        loginAfterSignUp: false,
-        onRecoverPassword: (_) => Future(() => null),
-      ),
+    return FlutterLogin(
+      title: 'EPITECH',
+      additionalSignupFields: const [
+        UserFormField(keyName: 'Firstname',),
+        UserFormField(keyName: 'Lastname',),
+        UserFormField(keyName: 'Pseudo',),
+      ],
+      onLogin: (data) => _firebaseAuth.signIn(email: data.name, password: data.password),
+      onSignup: (data) => _firebaseAuth.resgister(signupData: data),
+      onSubmitAnimationCompleted: () => Navigator.popAndPushNamed(context, '/home'),
+      hideForgotPasswordButton: true,
+      loginAfterSignUp: false,
+      onRecoverPassword: (_) => Future(() => null),
     );
   }
 }

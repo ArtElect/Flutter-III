@@ -1,4 +1,4 @@
-import 'package:admin/models/user_model.dart';
+import 'package:admin/models/fire_user_model.dart';
 import 'package:admin/screens/home/home.dart';
 import 'package:admin/screens/login/login.dart';
 import 'package:admin/services/fire_auth.dart';
@@ -31,7 +31,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: StreamBuilder<UserModel?>(
+      body: StreamBuilder<FirebaseUserModel?>(
         stream: _fireAuthService.authStateChanges,
         builder: (context, snapshot) {
           if (snapshot.data != null && isLogged == 'true') {
