@@ -41,24 +41,26 @@ class ProfileService {
     }
   }
 
-  Future<bool> updateUserInformation({required FormState user}) async {
-    try {
-      String? token = await _fireAuthService.getIdToken;
-      
-      final response = await client.post(
-        '$fireStoreHost/flutter-iii-8a868/us-central1/api/account',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-        data: user,
-      );
-      print('response.data : ' + response.data.toString());
-      if (response.statusCode == 200) {
-        return true;
-      }
+  Future<bool> updateCurrentAccount(String firstname, String lastname, String pseudo, String imageUrl) async {
+    String token = await _fireAuthService.getIdToken ?? '';
+    Map<String, dynamic> data = {
+      "firstname": firstname,
+      "lastname": lastname,
+      "pseudo": pseudo,
+      "image": imageUrl,
+    };
+    final response = await client.patch(
+      '$fireStoreHost/flutter-iii-8a868/us-central1/api/account',
+      data: data,
+      options: Options(
+        headers: {'Authorization':'Bearer ' + token},
+      ),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print('Status code : ${response.statusCode}, Response data : ${response.data.toString()}');
       return false;
-    } catch (error, stacktrace) {
-      throw Exception("Exception occured: $error stackTrace: $stacktrace");
     }
   }
 }
