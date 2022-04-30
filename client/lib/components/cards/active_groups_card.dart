@@ -14,9 +14,7 @@ class ActiveGroupsCard extends StatelessWidget {
 
   Widget _buildContent() {
     if (roles.isEmpty) {
-      return const Expanded(
-        child: EmptyCard(str: "No group has been assigned to you"),
-      );
+      return EmptyCard(str: "No group has been assigned to you");
     }
     return ListView.separated(
       scrollDirection: Axis.horizontal,
@@ -24,15 +22,15 @@ class ActiveGroupsCard extends StatelessWidget {
       separatorBuilder: (a, b) => const SizedBox(width: 10),
       itemBuilder: (BuildContext context, int index) {
         return GroupCard(
-          image:
-              "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
+          image: roles[index].group.image != "" ? roles[index].group.image! : "https://media.istockphoto.com/vectors/flat-cartoon-character-vector-id1156845283?k=20&m=1156845283&s=612x612&w=0&h=HHtAcCp3sHXHgkqcVo-rMcbYGH36HQkFRSHrKoRBd1c=",
           name: roles[index].group.name,
           description: roles[index].group.description!,
           onTap: () => {
             Navigator.of(context).pushNamed(
               Routes.projects,
               arguments: ProjectsScreenArguments(
-                groupId: roles[index].id,
+                roleId: roles[index].id,
+                groupId: roles[index].group.id!,
                 roleName: roles[index].name,
                 members: roles[index].users,
                 rights: roles[index].rights

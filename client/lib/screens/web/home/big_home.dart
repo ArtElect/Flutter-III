@@ -21,6 +21,7 @@ import 'package:client/models/role_model.dart';
 import 'package:client/services/role.dart';
 
 import 'package:client/constant/my_colors.dart';
+import 'dart:math';
 
 class BigHomePage extends StatefulWidget {
   const BigHomePage({Key? key}) : super(key: key);
@@ -30,8 +31,8 @@ class BigHomePage extends StatefulWidget {
 }
 
 class _BigHomePageState extends State<BigHomePage> {
-  List<Group> tmpGroups = Group.getGroups();
-  List<Member> tmpListOfMembers = Member.getMembers();
+  final _random = Random();
+
   final RoleService _roleService = RoleService();
 
   Widget welcome({required String name}) {
@@ -71,7 +72,7 @@ class _BigHomePageState extends State<BigHomePage> {
         int pageViewIndex,
       ) =>
           ProjectProgressionCard(
-              name: projects[index].title!, progression: 50, numberOfMembers: 15),
+              name: projects[index].title!, progression: _random.nextInt(100).toDouble(), numberOfMembers: 15),
     );
   }
 

@@ -11,12 +11,14 @@ import 'package:client/models/group_projects_model.dart';
 import 'package:client/models/right_model.dart';
 import 'package:client/models/user_model.dart';
 import 'package:client/services/project.dart';
+import 'package:client/screens/web/project/big_projects.dart';
 import 'package:client/screens/web/project/big_project_update.dart';
 
 import 'package:client/constant/my_colors.dart';
 import 'package:client/utils/color_checker.dart';
 
 class ProjectDetailScreenArguments {
+  final String roleId;
   final String groupId;
   final String roleName;
   final List<UserModel> members;
@@ -24,6 +26,7 @@ class ProjectDetailScreenArguments {
   final String projectId;
 
   ProjectDetailScreenArguments({
+    required this.roleId,
     required this.groupId,
     required this.roleName,
     required this.members,
@@ -60,9 +63,12 @@ class _BigProjectDetailPageState extends State<BigProjectDetailPage> {
                 Navigator.of(context).pushNamed(
                   Routes.projectUpdate,
                   arguments: ProjectUpdateScreenArguments(
+                    roleId: screenArgv.roleId,
                     groupId: screenArgv.groupId,
                     roleName: screenArgv.roleName,
                     project: project,
+                    rights: screenArgv.rights,
+                    members: screenArgv.members,
                   ),
                 );
               },
@@ -94,10 +100,36 @@ class _BigProjectDetailPageState extends State<BigProjectDetailPage> {
                       ),
                       GFButton(
                         color: GFColors.DANGER,
-                        onPressed: () {
-                          print("Delete project ");
-                        },
                         child: const Text('Confirm'),
+                        onPressed: () async {
+                          var res = await _projectService.deleteGroupProject(
+                            groupId: screenArgv.groupId,
+                            projectId: screenArgv.projectId,
+                          );
+                          if (res) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Delete project successful')),
+                            );
+                            Navigator.of(context).pushNamed(
+                              Routes.projects,
+                              arguments: ProjectsScreenArguments(
+                                roleId: screenArgv.roleId,
+                                groupId: screenArgv.groupId,
+                                roleName: screenArgv.roleName,
+                                rights: screenArgv.rights,
+                                members: screenArgv.members,
+                              ),
+                            );
+                          } else if (!res) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Delete project failed')),
+                            );
+                          } else {
+                            const CircularProgressIndicator();
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -113,9 +145,24 @@ class _BigProjectDetailPageState extends State<BigProjectDetailPage> {
 
   Widget _buildHeader() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ..._buildActionButton(),
+        const Text(
+          "Project detail",
+          style: TextStyle(
+            color: MyColors.text,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ..._buildActionButton(),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -220,46 +267,44 @@ class _BigProjectDetailPageState extends State<BigProjectDetailPage> {
             const Divider(thickness: 1),
             Expanded(
               flex: 3,
-              child: Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 20,
-                        ),
-                        margin: const EdgeInsets.only(bottom: 10),
-                        color: Colors.white,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: _buildAvatarContainer(project: project),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child:
-                                  _buildInformationContainer(project: project),
-                            )
-                          ],
-                        ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 20,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: _buildAvatarContainer(project: project),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child:
+                                _buildInformationContainer(project: project),
+                          )
+                        ],
                       ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10, bottom: 10),
-                        child: RoleMembersCard(
-                          name: project.title!,
-                          members: screenArgv.members,
-                        ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, bottom: 10),
+                      child: RoleMembersCard(
+                        name: project.title!,
+                        members: screenArgv.members,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -291,8 +336,8 @@ class _BigProjectDetailPageState extends State<BigProjectDetailPage> {
             future: _projectService.getGroupsProjects(),
             builder: (context, snapshot) {
               if (snapshot.data != null) {
-                project = _projectService.getProjectByGroupIdAndProjectId(
-                  groupId: screenArgv.groupId,
+                project = _projectService.getProjectByRoleIdAndProjectId(
+                  roleId: screenArgv.roleId,
                   projectId: screenArgv.projectId,
                 );
                 rights = screenArgv.rights;

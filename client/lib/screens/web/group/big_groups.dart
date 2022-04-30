@@ -33,8 +33,8 @@ class _BigGroupsPageState extends State<BigGroupsPage> {
     );
   }
 
-  Widget _buildContent(List<RoleModel> groups) {
-    if (groups.isEmpty) {
+  Widget _buildContent(List<RoleModel> roles) {
+    if (roles.isEmpty) {
       return const Expanded(child: EmptyCard(str: "No group has been assigned to you"));
     }
     return Expanded(
@@ -59,21 +59,21 @@ class _BigGroupsPageState extends State<BigGroupsPage> {
                     mainAxisSpacing: 20,
                     crossAxisSpacing: 20,
                   ),
-                  itemCount: groups.length,
+                  itemCount: roles.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GroupCard(
-                      image:
-                          "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
-                      name: groups[index].group.name,
-                      description: groups[index].group.description!,
+                      image: roles[index].group.image!,
+                      name: roles[index].group.name,
+                      description: roles[index].group.description!,
                       onTap: () => {
                         Navigator.of(context).pushNamed(
                           Routes.projects,
                           arguments: ProjectsScreenArguments(
-                            groupId: groups[index].id,
-                            roleName: groups[index].name,
-                            members: groups[index].users,
-                            rights: groups[index].rights
+                            roleId: roles[index].id,
+                            groupId: roles[index].group.id!,
+                            roleName: roles[index].name,
+                            members: roles[index].users,
+                            rights: roles[index].rights
                           ),
                         ),
                       },

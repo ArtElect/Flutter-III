@@ -1,19 +1,29 @@
-import 'package:flutter/material.dart';
+import 'package:client/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:client/components/navbar/navbar.dart';
 import 'package:client/components/sidebar/sidebar.dart';
 import 'package:getwidget/getwidget.dart';
 
+import 'package:client/models/right_model.dart';
+import 'package:client/models/user_model.dart';
 import 'package:client/models/project_model.dart';
+import 'package:client/services/project.dart';
+import 'package:client/screens/web/project/big_projects.dart';
 import 'package:client/constant/my_colors.dart';
 
 class ProjectCreateScreenArguments {
+  final String roleId;
   final String groupId;
   final String roleName;
+  final List<UserModel> members;
+  final List<RightModel> rights;
 
   ProjectCreateScreenArguments({
+    required this.roleId,
     required this.groupId,
     required this.roleName,
+    required this.rights,
+    required this.members,
   });
 }
 
@@ -26,9 +36,10 @@ class BigProjectCreatePage extends StatefulWidget {
 
 class _BigProjectCreatePageState extends State<BigProjectCreatePage> {
   final _formKey = GlobalKey<FormState>();
-  String projectName = "";
-  String projectDescription = "";
-  String projectImage = "";
+  final ProjectService _projectService = ProjectService();
+  late ProjectCreateScreenArguments screenArgv;
+  final ProjectModel _project =
+      ProjectModel(id: "", title: "", description: "", image: "");
 
   Widget _buildHeader() {
     return const Text(
@@ -48,7 +59,7 @@ class _BigProjectCreatePageState extends State<BigProjectCreatePage> {
         child: GFAvatar(
           child: Center(
             child: Text(
-              projectName == "" ? "Name" : projectName[0],
+              _project.title == "" ? "Name" : _project.title![0],
               style: const TextStyle(fontSize: 60),
             ),
           ),
@@ -68,7 +79,7 @@ class _BigProjectCreatePageState extends State<BigProjectCreatePage> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             TextFormField(
-              initialValue: projectName,
+              initialValue: _project.title,
               decoration: InputDecoration(
                 labelText: 'Project name',
                 filled: true,
@@ -78,23 +89,27 @@ class _BigProjectCreatePageState extends State<BigProjectCreatePage> {
                   borderSide: const BorderSide(color: MyColors.grey500),
                   borderRadius: BorderRadius.circular(5.5),
                 ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5.5),
+                ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     color: MyColors.grey500,
                   ),
                 ),
               ),
-              onChanged: (input) => {projectName = input},
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a project name';
                 }
+                _project.title = value;
                 return null;
               },
             ),
             const Divider(thickness: 1, height: 20, color: Colors.white),
             TextFormField(
-              initialValue: projectDescription,
+              initialValue: _project.description,
               maxLines: 5,
               minLines: 5,
               decoration: InputDecoration(
@@ -106,24 +121,27 @@ class _BigProjectCreatePageState extends State<BigProjectCreatePage> {
                   borderSide: const BorderSide(color: MyColors.grey500),
                   borderRadius: BorderRadius.circular(5.5),
                 ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5.5),
+                ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     color: MyColors.grey500,
                   ),
                 ),
               ),
-              onSaved: (input) =>
-                  {input != null ? projectDescription = input : ""},
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a project name';
                 }
+                _project.description = value;
                 return null;
               },
             ),
             const Divider(thickness: 1, height: 20, color: Colors.white),
             TextFormField(
-              initialValue: projectImage,
+              initialValue: _project.image,
               decoration: InputDecoration(
                 labelText: 'Project image',
                 hintText: 'http://image.com',
@@ -135,34 +153,59 @@ class _BigProjectCreatePageState extends State<BigProjectCreatePage> {
                   borderSide: const BorderSide(color: MyColors.grey500),
                   borderRadius: BorderRadius.circular(5.5),
                 ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5.5),
+                ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     color: MyColors.grey500,
                   ),
                 ),
               ),
-              onSaved: (input) => {input != null ? projectImage = input : ""},
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an image url';
+                } else if (!value.contains("http://") &&
+                    !value.contains("https://")) {
+                  return 'Image must be url type';
+                }
+                _project.image = value;
+                return null;
+              },
             ),
-
             GFButton(
               text: "Create",
               color: GFColors.PRIMARY,
               onPressed: () async {
-                // if (_formKey.currentState!.validate()) {
-                //   var res = await _profileService.updateUserInformation(
-                //       user: _formKey.currentState!);
-                //   if (res) {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(content: Text('Update successful')),
-                //     );
-                //   } else if (!res) {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(content: Text('Update failed')),
-                //     );
-                //   } else {
-                //     const CircularProgressIndicator();
-                //   }
-                // }
+                if (_formKey.currentState!.validate()) {
+                  var res = await _projectService.createGroupProject(
+                    groupId: screenArgv.groupId,
+                    project: _project,
+                  );
+                  if (res) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Create project successful')),
+                    );
+                    Navigator.of(context).pushNamed(
+                      Routes.projects,
+                      arguments: ProjectsScreenArguments(
+                        roleId: screenArgv.roleId,
+                        groupId: screenArgv.groupId,
+                        roleName: screenArgv.roleName,
+                        rights: screenArgv.rights,
+                        members: screenArgv.members,
+                      ),
+                    );
+                  } else if (!res) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Create project failed')),
+                    );
+                  } else {
+                    const CircularProgressIndicator();
+                  }
+                }
               },
             ),
           ],
@@ -214,6 +257,9 @@ class _BigProjectCreatePageState extends State<BigProjectCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    screenArgv = ModalRoute.of(context)!.settings.arguments
+        as ProjectCreateScreenArguments;
+
     return Scaffold(
       appBar: const Navbar(),
       body: Row(

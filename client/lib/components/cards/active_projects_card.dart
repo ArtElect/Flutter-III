@@ -3,6 +3,7 @@ import 'package:client/constant/my_colors.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:client/models/project_model.dart';
 import 'package:client/components/empty/empty_card.dart';
+import 'package:client/routes/routes.dart';
 
 class ActiveProjectsCard extends StatelessWidget {
   final List<ProjectModel> projects;
@@ -16,7 +17,11 @@ class ActiveProjectsCard extends StatelessWidget {
       childs.add(
         ListTile(
           contentPadding: const EdgeInsets.only(left: 0),
-          leading: const GFAvatar(),
+          leading: projects[i].image != "" ? GFAvatar(
+            backgroundImage: NetworkImage(projects[i].image!),
+          ) : GFAvatar(
+            child: Center(child: Text(projects[i].title![0])),
+          ),
           title: Text(
             projects[i].title!,
             overflow: TextOverflow.ellipsis,
@@ -67,7 +72,9 @@ class ActiveProjectsCard extends StatelessWidget {
           ? GFButtonBar(
               children: <Widget>[
                 GFButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.groups);
+                  },
                   text: 'See more',
                   type: GFButtonType.transparent,
                   focusElevation: 0,
