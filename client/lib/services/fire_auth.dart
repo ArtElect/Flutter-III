@@ -51,8 +51,10 @@ class FireAuthService {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       _storage.writeSecureData('isLogged', 'true');
+      debugPrint('Loggin successful');
       return null;
     } on FirebaseAuthException catch(e) {
+      debugPrint('Loggin failed');
       debugPrint(e.code);
       switch(e.code) {
         case 'user-not-found':

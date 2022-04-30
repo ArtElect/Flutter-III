@@ -35,9 +35,7 @@ class ActiveProjectsCard extends StatelessWidget {
 
   Widget _buildContent() {
     if (projects.isEmpty) {
-      return const Expanded(
-        child: EmptyCard(str: "No active projects have been found")
-      );
+      return const EmptyCard(str: "No active projects have been found");
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

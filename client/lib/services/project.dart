@@ -1,8 +1,9 @@
-import 'package:client/models/group_projects_model.dart';
-import 'package:client/models/project_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:client/services/fire_auth.dart';
+import 'package:client/models/group_projects_model.dart';
+import 'package:client/models/project_model.dart';
+import 'package:client/models/right_model.dart';
 import 'dart:math';
 
 class ProjectService {
@@ -12,6 +13,7 @@ class ProjectService {
   final _random = Random();
   List<GroupProjectsModel> groupProjects = [];
   List<ProjectModel> activeProjects = [];
+  List<RightModel> rights = [];
 
   Future<List<GroupProjectsModel>> getGroupsProjects() async {
     try {
@@ -29,7 +31,6 @@ class ProjectService {
         }
       }
       getActiveGroupsProjects(groupProjects);
-      print('groupProjects : ' + groupProjects.toString());
       return groupProjects;
     } catch (error, stacktrace) {
       throw Exception("Exception occured: $error stackTrace: $stacktrace");
@@ -51,8 +52,14 @@ class ProjectService {
     return activeProjects;
   }
 
-  GroupProjectsModel getProjectsByGroupId(String groupId) {
-      List<GroupProjectsModel> group = groupProjects.where((group) => group.id == groupId).toList();
-      return group[0];
+  GroupProjectsModel getProjectsByGroupId({required String groupId}) {
+    List<GroupProjectsModel> group = groupProjects.where((group) => group.id == groupId).toList();
+    return group[0];
+  }
+
+  ProjectModel getProjectByGroupIdAndProjectId({required String groupId, required String projectId, }) {
+    GroupProjectsModel group = getProjectsByGroupId(groupId:  groupId);
+    List<ProjectModel> projects = group.projects.where((project) => project.id == projectId).toList();
+    return projects[0];
   }
 }

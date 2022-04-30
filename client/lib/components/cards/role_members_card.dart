@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:client/constant/my_colors.dart';
-import 'package:client/types/member.dart';
+import 'package:client/models/user_model.dart';
 
-class GroupMembersCard extends StatelessWidget {
+class RoleMembersCard extends StatelessWidget {
   final String name;
-  final List<Member> members;
+  final List<UserModel> members;
 
-  const GroupMembersCard({
+  const RoleMembersCard({
     Key? key,
     required this.name,
     required this.members,
@@ -15,24 +15,29 @@ class GroupMembersCard extends StatelessWidget {
 
   List<Widget> getListOfMembers() {
     List<Widget> childs = [];
-    for (var i = 0; i < members.length; i++) {
+    const max = 4;
+    for (var i = 0; i < members.length && i <= max; i++) {
       childs.add(
         ListTile(
           contentPadding: const EdgeInsets.only(left: 0, right: 0),
-          leading: GFAvatar(
-            backgroundImage: NetworkImage(members[i].url),
+          leading: members[i].image != "" ? GFAvatar(
+            backgroundImage: NetworkImage(members[i].image!),
+          ) : GFAvatar(
+            child: Center(child: Text(members[i].firstName[0])),
           ),
           title: Text(
-            members[i].name,
+            members[i].firstName + ' ' + members[i].lastName,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            'Role : ${members[i].role}',
             overflow: TextOverflow.ellipsis,
           ),
           trailing: const Icon(Icons.visibility_outlined),
           onTap: () => {},
         ),
       );
-      childs.add(
-        const Divider(thickness: 1),
-      );
+
     }
     return childs;
   }

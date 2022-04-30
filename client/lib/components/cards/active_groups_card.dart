@@ -3,33 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:client/constant/my_colors.dart';
 import 'package:client/components/cards/group_card.dart';
 // import 'package:client/types/group.dart';
-import 'package:client/screens/web/project/projects.dart';
-import 'package:client/models/group_projects_model.dart';
+import 'package:client/screens/web/project/big_projects.dart';
+import 'package:client/models/role_model.dart';
 import 'package:client/components/empty/empty_card.dart';
 
 class ActiveGroupsCard extends StatelessWidget {
   // final List<Group> groups;
-  final List<GroupProjectsModel> groups;
-  const ActiveGroupsCard({Key? key, required this.groups}) : super(key: key);
+  final List<RoleModel> roles;
+  const ActiveGroupsCard({Key? key, required this.roles}) : super(key: key);
 
   Widget _buildContent() {
-    if (groups.isEmpty) {
+    if (roles.isEmpty) {
       return const Expanded(
-          child: EmptyCard(str: "No group has been assigned to you"));
+        child: EmptyCard(str: "No group has been assigned to you"),
+      );
     }
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      itemCount: groups.length,
+      itemCount: roles.length,
       separatorBuilder: (a, b) => const SizedBox(width: 10),
       itemBuilder: (BuildContext context, int index) {
         return GroupCard(
           image:
               "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
-          name: groups[index].group.name!,
-          description: groups[index].group.description!,
+          name: roles[index].group.name,
+          description: roles[index].group.description!,
           onTap: () => {
-            Navigator.of(context).pushNamed(Routes.projects,
-                arguments: ProjectsScreenArguments(groupId: groups[index].id))
+            Navigator.of(context).pushNamed(
+              Routes.projects,
+              arguments: ProjectsScreenArguments(
+                groupId: roles[index].id,
+                roleName: roles[index].name,
+                rights: roles[index].rights
+              ),
+            ),
           },
         );
       },

@@ -9,7 +9,8 @@ const rights = ['CREATE', 'READ', 'UPDATE', 'DELETE'];
 
 const groups = [{
     name: 'GAME DEV',
-    description: 'Description du groupe GAME DEV'
+    description: 'Description du groupe GAME DEV',
+    image: 'https://i0.wp.com/hipther.com/wp-content/uploads/2021/11/five-ai-tools-every-game-developer-should-have-in-their-toolbelt.jpg?resize=696%2C463&ssl=1'
   }, {
     name: 'APP DEV',
     description: 'Description du groupe APP DEV'

@@ -10,16 +10,16 @@ import 'package:client/models/role_model.dart';
 
 import 'package:client/services/role.dart';
 import 'package:client/constant/my_colors.dart';
-import 'package:client/screens/web/project/projects.dart';
+import 'package:client/screens/web/project/big_projects.dart';
 
-class GroupsPage extends StatefulWidget {
-  const GroupsPage({Key? key}) : super(key: key);
+class BigGroupsPage extends StatefulWidget {
+  const BigGroupsPage({Key? key}) : super(key: key);
 
   @override
-  State<GroupsPage> createState() => _GroupsPageState();
+  State<BigGroupsPage> createState() => _BigGroupsPageState();
 }
 
-class _GroupsPageState extends State<GroupsPage> {
+class _BigGroupsPageState extends State<BigGroupsPage> {
   final RoleService _roleService = RoleService();
 
   Widget _buildHeader() {
@@ -44,7 +44,7 @@ class _GroupsPageState extends State<GroupsPage> {
           vertical: 30,
         ),
         height: double.infinity,
-        color: MyColors.background,
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,13 +64,15 @@ class _GroupsPageState extends State<GroupsPage> {
                     return GroupCard(
                       image:
                           "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
-                      name: groups[index].group.name!,
+                      name: groups[index].group.name,
                       description: groups[index].group.description!,
                       onTap: () => {
                         Navigator.of(context).pushNamed(
                           Routes.projects,
                           arguments: ProjectsScreenArguments(
                             groupId: groups[index].id,
+                            roleName: groups[index].name,
+                            rights: groups[index].rights
                           ),
                         ),
                       },
