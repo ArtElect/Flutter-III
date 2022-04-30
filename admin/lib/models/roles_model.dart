@@ -21,14 +21,16 @@ class RolesModel {
 }
 
 class RolesGroupModel {
-  final String? image;
-  final String? description;
-  final String? name;
+  String? id;
+  String? image;
+  String? description;
+  String? name;
 
-  RolesGroupModel({this.image, this.description, this.name});
+  RolesGroupModel({this.id, this.image, this.description, this.name});
 
   factory RolesGroupModel.fromJson(Map<String, dynamic> json) {
     return RolesGroupModel(
+      id: json['id'],
       image: json['image'],
       description: json['description'],
       name: json['name'],
@@ -37,12 +39,12 @@ class RolesGroupModel {
 }
 
 class RolesAccountsModel {
-  final String? image;
-  final String? firstname;
-  final String? role;
-  final String? userId;
-  final String? lastname;
-  final String? pseudo;
+  String? image;
+  String? firstname;
+  String? role;
+  String? userId;
+  String? lastname;
+  String? pseudo;
 
   RolesAccountsModel({this.image, this.firstname, this.role, this.userId, this.lastname, this.pseudo});
 
