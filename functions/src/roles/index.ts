@@ -15,11 +15,17 @@ export const listAccountRoles = async (userId: string) => {
     const data = role.data();
 
     const groupRef = await data.group.get();
-    const group = groupRef.data();
+    const group = {
+      id: groupRef.id,
+      ...groupRef.data()
+    };
 
     const rights = await Promise.all(data.rights.map(async (r: any) => {
       const rightRef = await r.get();
-      return rightRef.data();
+      return {
+        id: rightRef.id,
+        ...rightRef.data()
+      };
     }));
 
     const accounts = await Promise.all(data.accounts.map(async (a: any) => {
@@ -89,16 +95,25 @@ export const listRoles = async () => {
     const data = role.data();
 
     const groupRef = await data.group.get();
-    const group = groupRef.data();
+    const group = {
+      id: groupRef.id,
+      ...groupRef.data()
+    };
 
     const rights = await Promise.all(data.rights.map(async (r: any) => {
       const rightRef = await r.get();
-      return rightRef.data();
+      return {
+        id: rightRef.id,
+        ...rightRef.data()
+      };
     }));
 
     const accounts = await Promise.all(data.accounts.map(async (a: any) => {
       const aRef = await a.get();
-      return aRef.data();
+      return {
+        id: aRef.id,
+        ...aRef.data()
+      };
     }));
 
     return {

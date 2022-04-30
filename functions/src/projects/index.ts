@@ -15,7 +15,10 @@ export const listAccountProjects = async (userId: string) => {
     const data = role.data();
 
     const groupRef = await data.group.get();
-    const group = groupRef.data();
+    const group = {
+      id: groupRef.id,
+      ...groupRef.data()
+    };
 
     const projectsDocs = await database.firestore().collection('project')
       .where('group', '==', data.group)
@@ -144,7 +147,10 @@ export const listGroupProjects = async (userId: string, groupId: string) => {
     const data = role.data();
 
     const groupRef = await data.group.get();
-    const group = groupRef.data();
+    const group = {
+      id: groupRef.id,
+      ...groupRef.data()
+    };
 
     const projectsDocs = await database.firestore().collection('project')
       .where('group', '==', data.group)
