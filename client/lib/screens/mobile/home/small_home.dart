@@ -54,7 +54,7 @@ class _SmallHomePageState extends State<SmallHomePage> {
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             print(snapshot.data);
-            _fireAuthService.createAccountInDB(snapshot.data.toString());
+            // _fireAuthService.createAccountInDB(snapshot.data.toString());
             return SingleChildScrollView(
               child: Column(
                 children: [

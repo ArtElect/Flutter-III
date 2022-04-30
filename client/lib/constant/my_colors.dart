@@ -15,4 +15,5 @@ class MyColors {
   static const Color drawerButtonsColor = Color(0xFF183153);
   static const Color appBarBgColor = Colors.cyan;
   static const Color cardItemTextColor = Colors.white;
+  static const grey500 = Color(0xFF667085);
 }

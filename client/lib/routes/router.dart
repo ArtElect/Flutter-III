@@ -1,9 +1,12 @@
 import 'package:client/routes/routes.dart';
 import 'package:client/screens/signin.dart';
-import 'package:client/screens/home.dart';
-import 'package:client/screens/groups.dart';
-import 'package:client/screens/projects.dart';
-import 'package:client/screens/profile.dart';
+import 'package:client/screens/web/home/big_home.dart';
+import 'package:client/screens/web/group/big_groups.dart';
+import 'package:client/screens/web/project/big_projects.dart';
+import 'package:client/screens/web/project/big_project_detail.dart';
+import 'package:client/screens/web/project/big_project_create.dart';
+import 'package:client/screens/web/project/big_project_update.dart';
+import 'package:client/screens/web/profile/big_profile.dart';
 import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/mobile/profile/small_profile.dart';
 import 'package:client/screens/mobile/project/small_project.dart';
@@ -38,13 +41,19 @@ class GenerateRoutes {
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.home:
-        return verifyRoute(settings, const SmallHomePage(), const HomePage());
+        return verifyRoute(settings, const SmallHomePage(), const BigHomePage());
       case Routes.groups:
-        return routeBuilder(settings, const GroupsPage());
+        return routeBuilder(settings, const BigGroupsPage());
       case Routes.projects:
-        return verifyRoute(settings, const SmallProject(), const ProjectsPage());
+        return verifyRoute(settings, const SmallProject(), const BigProjectsPage());
+      case Routes.projectDetail:
+        return routeBuilder(settings, const BigProjectDetailPage());
+      case Routes.projectCreate:
+        return routeBuilder(settings, const BigProjectCreatePage());
+      case Routes.projectUpdate:
+        return routeBuilder(settings, const BigProjectUpdatePage());
       case Routes.profile:
-        return verifyRoute(settings, const SmallProfilePage(), const ProfilePage());
+        return verifyRoute(settings, const SmallProfilePage(), const BigProfilePage());
       case Routes.signin:
         return routeBuilder(settings, const SignIn());
       default:

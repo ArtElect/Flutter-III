@@ -1,6 +1,6 @@
 import 'package:adaptive_widgets/adaptive_widgets.dart';
-import 'package:client/models/user_model.dart';
-import 'package:client/screens/home.dart';
+import 'package:client/models/firebase_user_model.dart';
+import 'package:client/screens/web/home/big_home.dart';
 import 'package:client/screens/mobile/home/small_home.dart';
 import 'package:client/screens/signin.dart';
 import 'package:client/services/fire_auth.dart';
@@ -34,12 +34,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: StreamBuilder<UserModel?>(
+      body: StreamBuilder<FirebaseUserModel?>(
         stream: _fireAuthService.authStateChanges,
         builder: (context, snapshot) {
           if (snapshot.data != null && isLogged == 'true') {
             if (AdaptiveWidget.isSmallScreen(screenSize)) return const SmallHomePage();
-            return const HomePage();
+            return const BigHomePage();
           } else {
             return const SignIn();
           }
