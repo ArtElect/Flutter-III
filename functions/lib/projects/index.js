@@ -14,7 +14,7 @@ exports.listAccountProjects = async (userId) => {
     return Promise.all(roles.docs.map(async (role) => {
         const data = role.data();
         const groupRef = await data.group.get();
-        const group = groupRef.data();
+        const group = Object.assign({ id: groupRef.id }, groupRef.data());
         const projectsDocs = await database_1.default.firestore().collection('project')
             .where('group', '==', data.group)
             .get();
@@ -121,7 +121,7 @@ exports.listGroupProjects = async (userId, groupId) => {
     return Promise.all(roles.docs.map(async (role) => {
         const data = role.data();
         const groupRef = await data.group.get();
-        const group = groupRef.data();
+        const group = Object.assign({ id: groupRef.id }, groupRef.data());
         const projectsDocs = await database_1.default.firestore().collection('project')
             .where('group', '==', data.group)
             .get();
