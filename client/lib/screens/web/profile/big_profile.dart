@@ -19,6 +19,7 @@ class BigProfilePage extends StatefulWidget {
 class _BigProfilePageState extends State<BigProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final ProfileService _profileService = ProfileService();
+  final List<String> textFieldsValue = [];
 
   Widget _buildRightPills({required List<RoleModel> roles}) {
     if (roles.isEmpty) {
@@ -78,6 +79,7 @@ class _BigProfilePageState extends State<BigProfilePage> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a first name';
                 }
+                textFieldsValue.add(value);
                 return null;
               },
             ),
@@ -104,6 +106,7 @@ class _BigProfilePageState extends State<BigProfilePage> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a last name';
                 }
+                textFieldsValue.add(value);
                 return null;
               },
             ),
@@ -130,6 +133,7 @@ class _BigProfilePageState extends State<BigProfilePage> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a last name';
                 }
+                textFieldsValue.add(value);
                 return null;
               },
             ),
@@ -153,6 +157,13 @@ class _BigProfilePageState extends State<BigProfilePage> {
                   ),
                 ),
               ),
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an image url';
+                }
+                textFieldsValue.add(value);
+                return null;
+              },
             ),
             const Divider(thickness: 1, height: 20, color: Colors.white),
             GFButton(
@@ -160,8 +171,12 @@ class _BigProfilePageState extends State<BigProfilePage> {
               color: GFColors.PRIMARY,
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  var res = await _profileService.updateUserInformation(
-                      user: _formKey.currentState!);
+                  var res = await _profileService.updateCurrentAccount(
+                      textFieldsValue[0],
+                      textFieldsValue[1],
+                      textFieldsValue[2],
+                      textFieldsValue[3]
+                  );
                   if (res) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Update successful')),
