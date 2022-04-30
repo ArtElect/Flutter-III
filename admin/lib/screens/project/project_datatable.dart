@@ -42,6 +42,7 @@ class _ProjectDatatableState extends State<ProjectDatatable> {
         mainAxisSize: MainAxisSize.min,
         children: [
           DataTable2(
+            empty: const Text('No data', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
             scrollController: ScrollController(),
             columnSpacing: 12,
             horizontalMargin: 12,

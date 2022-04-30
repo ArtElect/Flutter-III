@@ -1,3 +1,4 @@
+import 'package:admin/config/my_colors.dart';
 import 'package:admin/models/groups_model.dart';
 import 'package:admin/services/group_service.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -50,7 +51,7 @@ class _ProjectDropdownfieldState extends State<ProjectDropdownfield> {
             ),
             icon: const Icon(
               Icons.arrow_drop_down,
-              color: Color.fromARGB(115, 83, 68, 68),
+              color: MyColors.dropDownArrow,
             ),
             iconSize: 30,
             buttonHeight: 60,

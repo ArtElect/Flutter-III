@@ -1,6 +1,7 @@
 import 'package:admin/components/sidebar.dart';
 import 'package:admin/models/project_model.dart';
 import 'package:admin/routes/routes.dart';
+import 'package:admin/screens/project/project_textfield.dart';
 import 'package:admin/services/project_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class ProjectDetailPage extends StatefulWidget {
 }
 
 class _ProjectDetailPageState extends State<ProjectDetailPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
@@ -46,90 +48,73 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           Expanded(
             child: Center(
               child: GFCard(
-                content: Column(
-                  children: [
-                    const Padding(padding: EdgeInsets.only(top: 10)),
-                    Container(
-                      width: 200,
-                      height: 130,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(widget.project.image!),
+                content: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                      Container(
+                        width: 200,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(widget.project.image!),
+                          )
+                        )
+                      ),
+                      const SizedBox(height: 30,),
+                      ProjectTextField(
+                        label: 'Title',
+                        errorMessage: 'Invalid title',
+                        controller: _titleController,
+                      ),
+                      ProjectTextField(
+                        label: 'Description',
+                        errorMessage: 'Invalid description',
+                        controller: _descriptionController,
+                      ),
+                      ProjectTextField(
+                        label: 'Image url',
+                        errorMessage: 'Invalid image url',
+                        controller: _imageController,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                              _projectService.updateProject(
+                              _titleController.text,
+                              _descriptionController.text,
+                              _imageController.text,
+                              widget.project.groupId!,
+                              widget.project.projectId!,
+                            );
+                            Navigator.of(context).popAndPushNamed(Routes.projects);
+                            setState(() {});
+                          }
+                        },
+                        child: const Text("Update"),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          onPrimary: Colors.blue
+                        )
+                      ),
+                      const SizedBox(height: 10,),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _projectService.deleteGroup(widget.project.groupId!, widget.project.projectId!);
+                            Navigator.of(context).popAndPushNamed(Routes.projects);
+                          });
+                        },
+                        child: const Text("Delete"),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          onPrimary: Colors.red
                         )
                       )
-                    ),
-                    const Padding(padding: EdgeInsets.only(bottom: 10)),
-                    SizedBox(
-                      width: 300,
-                      child: TextField(
-                        controller: _titleController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Title',
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(bottom: 10)),
-                    SizedBox(
-                      width: 300,
-                      child: TextField(
-                        controller: _descriptionController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Description',
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(bottom: 10)),
-                    SizedBox(
-                      width: 300,
-                      child: TextField(
-                        controller: _imageController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'ImageUrl',
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(bottom: 10)),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _projectService.updateProject(
-                            _titleController.text.isEmpty ? widget.project.title! : _titleController.text,
-                            _descriptionController.text.isEmpty ? widget.project.description! : _descriptionController.text,
-                            _imageController.text.isEmpty ? widget.project.image! : _imageController.text,
-                            widget.project.groupId!,
-                            widget.project.projectId!,
-                          );
-                          Navigator.of(context).popAndPushNamed(Routes.projects);
-                        });
-                      },
-                      child: const Text("Update"),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        onPrimary: Colors.blue
-                      )
-                    ),
-                    const Padding(padding: EdgeInsets.only(bottom: 10)),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _projectService.deleteGroup(widget.project.groupId!, widget.project.projectId!);
-                          Navigator.of(context).popAndPushNamed(Routes.projects);
-                        });
-                      },
-                      child: const Text("Delete"),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        onPrimary: Colors.red
-                      )
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

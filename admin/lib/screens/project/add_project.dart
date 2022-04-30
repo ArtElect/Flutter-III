@@ -1,4 +1,5 @@
 import 'package:admin/components/sidebar.dart';
+import 'package:admin/config/my_colors.dart';
 import 'package:admin/routes/routes.dart';
 import 'package:admin/screens/project/project_dropdownfield.dart';
 import 'package:admin/screens/project/project_textfield.dart';
@@ -17,9 +18,9 @@ class AddProjectPage extends StatefulWidget {
 class _AddProjectPageState extends State<AddProjectPage> {
   final _formKey = GlobalKey<FormState>();
   final ProjectService _projectService = ProjectService();
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _imageController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
   String? _selectedValue;
 
   @override
@@ -80,8 +81,8 @@ class _AddProjectPageState extends State<AddProjectPage> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              onPrimary: Colors.blue
+                              primary: MyColors.light,
+                              onPrimary: MyColors.blue,
                             ),
                             child: const Text(
                               'Create',
