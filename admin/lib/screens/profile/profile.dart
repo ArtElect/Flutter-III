@@ -1,10 +1,10 @@
 import 'package:admin/components/sidebar.dart';
 import 'package:admin/models/db_user_model.dart';
-import 'package:admin/routes/routes.dart';
 import 'package:admin/services/fire_auth.dart';
+import 'package:admin/services/fire_storage_service.dart';
 import 'package:admin/services/user_service.dart';
 import 'package:admin/widgets/custom_app_bar.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,6 +16,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final FireAuthService _fireAuthService = FireAuthService();
+  final FireStorageService _fireStorageService = FireStorageService();
   final UserService _userService = UserService();
   late TextEditingController _imageController;
   late TextEditingController _firstnameController;
@@ -30,15 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _firstnameController = TextEditingController();
     _lastnameController = TextEditingController();
     _pseudoController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _imageController.dispose();
-    _firstnameController.dispose();
-    _lastnameController.dispose();
-    _pseudoController.dispose();
-    super.dispose();
   }
 
   @override
@@ -159,16 +151,36 @@ class _ProfilePageState extends State<ProfilePage> {
                                               keyboardType: TextInputType.phone,
                                             ),
                                           ),
+                                          const SizedBox(height: 15,),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              final result = await FilePicker.platform.pickFiles(
+                                                allowMultiple: false,
+                                              );
+                                              if (result == null) {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text('No file selected')),
+                                                );
+                                              }
+                                              String imageUrl = await _fireStorageService.uploadImage(result!.files.single);
+                                              _imageController.text = imageUrl;
+                                            },
+                                            child: const Text("Upload Profile Image"),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.white,
+                                              onPrimary: Colors.blue
+                                            )
+                                          ),
                                           const Padding(padding: EdgeInsets.only(bottom: 10)),
                                           ElevatedButton(
                                               onPressed: () {
+                                                _userService.updateCurrentAccount(
+                                                  _firstnameController.text.isNotEmpty ? _firstnameController.text : snapshot.data!.firstname!,
+                                                  _lastnameController.text.isNotEmpty ? _lastnameController.text : snapshot.data!.lastname!,
+                                                  _pseudoController.text.isNotEmpty ? _pseudoController.text : snapshot.data!.pseudo!,
+                                                  _imageController.text.isNotEmpty ? _imageController.text : snapshot.data!.image!
+                                                );
                                                 setState(() {
-                                                  _userService.updateCurrentAccount(
-                                                      _firstnameController.text.isNotEmpty ? _firstnameController.text : snapshot.data!.firstname!,
-                                                      _lastnameController.text.isNotEmpty ? _lastnameController.text : snapshot.data!.lastname!,
-                                                      _pseudoController.text.isNotEmpty ? _pseudoController.text : snapshot.data!.pseudo!,
-                                                      _imageController.text.isNotEmpty ? _imageController.text : snapshot.data!.image!
-                                                  );
                                                 });
                                               },
                                               child: const Text("Update"),

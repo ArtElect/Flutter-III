@@ -1,9 +1,10 @@
 import 'package:admin/routes/router.dart';
 import 'package:admin/widgets/auth_wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:admin/routes/routes.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -17,7 +18,15 @@ void main() async {
         appId: "1:414166164696:android:812dd951ef1bf34e6e23ad",
         messagingSenderId: "",
         projectId: "flutter-iii-8a868",
-        ),
+        storageBucket: "flutter-iii-8a868.appspot.com",
+      ),
+    );
+    //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+    FirebaseFirestore.instance.settings = const Settings(
+      host: 'localhost:8080',
+      sslEnabled: false,
+      persistenceEnabled: false,
     );
   } else {
     await Firebase.initializeApp();
@@ -26,6 +35,7 @@ void main() async {
       sslEnabled: false,
       persistenceEnabled: false,
     );
+    await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
   }
   runApp(const MyApp());
 }

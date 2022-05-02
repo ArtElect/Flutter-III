@@ -45,6 +45,8 @@ dependencies:
   dropdown_button2: ^1.4.0
   flutter_secure_storage: ^5.0.2
   firebase_core: ^1.14.1
+  firebase_storage: ^10.2.14
+  file_picker: ^4.5.1
   cloud_firestore: ^3.1.12
   cloud_functions: ^3.2.12
   firebase_auth: ^3.3.14
