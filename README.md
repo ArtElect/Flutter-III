@@ -4,30 +4,41 @@
 
 **<ins>Step 1</ins>**
 
-run "firebase emulators:start" cmd
+Install node14
 
-the result should be like this
 
-![alt text](assets/firebase.png)
+[![node14 download link](https://nodejs.org/gl/blog/release/v14.0.0/)]
+
 
 **<ins>Step 2</ins>**
 
-Click on the "Authentication" emulator UI link and create an account on it
+```cd functions```
 
-Copy the generated userId
+```npm install```
+
+```npm run build```
 
 **<ins>Step 3</ins>**
 
-You will now seed the database
+```cd functions```
 
-run "cd functions/"
+```run "firebase emulators:start"```
 
-run "npm run db:seed" (warning: don't run this cmd more than once)
+the result should be like this:
+
+![alt text](assets/firebase.png)
 
 **<ins>Step 4</ins>**
 
-Click on the "Firestore" emulator UI link.
+You will now seed the database
 
-Now you can click on the account collection, you will see an admin account, you can now change the userId by your own.
+run ```cd functions/```
 
-You have finished the initialization of firebase
+run ```npm run db:seed``` or ```npx ts-node seed.ts``` npx ts-node seed.ts(warning: don't run this cmd more than once)
+
+**<ins>Step 5</ins>**
+
+Once you have created an account by using the app, please go to the Firestore UI (e.g. http://localhost:4001/firestore)
+And manually modify the role from USER to ADMIN
+
+Now you can test other features
