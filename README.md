@@ -26,7 +26,7 @@ Install node14
 
 the result should be like this:
 
-![alt text](assets/firebase.png)
+[e.g.](https://cdn.discordapp.com/attachments/963051818861092886/970655867206787082/unknown.png)
 
 **<ins>Step 4</ins>**
 
