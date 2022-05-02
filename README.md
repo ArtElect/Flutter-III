@@ -34,7 +34,7 @@ You will now seed the database
 
 run ```cd functions/```
 
-run ```npm run db:seed``` or ```npx ts-node seed.ts``` npx ts-node seed.ts(warning: don't run this cmd more than once)
+run ```npm run db:seed``` or ```npx ts-node seed.ts``` (warning: don't run this cmd more than once)
 
 **<ins>Step 5</ins>**
 
