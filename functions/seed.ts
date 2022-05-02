@@ -2,7 +2,7 @@ const admin = require('firebase-admin'); // required
 
 // initialization
 const projectId = 'flutter-iii-8a868';
-process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
+process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8000';
 admin.initializeApp({ projectId });
 
 const rights = ['CREATE', 'READ', 'UPDATE', 'DELETE'];
