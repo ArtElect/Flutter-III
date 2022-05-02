@@ -1,21 +1,32 @@
+import 'package:client/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:client/components/navbar/navbar.dart';
 import 'package:client/components/sidebar/sidebar.dart';
 import 'package:getwidget/getwidget.dart';
 
+import 'package:client/models/right_model.dart';
+import 'package:client/models/user_model.dart';
 import 'package:client/models/project_model.dart';
+import 'package:client/services/project.dart';
+import 'package:client/screens/web/project/big_project_detail.dart';
 import 'package:client/constant/my_colors.dart';
 
 class ProjectUpdateScreenArguments {
+  final String roleId;
   final String groupId;
   final String roleName;
+  final List<UserModel> members;
+  final List<RightModel> rights;
   final ProjectModel project;
 
   ProjectUpdateScreenArguments({
+    required this.roleId,
     required this.groupId,
     required this.roleName,
-    required this.project
+    required this.project,
+    required this.rights,
+    required this.members,
   });
 }
 
@@ -28,6 +39,7 @@ class BigProjectUpdatePage extends StatefulWidget {
 
 class _BigProjectUpdatePageState extends State<BigProjectUpdatePage> {
   final _formKey = GlobalKey<FormState>();
+  final ProjectService _projectService = ProjectService();
   late ProjectUpdateScreenArguments screenArgv;
   late ProjectModel project;
 
@@ -113,6 +125,10 @@ class _BigProjectUpdatePageState extends State<BigProjectUpdatePage> {
                   borderSide: const BorderSide(color: MyColors.grey500),
                   borderRadius: BorderRadius.circular(5.5),
                 ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5.5),
+                ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     color: MyColors.grey500,
@@ -123,6 +139,7 @@ class _BigProjectUpdatePageState extends State<BigProjectUpdatePage> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a project name';
                 }
+                project.title = value;
                 return null;
               },
             ),
@@ -140,6 +157,10 @@ class _BigProjectUpdatePageState extends State<BigProjectUpdatePage> {
                   borderSide: const BorderSide(color: MyColors.grey500),
                   borderRadius: BorderRadius.circular(5.5),
                 ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5.5),
+                ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     color: MyColors.grey500,
@@ -150,6 +171,7 @@ class _BigProjectUpdatePageState extends State<BigProjectUpdatePage> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a project name';
                 }
+                project.description = value;
                 return null;
               },
             ),
@@ -167,33 +189,60 @@ class _BigProjectUpdatePageState extends State<BigProjectUpdatePage> {
                   borderSide: const BorderSide(color: MyColors.grey500),
                   borderRadius: BorderRadius.circular(5.5),
                 ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5.5),
+                ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     color: MyColors.grey500,
                   ),
                 ),
               ),
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an image url';
+                } else if (!value.contains("http://") &&
+                    !value.contains("https://")) {
+                  return 'Image must be url type';
+                }
+                project.image = value;
+                return null;
+              },
             ),
-
             GFButton(
               text: "Update",
               color: GFColors.PRIMARY,
               onPressed: () async {
-                // if (_formKey.currentState!.validate()) {
-                //   var res = await _profileService.updateUserInformation(
-                //       user: _formKey.currentState!);
-                //   if (res) {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(content: Text('Update successful')),
-                //     );
-                //   } else if (!res) {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(content: Text('Update failed')),
-                //     );
-                //   } else {
-                //     const CircularProgressIndicator();
-                //   }
-                // }
+                if (_formKey.currentState!.validate()) {
+                  var res = await _projectService.updateGroupProject(
+                    groupId: screenArgv.groupId,
+                    project: project,
+                  );
+                  if (res) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Update project successful')),
+                    );
+                    Navigator.of(context).pushNamed(
+                      Routes.projectDetail,
+                      arguments: ProjectDetailScreenArguments(
+                        roleId: screenArgv.roleId,
+                        groupId: screenArgv.groupId,
+                        roleName: screenArgv.roleName,
+                        rights: screenArgv.rights,
+                        members: screenArgv.members,
+                        projectId: project.id!
+                      ),
+                    );
+                  } else if (!res) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Update project failed')),
+                    );
+                  } else {
+                    const CircularProgressIndicator();
+                  }
+                }
               },
             ),
           ],
@@ -244,8 +293,8 @@ class _BigProjectUpdatePageState extends State<BigProjectUpdatePage> {
 
   @override
   Widget build(BuildContext context) {
-    screenArgv =
-        ModalRoute.of(context)!.settings.arguments as ProjectUpdateScreenArguments;
+    screenArgv = ModalRoute.of(context)!.settings.arguments
+        as ProjectUpdateScreenArguments;
     project = screenArgv.project;
     return Scaffold(
       appBar: const Navbar(),

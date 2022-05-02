@@ -20,12 +20,14 @@ import 'package:client/constant/my_colors.dart';
 import 'package:client/utils/color_checker.dart';
 
 class ProjectsScreenArguments {
+  final String roleId;
   final String groupId;
   final String roleName;
   final List<UserModel> members;
   final List<RightModel> rights;
 
   ProjectsScreenArguments({
+    required this.roleId,
     required this.groupId,
     required this.roleName,
     required this.rights,
@@ -59,8 +61,11 @@ class _BigProjectsPageState extends State<BigProjectsPage> {
               Navigator.of(context).pushNamed(
                 Routes.projectCreate,
                 arguments: ProjectCreateScreenArguments(
+                  roleId: screenArgv.roleId,
                   groupId: screenArgv.groupId,
                   roleName: screenArgv.roleName,
+                  rights: screenArgv.rights,
+                  members: screenArgv.members,
                 ),
               );
             },
@@ -106,7 +111,7 @@ class _BigProjectsPageState extends State<BigProjectsPage> {
   }
 
   Widget _buildContent(List<GroupProjectsModel> groups) {
-    group = _projectService.getProjectsByGroupId(groupId: screenArgv.groupId);
+    group = _projectService.getProjectsByRoleId(roleId: screenArgv.roleId);
     rights = screenArgv.rights;
 
     if (groups.isEmpty || rights.isEmpty) {
@@ -140,14 +145,14 @@ class _BigProjectsPageState extends State<BigProjectsPage> {
                       itemCount: group.projects.length,
                       itemBuilder: (BuildContext context, int index) {
                         return GroupCard(
-                          image:
-                              "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg",
+                          image: group.projects[index].image!,
                           name: group.projects[index].title!,
                           description: group.projects[index].title!,
                           onTap: () => {
                             Navigator.of(context).pushNamed(
                               Routes.projectDetail,
                               arguments: ProjectDetailScreenArguments(
+                                roleId: screenArgv.roleId,
                                 groupId: screenArgv.groupId,
                                 roleName: screenArgv.roleName,
                                 members: screenArgv.members,

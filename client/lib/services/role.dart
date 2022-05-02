@@ -41,13 +41,4 @@ class RoleService {
       throw Exception("Exception occured: $error stackTrace: $stacktrace");
     }
   }
-
-  List<RightModel> getRightsByGroupId({required String groupId}) {
-    for (var role in roles) {
-      if (role.id == groupId) {
-        return role.rights;
-      }      
-    }
-    return [];
-  }
 }

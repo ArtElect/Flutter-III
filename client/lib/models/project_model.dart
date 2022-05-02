@@ -1,14 +1,14 @@
 class ProjectModel {
-  final String? id;
-  final String? title;
-  final String? description;
-  final String? image;
+  String? id;
+  String? title;
+  String? description;
+  String? image;
 
   ProjectModel({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.image,
+    this.id,
+    this.title,
+    this.description,
+    this.image,
   });
 
   factory ProjectModel.fromJSON(Map<String, dynamic> json) {
