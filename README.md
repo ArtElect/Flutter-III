@@ -7,7 +7,7 @@
 Install node14
 
 
-[![node14 download link](https://nodejs.org/gl/blog/release/v14.0.0/)]
+![node14 download link](https://nodejs.org/gl/blog/release/v14.0.0/)
 
 
 **<ins>Step 2</ins>**
